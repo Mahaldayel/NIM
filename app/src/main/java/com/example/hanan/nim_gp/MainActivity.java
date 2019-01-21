@@ -16,4 +16,11 @@ public class MainActivity extends AppCompatActivity {
 
         // this method only for test
     }
+
+    private void test2(){
+
+        // this method only for test
+    }
+
+
 }
