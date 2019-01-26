@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.ybs.countrypicker.CountryPicker;
+import com.ybs.countrypicker.CountryPickerListener;
+
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button buttonSignup;
@@ -26,6 +30,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private TextView textViewSignin;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
+    private CountryPicker picker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,17 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         buttonSignup.setOnClickListener(this);
         textViewSignin.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
+
+
+        picker = CountryPicker.newInstance("Select Country");  // dialog title
+        picker.setListener(new CountryPickerListener() {
+            @Override
+            public void onSelectCountry(String name, String code, String dialCode, int flagDrawableResID) {
+
+                picker.dismiss();
+
+            }
+        });
 
 
     }
@@ -100,6 +116,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             //open sign in activity
         }
 
+    }
+
+    public void openPicker(View view){
+        picker.show(getSupportFragmentManager(), "COUNTRY_PICKER");
     }
 
 }
