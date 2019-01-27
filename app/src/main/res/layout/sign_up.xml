@@ -24,6 +24,23 @@
             android:hint="Enter email"
             android:inputType="textEmailAddress" />
 
+
+        <EditText
+            android:id="@+id/editTextUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Enter your username"
+            android:inputType="textEmailAddress" />
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Select Date"
+            android:layout_margin="15dp"/>
+
+
         <EditText
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
