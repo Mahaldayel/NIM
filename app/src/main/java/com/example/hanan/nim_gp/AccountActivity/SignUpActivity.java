@@ -73,8 +73,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private PlayerInformation player;
     public List<PlayerInformation> playersInfo = new ArrayList<>();
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,7 +163,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
-        player.setEmail(email);
+
 
         //checking if email and passwords are empty
         if(TextUtils.isEmpty(email)){
@@ -222,6 +220,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         //checking if success
                         if(task.isSuccessful()){
                             //display some message here
+                            player.setEmail(editTextEmail.getText().toString().trim());
                             addPlayer();
                         }else{
                             //display some message here
@@ -255,7 +254,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == GALLERY_INTENT && resultCode==RESULT_OK) {
@@ -277,7 +275,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             });
         }
     }
-
 
 
     public boolean checkUsernameAvailability(){
@@ -327,13 +324,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-
     public void addPlayer(){
             String playerId=firebaseAuth.getCurrentUser().getUid();
             mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("Players").child(playerId).setValue(player);
             Toast.makeText(SignUpActivity.this,"Successfully registered",Toast.LENGTH_LONG).show();
     }
+
 
     public void displayErrorMsg(String errorCode){
         switch (errorCode) {
