@@ -39,8 +39,12 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -67,6 +71,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private StorageReference mStorage;
     private DatabaseReference mDatabase;
     private PlayerInformation player;
+    public List<PlayerInformation> playersInfo = new ArrayList<>();
+
 
 
     @Override
@@ -249,39 +255,68 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         String username=editTextUserName.getText().toString().trim();
         player.setUsername(username);
         boolean available=false;
-        List<String> playersUsernames = new ArrayList<>();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        Query myTopQuery;
+        myTopQuery = mDatabase.child("Players");
+
 
         //get the list of players
 
+        myTopQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot playersSnapshot: dataSnapshot.getChildren()) {
+                    //
+                    playersInfo.add((PlayerInformation) playersSnapshot.getValue());
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        });
+
+
         //loop and check
 
-
-        if(available){
-            player.setUsername(username);
-            return true;
-        }else{
-            return false;
+        /*for (int i=0 ; i<playersInfo.size();i++){
+            if (playersInfo.get(i).getUsername().equalsIgnoreCase(player.getUsername())) {
+                available = false;
+                break;
+            }else{
+                available=true;
+            }
 
         }
 
-
+        return available;
+*/
+        return true;
     }
 
 
 
     public void addPlayer(){
 
-        boolean availableUsername = checkUsernameAvailability();
+      //  boolean availableUsername = checkUsernameAvailability();
         player.setOnline(true);
         player.setScore(0);
-        //if(availableUsername){
+       // if(availableUsername){
 
             String playerId=firebaseAuth.getCurrentUser().getUid();
             mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("Players").child(playerId).setValue(player);
 
-       // }
+        //}
        // else{
+
+        //    Toast.makeText(SignUpActivity.this,"duplicated username",Toast.LENGTH_LONG).show();
+
 
        // }
 
