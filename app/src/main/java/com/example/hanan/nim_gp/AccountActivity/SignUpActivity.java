@@ -96,18 +96,18 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         mDisplayDate = (TextView) findViewById(R.id.tvDate);
         editTextUserName = (EditText) findViewById(R.id.editTextUserName);
 
-         // Pic
+        // Pic
         setPic.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
                 startActivityForResult(intent,GALLERY_INTENT);
-
             }
         });
+
+
+
 
 
 
@@ -119,7 +119,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
                 picker.dismiss();
                 setCountry.setText(name);
-
                 player.setCountyCode(code);
 
 
@@ -181,6 +180,36 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
 
+        if(TextUtils.isEmpty(editTextUserName.getText().toString().trim())){
+            //username is empty
+            Toast.makeText(SignUpActivity.this,"Please enter username",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+
+        if(!checkUsernameAvailability()){
+            Toast.makeText(SignUpActivity.this,"Please enter another username",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(player.getBirthDate().equalsIgnoreCase("")){
+            //birthDate is empty
+            Toast.makeText(SignUpActivity.this,"Please enter your birth date",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(player.getCountyCode().equalsIgnoreCase("")){
+            //country  is empty
+            Toast.makeText(SignUpActivity.this,"Select ur country",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(player.getPicURL().equalsIgnoreCase("")){
+            //Pic is empty
+            Toast.makeText(SignUpActivity.this,"Select the PIC",Toast.LENGTH_LONG).show();
+            return;
+        }
+
         progressDialog.setMessage("Registering Please Wait...");
         progressDialog.show();
 
@@ -193,14 +222,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         //checking if success
                         if(task.isSuccessful()){
                             //display some message here
-                            Toast.makeText(SignUpActivity.this,"Successfully registered",Toast.LENGTH_LONG).show();
                             addPlayer();
                         }else{
                             //display some message here
-                            Toast.makeText(SignUpActivity.this,"Registration Error",Toast.LENGTH_LONG).show();
-                            //Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 
-                            }
+                            String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                            displayErrorMsg(errorCode);
+
+                        }
 
                         progressDialog.dismiss();
                     }
@@ -267,9 +296,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot playersSnapshot: dataSnapshot.getChildren()) {
-                    //
-                    playersInfo.add((PlayerInformation) playersSnapshot.getValue());
-
+                    PlayerInformation playerTmp = playersSnapshot.getValue(PlayerInformation.class);
+                    playersInfo.add(playerTmp);
                 }
             }
 
@@ -284,43 +312,106 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         //loop and check
 
-        /*for (int i=0 ; i<playersInfo.size();i++){
+        for (int i=0 ; i<playersInfo.size();i++){
             if (playersInfo.get(i).getUsername().equalsIgnoreCase(player.getUsername())) {
                 available = false;
                 break;
             }else{
                 available=true;
+                continue;
             }
 
         }
 
         return available;
-*/
-        return true;
     }
 
 
 
     public void addPlayer(){
-
-      //  boolean availableUsername = checkUsernameAvailability();
-        player.setOnline(true);
-        player.setScore(0);
-       // if(availableUsername){
-
             String playerId=firebaseAuth.getCurrentUser().getUid();
             mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("Players").child(playerId).setValue(player);
+            Toast.makeText(SignUpActivity.this,"Successfully registered",Toast.LENGTH_LONG).show();
+    }
 
-        //}
-       // else{
+    public void displayErrorMsg(String errorCode){
+        switch (errorCode) {
 
-        //    Toast.makeText(SignUpActivity.this,"duplicated username",Toast.LENGTH_LONG).show();
+            case "ERROR_INVALID_CUSTOM_TOKEN":
+                Toast.makeText(SignUpActivity.this, "The custom token format is incorrect. Please check the documentation.", Toast.LENGTH_LONG).show();
+                break;
 
+            case "ERROR_CUSTOM_TOKEN_MISMATCH":
+                Toast.makeText(SignUpActivity.this, "The custom token corresponds to a different audience.", Toast.LENGTH_LONG).show();
+                break;
 
-       // }
+            case "ERROR_INVALID_CREDENTIAL":
+                Toast.makeText(SignUpActivity.this, "The supplied auth credential is malformed or has expired.", Toast.LENGTH_LONG).show();
+                break;
 
+            case "ERROR_INVALID_EMAIL":
+                Toast.makeText(SignUpActivity.this, "The email address is badly formatted.", Toast.LENGTH_LONG).show();
+                editTextEmail.setError("The email address is badly formatted.");
+                editTextEmail.requestFocus();
+                break;
 
+            case "ERROR_WRONG_PASSWORD":
+                Toast.makeText(SignUpActivity.this, "The password is invalid or the user does not have a password.", Toast.LENGTH_LONG).show();
+                editTextPassword.setError("password is incorrect ");
+                editTextPassword.requestFocus();
+                editTextPassword.setText("");
+                break;
+
+            case "ERROR_USER_MISMATCH":
+                Toast.makeText(SignUpActivity.this, "The supplied credentials do not correspond to the previously signed in user.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_REQUIRES_RECENT_LOGIN":
+                Toast.makeText(SignUpActivity.this, "This operation is sensitive and requires recent authentication. Log in again before retrying this request.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
+                Toast.makeText(SignUpActivity.this, "An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_EMAIL_ALREADY_IN_USE":
+                Toast.makeText(SignUpActivity.this, "The email address is already in use by another account.   ", Toast.LENGTH_LONG).show();
+                editTextEmail.setError("The email address is already in use by another account.");
+                editTextEmail.requestFocus();
+                break;
+
+            case "ERROR_CREDENTIAL_ALREADY_IN_USE":
+                Toast.makeText(SignUpActivity.this, "This credential is already associated with a different user account.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_USER_DISABLED":
+                Toast.makeText(SignUpActivity.this, "The user account has been disabled by an administrator.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_USER_TOKEN_EXPIRED":
+                Toast.makeText(SignUpActivity.this, "The user\\'s credential is no longer valid. The user must sign in again.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_USER_NOT_FOUND":
+                Toast.makeText(SignUpActivity.this, "There is no user record corresponding to this identifier. The user may have been deleted.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_INVALID_USER_TOKEN":
+                Toast.makeText(SignUpActivity.this, "The user\\'s credential is no longer valid. The user must sign in again.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_OPERATION_NOT_ALLOWED":
+                Toast.makeText(SignUpActivity.this, "This operation is not allowed. You must enable this service in the console.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_WEAK_PASSWORD":
+                Toast.makeText(SignUpActivity.this, "The given password is invalid.", Toast.LENGTH_LONG).show();
+                editTextPassword.setError("The password is invalid it must 6 characters at least");
+                editTextPassword.requestFocus();
+                break;
+
+        }
     }
 
 }
