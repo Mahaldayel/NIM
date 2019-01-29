@@ -12,7 +12,7 @@ public class PlayerInformation {
         this.birthDate="";
         this.picURL="";
         this.countyCode="";
-        this.online=false;
+        this.online=true;
         this.score=0;
     }
 

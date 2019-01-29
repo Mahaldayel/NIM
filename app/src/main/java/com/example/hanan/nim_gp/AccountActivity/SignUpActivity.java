@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
 import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -79,6 +80,16 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.sign_up);
 
         firebaseAuth = FirebaseAuth.getInstance();
+
+        //if the objects getcurrentuser method is not null
+        //means user is already logged in
+        /*if(firebaseAuth.getCurrentUser() != null){
+            //close this activity
+            finish();
+            //opening profile activity
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        }*/
+
         player=new PlayerInformation();
         //initializing views
         buttonSignup = (Button) findViewById(R.id.buttonSignup);
@@ -245,6 +256,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         if(view == textViewSignin){
             //open sign in activity
+            startActivity(new Intent(this, SignInActivity.class));
+
         }
     }
 
@@ -310,7 +323,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         //loop and check
 
         for (int i=0 ; i<playersInfo.size();i++){
-            if (playersInfo.get(i).getUsername().equalsIgnoreCase(player.getUsername())) {
+            if (playersInfo.get(i).getUsername().equalsIgnoreCase(editTextUserName.getText().toString().trim())) {
                 available = false;
                 break;
             }else{
@@ -329,6 +342,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("Players").child(playerId).setValue(player);
             Toast.makeText(SignUpActivity.this,"Successfully registered",Toast.LENGTH_LONG).show();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+
     }
 
 
