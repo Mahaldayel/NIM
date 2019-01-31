@@ -39,6 +39,12 @@ dependencies {
     implementation 'com.android.support:support-annotations:20.0.0'
     implementation 'com.github.yesterselga:country-picker-android:1.0'
 
+    implementation 'com.github.KaKaVip:Android-Flag-Kit:v0.1'
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+
+
 
 
 
@@ -47,3 +53,4 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
+
