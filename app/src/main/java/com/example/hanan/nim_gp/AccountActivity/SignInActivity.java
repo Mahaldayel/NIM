@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.example.hanan.nim_gp.R;
 
 
-public class SignInActivity extends AppCompatActivity  {
+public class SignInActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
