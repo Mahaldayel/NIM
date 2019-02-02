@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,15 +15,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.haipq.android.flagkit.FlagImageView;
 import com.squareup.picasso.Picasso;
+import com.haipq.android.flagkit.FlagImageView;
 
-import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Locale;
+
 import java.util.Map;
 
 public class view_accountActivity extends AppCompatActivity implements View.OnClickListener {

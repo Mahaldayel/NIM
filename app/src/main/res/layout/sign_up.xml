@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AccountActivity.SignUpActivity">
+    >
 
 
 
@@ -60,20 +60,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+
         <Button
             android:id="@+id/buttonSignup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:text="Signup" />
-        
-        
+            android:text="Signup"
+            android:textStyle="bold"/>
+
+
         <TextView
             android:textAlignment="center"
             android:id="@+id/textViewSignin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Already Registered? sign in here"/>
+
+
 
     </LinearLayout>
 

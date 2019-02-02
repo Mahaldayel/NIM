@@ -5,34 +5,29 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
-
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AccountActivity.view_accountActivity">
+        <activity android:name=".AccountActivity.UploadProfileImageActivity"></activity>
+        <activity android:name=".AccountActivity.SignUpActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".AccountActivity.SignInActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".AccountActivity.ResetPasswordActivity"/>
-        <activity android:name=".AccountActivity.changeUserPassword"/>
-        <activity android:name=".AccountActivity.update_accountActivity">
-        </activity>
-        <activity android:name=".AccountActivity.SignUpActivity">
-
-        </activity>
-
-
+        <activity android:name=".AccountActivity.ResetPasswordActivity" />
+        <activity android:name=".AccountActivity.changeUserPassword" />
+        <activity android:name=".AccountActivity.update_accountActivity"></activity>
+        <activity android:name=".AccountActivity.view_accountActivity"></activity>
     </application>
 
 </manifest>
