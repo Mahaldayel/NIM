@@ -158,7 +158,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case "ERROR_WRONG_PASSWORD":
-                Toast.makeText(SignInActivity.this, "The password is invalid or the user does not have a password.", Toast.LENGTH_LONG).show();
+                //Toast.makeText(SignInActivity.this, "The password is invalid or the user does not have a password.", Toast.LENGTH_LONG).show();
                 editTextPassword.setError("password is incorrect ");
                 editTextPassword.requestFocus();
                 editTextPassword.setText("");

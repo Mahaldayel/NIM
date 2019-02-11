@@ -30,7 +30,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -38,9 +37,7 @@ import com.google.firebase.storage.UploadTask;
 import com.ybs.countrypicker.CountryPicker;
 import com.ybs.countrypicker.CountryPickerListener;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -58,11 +55,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private static final int GALLERY_INTENT = 2;
     private ImageView backbtn;
     private Button setCountry;
-    private Button setPic;
     private StorageReference mStorage;
     private DatabaseReference mDatabase;
     private PlayerInformation player;
-    public List<PlayerInformation> playersInfo = new ArrayList<>();
+    boolean available=false;
 
 
     @Override
@@ -71,6 +67,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_up);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        player=new PlayerInformation();
 
         //if the objects getcurrentuser method is not null
         //means user is already logged in
@@ -81,7 +78,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }*/
 
-        player=new PlayerInformation();
+
         //initializing views
         buttonSignup = (Button) findViewById(R.id.buttonSignup);
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
@@ -89,28 +86,11 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         backbtn = (ImageView) findViewById(R.id.backbtn);
         buttonSignup.setOnClickListener(this);
         backbtn.setOnClickListener(this);
-        //textViewSignin.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
         setCountry = (Button) findViewById(R.id.setCountry);
-        setPic = (Button) findViewById(R.id.setPic);
         mStorage = FirebaseStorage.getInstance().getReference();
         mDisplayDate = (TextView) findViewById(R.id.tvDate);
         editTextUserName = (EditText) findViewById(R.id.editTextUserName);
-
-
-
-        // Pic
-/*        setPic.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent,GALLERY_INTENT);
-            }
-        });*/
-
-
-
 
 
 
@@ -152,8 +132,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
-                //Log.d(TAG, "onDateSet: mm/dd/yyy: " + month + "/" + day + "/" + year);
-
                 String date = month + "/" + day + "/" + year;
                 mDisplayDate.setText(date);
                 player.setBirthDate(date);
@@ -190,9 +168,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
 
-        boolean tmp = checkUsernameAvailability();
-
-
         if(!checkUsernameAvailability()){
             Toast.makeText(SignUpActivity.this,"Please enter another username",Toast.LENGTH_LONG).show();
             return;
@@ -206,15 +181,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         if(player.getCountyCode().equalsIgnoreCase("")){
             //country  is empty
-            Toast.makeText(SignUpActivity.this,"Select ur country",Toast.LENGTH_LONG).show();
+            Toast.makeText(SignUpActivity.this,"Select your country",Toast.LENGTH_LONG).show();
             return;
         }
 
-       /* if(player.getPicURL().equalsIgnoreCase("")){
-            //Pic is empty
-            Toast.makeText(SignUpActivity.this,"Select the PIC",Toast.LENGTH_LONG).show();
-            return;
-        }*/
 
         progressDialog.setMessage("Registering Please Wait...");
         progressDialog.show();
@@ -288,61 +258,30 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
 
     public boolean checkUsernameAvailability(){
+        String username=editTextUserName.getText().toString();
+        player.setUsername(username);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Players");
 
-        boolean available=false;
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        Query myTopQuery = mDatabase.child("Players");
+        //check if the username exist in Database or not
+        mDatabase.orderByChild("username").equalTo(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            //the username exists
+                        } else {
+                            available = true;
+                        }
+                    }
 
-        //get the list of players
-        /*myTopQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot playersSnapshot: dataSnapshot.getChildren()) {
-                    PlayerInformation playerTmp = playersSnapshot.getValue(PlayerInformation.class);
-                    playersInfo.add(playerTmp);
-                }
-            }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        });*/
+                    }
 
-
-        final List<PlayerInformation> playerList = new ArrayList<>();
-        myTopQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                playerList.clear();
-                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                    PlayerInformation player = postSnapshot.getValue(PlayerInformation.class);
-                    playerList.add(player);
-                    // here you can access to name property like university.name
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                DatabaseError firebaseError = null;
-                System.out.println("The read failed: " + firebaseError.getMessage());
-            }
-        });
-
-        //loop and check
-        for (int i=0 ; i<playerList.size();i++) {
-            if (playerList.get(i).getUsername().equalsIgnoreCase(editTextUserName.getText().toString().trim())) {
-                available = false;
-                break;
-            } else {
-                available = true;
-                continue;
-            }
-        }
-
+                });
         return available;
+
     }
 
 
