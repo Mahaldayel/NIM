@@ -10,11 +10,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +48,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private EditText editTextEmail;
     private EditText editTextPassword;
     private EditText editTextUserName;
-    private TextView textViewSignin;
     private TextView textViewLocation;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
@@ -57,13 +56,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private static final String TAG = "AccountActivity.SignUpActivity";
     private static final int GALLERY_INTENT = 2;
+    private ImageView backbtn;
     private Button setCountry;
     private Button setPic;
     private StorageReference mStorage;
     private DatabaseReference mDatabase;
     private PlayerInformation player;
     public List<PlayerInformation> playersInfo = new ArrayList<>();
-    public String username="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +86,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         buttonSignup = (Button) findViewById(R.id.buttonSignup);
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-        textViewSignin = (TextView) findViewById(R.id.textViewSignin);
+        backbtn = (ImageView) findViewById(R.id.backbtn);
         buttonSignup.setOnClickListener(this);
+        backbtn.setOnClickListener(this);
         //textViewSignin.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
         setCountry = (Button) findViewById(R.id.setCountry);
@@ -95,6 +96,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         mStorage = FirebaseStorage.getInstance().getReference();
         mDisplayDate = (TextView) findViewById(R.id.tvDate);
         editTextUserName = (EditText) findViewById(R.id.editTextUserName);
+
+
 
         // Pic
 /*        setPic.setOnClickListener(new View.OnClickListener(){
@@ -165,7 +168,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
-        username= editTextUserName.getText().toString().trim();
+        String username= editTextUserName.getText().toString().trim();
 
 
         //checking if email and passwords are empty
@@ -181,11 +184,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
 
-        if("".equals(username)){
+        if(TextUtils.isEmpty(username)){
             //username is empty
             Toast.makeText(SignUpActivity.this,"Please enter username",Toast.LENGTH_LONG).show();
             return;
         }
+
+        boolean tmp = checkUsernameAvailability();
 
 
         if(!checkUsernameAvailability()){
@@ -246,9 +251,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             registerUser();
         }
 
-        if(view == textViewSignin){
+        if(view == backbtn){
             //open sign in activity
-            startActivity(new Intent(this, SignInActivity.class));
+            startActivity(new Intent(this, FirstPage.class));
 
         }
     }
@@ -283,18 +288,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
 
     public boolean checkUsernameAvailability(){
-        String username=editTextUserName.getText().toString().trim();
-        player.setUsername(username);
+
         boolean available=false;
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        Query myTopQuery;
-        myTopQuery = mDatabase.child("Players");
-
+        Query myTopQuery = mDatabase.child("Players");
 
         //get the list of players
-
-        myTopQuery.addValueEventListener(new ValueEventListener() {
+        /*myTopQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot playersSnapshot: dataSnapshot.getChildren()) {
@@ -309,20 +309,37 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
                 // ...
             }
-        });
+        });*/
 
 
-        //loop and check
-
-        for (int i=0 ; i<playersInfo.size();i++){
-            if (playersInfo.get(i).getUsername().equalsIgnoreCase(editTextUserName.getText().toString().trim())) {
-                available = false;
-                break;
-            }else{
-                available=true;
-                continue;
+        final List<PlayerInformation> playerList = new ArrayList<>();
+        myTopQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                playerList.clear();
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                    PlayerInformation player = postSnapshot.getValue(PlayerInformation.class);
+                    playerList.add(player);
+                    // here you can access to name property like university.name
+                }
             }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                DatabaseError firebaseError = null;
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
+
+        //loop and check
+        for (int i=0 ; i<playerList.size();i++) {
+            if (playerList.get(i).getUsername().equalsIgnoreCase(editTextUserName.getText().toString().trim())) {
+                available = false;
+                break;
+            } else {
+                available = true;
+                continue;
+            }
         }
 
         return available;

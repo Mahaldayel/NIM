@@ -42,8 +42,11 @@ dependencies {
     implementation 'com.github.yesterselga:country-picker-android:1.0'
 
     implementation 'com.github.KaKaVip:Android-Flag-Kit:v0.1'
-
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.github.takusemba:cropme:1.1.0'
+    implementation "com.android.support:support-dynamic-animation:28.0.0"
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
+
 
 
 }

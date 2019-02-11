@@ -14,20 +14,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AccountActivity.UploadProfileImageActivity"></activity>
-        <activity android:name=".AccountActivity.SignUpActivity">
+        <activity android:name=".AccountActivity.CropView"></activity>
+        <activity android:name=".AccountActivity.FirstPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AccountActivity.UploadProfileImageActivity" />
+        <activity android:name=".AccountActivity.SignUpActivity" />
         <activity android:name=".AccountActivity.SignInActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".AccountActivity.ResetPasswordActivity" />
         <activity android:name=".AccountActivity.changeUserPassword" />
-        <activity android:name=".AccountActivity.update_accountActivity"></activity>
-        <activity android:name=".AccountActivity.view_accountActivity"></activity>
+        <activity android:name=".AccountActivity.update_accountActivity" />
+        <activity android:name=".AccountActivity.view_accountActivity" />
     </application>
 
 </manifest>
