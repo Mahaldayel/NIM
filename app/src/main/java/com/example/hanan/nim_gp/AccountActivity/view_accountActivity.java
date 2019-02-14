@@ -95,7 +95,7 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
             Typeface playerPass_font = Typeface.createFromAsset(getAssets(),  "fonts/Lalezar-Regular.ttf");
             password.setTypeface(playerPass_font);
 
-            deleteAccount=findViewById(R.id.deleteLabel);
+            deleteAccount=findViewById(R.id.DeleteAccount);
             Typeface deletAccount_font = Typeface.createFromAsset(getAssets(),  "fonts/Lalezar-Regular.ttf");
             deleteAccount.setTypeface(deletAccount_font);
 
