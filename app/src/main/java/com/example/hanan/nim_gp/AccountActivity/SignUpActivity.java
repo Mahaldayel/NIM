@@ -286,12 +286,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
 
     public void addPlayer(){
-            String playerId=firebaseAuth.getCurrentUser().getUid();
-            mDatabase = FirebaseDatabase.getInstance().getReference();
-            mDatabase.child("Players").child(playerId).setValue(player);
-            Toast.makeText(SignUpActivity.this,"Successfully registered",Toast.LENGTH_LONG).show();
-            startActivity(new Intent(getApplicationContext(), UploadProfileImageActivity.class));
-            finish();
+        String playerId=firebaseAuth.getCurrentUser().getUid();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("Players").child(playerId).setValue(player);
+        Toast.makeText(SignUpActivity.this,"Successfully registered",Toast.LENGTH_LONG).show();
+        startActivity(new Intent(getApplicationContext(), UploadProfileImageActivity.class));
+        finish();
 
     }
 
