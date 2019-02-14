@@ -1,50 +1,35 @@
 package com.example.hanan.nim_gp.AccountActivity;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
-import android.support.annotation.NonNull;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.DatePicker;
-import android.widget.TextView;
-import android.app.DatePickerDialog;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
-import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
 import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -52,13 +37,14 @@ import com.google.firebase.storage.UploadTask;
 import com.ybs.countrypicker.CountryPicker;
 import com.ybs.countrypicker.CountryPickerListener;
 
+import java.util.Calendar;
+
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button buttonSignup;
     private EditText editTextEmail;
     private EditText editTextPassword;
     private EditText editTextUserName;
-    private TextView textViewSignin;
     private TextView textViewLocation;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
@@ -67,19 +53,21 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private static final String TAG = "AccountActivity.SignUpActivity";
     private static final int GALLERY_INTENT = 2;
+    private ImageView backbtn;
     private Button setCountry;
-    private Button setPic;
     private StorageReference mStorage;
     private DatabaseReference mDatabase;
     private PlayerInformation player;
-    public List<PlayerInformation> playersInfo = new ArrayList<>();
+    boolean available=false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sign_up);
+        setContentView(R.layout.activity_sign_up);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        player=new PlayerInformation();
 
         //if the objects getcurrentuser method is not null
         //means user is already logged in
@@ -90,33 +78,19 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }*/
 
-        player=new PlayerInformation();
+
         //initializing views
         buttonSignup = (Button) findViewById(R.id.buttonSignup);
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-        textViewSignin = (TextView) findViewById(R.id.textViewSignin);
+        backbtn = (ImageView) findViewById(R.id.backbtn);
         buttonSignup.setOnClickListener(this);
-        textViewSignin.setOnClickListener(this);
+        backbtn.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
         setCountry = (Button) findViewById(R.id.setCountry);
-        setPic = (Button) findViewById(R.id.setPic);
         mStorage = FirebaseStorage.getInstance().getReference();
         mDisplayDate = (TextView) findViewById(R.id.tvDate);
         editTextUserName = (EditText) findViewById(R.id.editTextUserName);
-
-        // Pic
-        setPic.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent,GALLERY_INTENT);
-            }
-        });
-
-
-
 
 
 
@@ -158,8 +132,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
-                //Log.d(TAG, "onDateSet: mm/dd/yyy: " + month + "/" + day + "/" + year);
-
                 String date = month + "/" + day + "/" + year;
                 mDisplayDate.setText(date);
                 player.setBirthDate(date);
@@ -174,6 +146,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
+        String username= editTextUserName.getText().toString().trim();
 
 
         //checking if email and passwords are empty
@@ -189,12 +162,11 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
 
-        if(TextUtils.isEmpty(editTextUserName.getText().toString().trim())){
+        if(TextUtils.isEmpty(username)){
             //username is empty
             Toast.makeText(SignUpActivity.this,"Please enter username",Toast.LENGTH_LONG).show();
             return;
         }
-
 
         if(!checkUsernameAvailability()){
             Toast.makeText(SignUpActivity.this,"Please enter another username",Toast.LENGTH_LONG).show();
@@ -209,15 +181,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         if(player.getCountyCode().equalsIgnoreCase("")){
             //country  is empty
-            Toast.makeText(SignUpActivity.this,"Select ur country",Toast.LENGTH_LONG).show();
+            Toast.makeText(SignUpActivity.this,"Select your country",Toast.LENGTH_LONG).show();
             return;
         }
 
-        if(player.getPicURL().equalsIgnoreCase("")){
-            //Pic is empty
-            Toast.makeText(SignUpActivity.this,"Select the PIC",Toast.LENGTH_LONG).show();
-            return;
-        }
 
         progressDialog.setMessage("Registering Please Wait...");
         progressDialog.show();
@@ -254,9 +221,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             registerUser();
         }
 
-        if(view == textViewSignin){
+        if(view == backbtn){
             //open sign in activity
-            startActivity(new Intent(this, SignInActivity.class));
+            startActivity(new Intent(this, FirstPage.class));
 
         }
     }
@@ -291,49 +258,30 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
 
     public boolean checkUsernameAvailability(){
-        String username=editTextUserName.getText().toString().trim();
+        String username=editTextUserName.getText().toString();
         player.setUsername(username);
-        boolean available=false;
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Players");
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        Query myTopQuery;
-        myTopQuery = mDatabase.child("Players");
+        //check if the username exist in Database or not
+        mDatabase.orderByChild("username").equalTo(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            //the username exists
+                        } else {
+                            available = true;
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        //get the list of players
+                    }
 
-        myTopQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot playersSnapshot: dataSnapshot.getChildren()) {
-                    PlayerInformation playerTmp = playersSnapshot.getValue(PlayerInformation.class);
-                    playersInfo.add(playerTmp);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        });
-
-
-        //loop and check
-
-        for (int i=0 ; i<playersInfo.size();i++){
-            if (playersInfo.get(i).getUsername().equalsIgnoreCase(editTextUserName.getText().toString().trim())) {
-                available = false;
-                break;
-            }else{
-                available=true;
-                continue;
-            }
-
-        }
-
+                });
         return available;
+
     }
 
 
@@ -342,7 +290,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("Players").child(playerId).setValue(player);
             Toast.makeText(SignUpActivity.this,"Successfully registered",Toast.LENGTH_LONG).show();
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            startActivity(new Intent(getApplicationContext(), UploadProfileImageActivity.class));
             finish();
 
     }
