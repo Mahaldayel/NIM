@@ -3,6 +3,7 @@ package com.example.hanan.nim_gp.AccountActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -42,10 +43,15 @@ public class changeUserPassword extends AppCompatActivity implements View.OnClic
     /**/
     private void initElement() {
 
+
+        buttonupdate = findViewById(R.id.update_button);
+        Typeface updateButton_font = Typeface.createFromAsset(getAssets(),  "fonts/Lalezar-Regular.ttf");
+        buttonupdate.setTypeface(updateButton_font);
+
+
         dialog = new ProgressDialog(this);
         editTextPassword =  findViewById(R.id.editTextPassword);
         editTextRepeatPassword =  findViewById(R.id.editTextRepeatPassword);
-        buttonupdate = findViewById(R.id.buttonupdate);
         buttonupdate.setOnClickListener(this);
         back=findViewById(R.id.back);
         back.setOnClickListener(this);
