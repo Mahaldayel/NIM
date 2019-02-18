@@ -128,7 +128,8 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
             }
             if(view==password){  startActivity(new Intent(view_accountActivity.this,changeUserPassword.class));
             }
-            if(view==deleteAccount){//RAHAFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            if(view==deleteAccount){
+                startActivity(new Intent(view_accountActivity.this,DeleteAccount.class));
                  }
         if(view==back){   startActivity(new Intent(view_accountActivity.this, MainActivity.class));}}
 

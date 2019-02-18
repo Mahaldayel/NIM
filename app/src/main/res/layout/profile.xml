@@ -270,21 +270,22 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="Change Password"
-                    android:textColor="@color/colorBrown"
-
                     android:textSize="20dp"
-                    android:textStyle="bold" />
 
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold" />
                 <TextView
                     android:id="@+id/DeleteAccount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="Delete Account"
-                    android:textColor="@color/colorBrown"
-
                     android:textSize="20dp"
+
+                    android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
+
+
 
             </LinearLayout>
 
