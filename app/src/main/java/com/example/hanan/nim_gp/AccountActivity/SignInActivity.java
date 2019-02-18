@@ -114,7 +114,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                         if(task.isSuccessful()){
                             //start the profile activity
                             finish();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), view_accountActivity.class));
                         }else {
                             String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
                             displayErrorMsg(errorCode);

@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,8 +46,11 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
 
 //        ref =  database.getReference().child("players").child(temp.getUid());
         //.child(firebaseAuth.getCurrentUser().getUid()
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String playeId = user.getUid();
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Players").child(playeId);
 
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("Players").child("JF8mmf9m00VfHF3SbLKJ5xi1e3B3");
+       // DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("Players").child("JF8mmf9m00VfHF3SbLKJ5xi1e3B3");
         rootRef.addValueEventListener(new ValueEventListener() {
 
             @Override
@@ -95,7 +100,7 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
             Typeface playerPass_font = Typeface.createFromAsset(getAssets(),  "fonts/Lalezar-Regular.ttf");
             password.setTypeface(playerPass_font);
 
-            deleteAccount=findViewById(R.id.deleteLabel);
+            deleteAccount=findViewById(R.id.DeleteAccount);
             Typeface deletAccount_font = Typeface.createFromAsset(getAssets(),  "fonts/Lalezar-Regular.ttf");
             deleteAccount.setTypeface(deletAccount_font);
 
@@ -136,7 +141,7 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
                         Uname = (String) dataSnapshot.child("username").getValue();
                         picUri=(String)dataSnapshot.child("picURL").getValue();
 ////Just for now
-        if(email.equals("arwaH@hotmail.com")) {
+       // if(email.equals("arwaH@hotmail.com")) {
 
             displayFlag();
             mTextViewEmail.setText(email);
@@ -145,7 +150,7 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
             date.setText(Bdate);
            Picasso.get().load(picUri).into(mImageViewPic);
 
-        }
+        //}
     }
 
     private void displayFlag() {

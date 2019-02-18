@@ -27,7 +27,7 @@
         <activity android:name=".AccountActivity.SignInActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".AccountActivity.ResetPasswordActivity" />
-        <activity android:name=".AccountActivity.changeUserPassword" />
+        <activity android:name=".AccountActivity.changeUserPassword">   </activity >
         <activity android:name=".AccountActivity.update_accountActivity" />
         <activity android:name=".AccountActivity.view_accountActivity" />
     </application>
