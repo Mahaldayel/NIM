@@ -258,26 +258,48 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
 
     public boolean checkUsernameAvailability(){
+
         String username=editTextUserName.getText().toString();
+
         player.setUsername(username);
+
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Players");
 
+
+
         //check if the username exist in Database or not
+
         mDatabase.orderByChild("username").equalTo(username)
+
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            //the username exists
-                        } else {
-                            available = true;
-                        }
-                    }
 
                     @Override
+
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.exists()) {
+
+                            //the username exists
+
+                        } else {
+
+                            available = true;
+
+                        }
+
+                    }
+
+
+
+                    @Override
+
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
+
+
                     }
+
+
 
                 });
         return available;
