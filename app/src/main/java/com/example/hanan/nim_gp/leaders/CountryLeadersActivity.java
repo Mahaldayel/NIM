@@ -7,7 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
 import android.view.View;
-
+import com.google.firebase.auth.FirebaseAuth;
 import com.example.hanan.nim_gp.MainActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,7 +18,7 @@ import android.content.Intent;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
-
+import com.google.firebase.auth.FirebaseUser;
 import com.example.hanan.nim_gp.R;
 import com.haipq.android.flagkit.FlagImageView;
 import com.squareup.picasso.Picasso;
@@ -32,12 +32,13 @@ public class CountryLeadersActivity extends AppCompatActivity {
     RecyclerView recyclerView ;
     TextView world;
     TextView country;
-
-    ImageView Player1Pic,Player2Pic,Player3Pic,CurrentPlayerPic;
+ String CurrentPlayerUserName;
+    ImageView Player1Pic,Player2Pic,Player3Pic,CurrentPlayerPic,secondpic,thirdpic;
     TextView Player1Name,Player2Name,Player3Name,CurrentPlayerName,Player1Score,Player2Score,Player3Score,CurrentPlayerScore,CurrentPlayerOrder;
     FlagImageView Player1Country,Player2Country,Player3Country,CurrentPlayerCountry;
-
-
+    FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
+    String CurrentplayeId = CurrentPlayer.getUid();
+String CurrentPlayerCountryCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,8 @@ public class CountryLeadersActivity extends AppCompatActivity {
         CurrentPlayerPic=(ImageView)findViewById(R.id.CCurrentPlayerPic);
         CurrentPlayerCountry=(FlagImageView) findViewById(R.id.CCurrentPlayerCountry);
         CurrentPlayerOrder=(TextView) findViewById(R.id.CCurrentPlayerOrder);
+       secondpic=(ImageView)findViewById(R.id.second);
+        thirdpic=(ImageView)findViewById(R.id.third);
         Wbutton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 Intent LB2= new Intent(CountryLeadersActivity.this, LeadersActivity.class);
@@ -103,7 +106,9 @@ CurrentPlayerOrder.setTypeface(typeface);
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-
+                    if(child.getKey().equals(CurrentplayeId)){
+                        CurrentPlayerUserName=child.child("username").getValue().toString();
+                        CurrentPlayerCountryCode=child.child("countyCode").getValue().toString();}
                     int score =Integer.parseInt(child.child("score").getValue().toString()) ;
 
                     String Uname = child.child("username").getValue().toString();
@@ -111,12 +116,38 @@ CurrentPlayerOrder.setTypeface(typeface);
                     String Country=child.child("countyCode").getValue().toString();
                     PlayersDB p = new PlayersDB(score,Uname,pic,Country);
                   //  if(p!=null&&Country.equals("AR"))
+                    if(Country.equals(CurrentPlayerCountryCode))
                         players.add(p);
 
 
 
                 }
                 System.out.println("*******************"+players.size());
+
+                if(players.size()==1){
+
+
+                    Player2Name.setVisibility(View.INVISIBLE);
+                    Player2Score.setVisibility(View.INVISIBLE);
+                            Player2Pic.setVisibility(View.INVISIBLE);
+                    Player2Country.setVisibility(View.INVISIBLE);
+                    secondpic.setVisibility(View.INVISIBLE);
+                                    Player3Name.setVisibility(View.INVISIBLE);
+                    Player3Score.setVisibility(View.INVISIBLE);
+                            Player3Pic.setVisibility(View.INVISIBLE);
+                    Player3Country.setVisibility(View.INVISIBLE);
+                    thirdpic.setVisibility(View.INVISIBLE);
+                }
+                if(players.size()==2){
+
+
+
+                    Player3Name.setVisibility(View.INVISIBLE);
+                    Player3Score.setVisibility(View.INVISIBLE);
+                    Player3Pic.setVisibility(View.INVISIBLE);
+                    Player3Country.setVisibility(View.INVISIBLE);
+                    thirdpic.setVisibility(View.INVISIBLE);
+                }
                 arrange();
                 ininatadapter();
 
@@ -183,6 +214,23 @@ CurrentPlayerOrder.setTypeface(typeface);
                 Country="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Flag_of_Saudi_Arabia.svg/2000px-Flag_of_Saudi_Arabia.svg.png";
             else Country=players.get(z).getCountry();
             PlayersLB temp=new PlayersLB(players.get(z).getScore(),players.get(z).getUname(),players.get(z).getPic(),Country,z+1);
+
+            if(players.get(z).getUname().equals(CurrentPlayerUserName)){
+
+
+
+
+
+                CurrentPlayerName.setText(players.get(z).getUname());
+                CurrentPlayerScore.setText(String.valueOf(players.get(z).getScore()));
+                Picasso.get().load(String.valueOf(players.get(z).getPic())).into(CurrentPlayerPic);
+                if(players.get(z).getCountry().equals("SA"))
+                    CurrentPlayerCountry.setImageResource(R.drawable.saudi_flag);
+                else CurrentPlayerCountry.setCountryCode(players.get(z).getCountry());
+                String o=String.valueOf(z+1);
+                CurrentPlayerOrder.setText("#"+o);
+
+            }
             if(z==0){
 
                 Player1Name.setText(players.get(z).getUname());
