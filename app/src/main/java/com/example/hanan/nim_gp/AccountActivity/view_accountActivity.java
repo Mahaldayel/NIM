@@ -1,4 +1,5 @@
 package com.example.hanan.nim_gp.AccountActivity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.widget.Toast;
 
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,19 +36,23 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
     private ImageView back;
     private TextView password;
     private TextView deleteAccount;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
-
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
         initElements();
 
 
-//        ref =  database.getReference().child("players").child(temp.getUid());
-        //.child(firebaseAuth.getCurrentUser().getUid()
 
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("Players").child("JF8mmf9m00VfHF3SbLKJ5xi1e3B3");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String playeId = user.getUid();
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Players").child(playeId);
+
         rootRef.addValueEventListener(new ValueEventListener() {
 
             @Override
@@ -125,7 +132,8 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
             }
             if(view==password){  startActivity(new Intent(view_accountActivity.this,changeUserPassword.class));
             }
-            if(view==deleteAccount){//RAHAFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            if(view==deleteAccount){
+                startActivity(new Intent(view_accountActivity.this,DeleteAccount.class));
                  }
         if(view==back){   startActivity(new Intent(view_accountActivity.this, MainActivity.class));}}
 
@@ -137,8 +145,7 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
                          score = (Long) dataSnapshot.child("score").getValue();
                         Uname = (String) dataSnapshot.child("username").getValue();
                         picUri=(String)dataSnapshot.child("picURL").getValue();
-////Just for now
-        if(email.equals("arwaH@hotmail.com")) {
+
 
             displayFlag();
             mTextViewEmail.setText(email);
@@ -146,8 +153,8 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
             mTextViewName.setText(Uname);
             date.setText(Bdate);
            Picasso.get().load(picUri).into(mImageViewPic);
+        progressDialog.dismiss();
 
-        }
     }
 
     private void displayFlag() {

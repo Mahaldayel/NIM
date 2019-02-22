@@ -24,6 +24,8 @@ import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,7 +49,7 @@ public class update_accountActivity extends AppCompatActivity implements View.On
     String email,name,countryCode,Bdate,pic;
     private TextView mTextViewName;
     private TextView mTextViewEmail;
-    private TextView mTextViewCountry;
+    private Button mTextViewCountry;
     private ImageView mTextViewPic;
     private Button mUpdateButton;
     private ImageView back;
@@ -75,8 +77,11 @@ public class update_accountActivity extends AppCompatActivity implements View.On
 
 //        ref =  database.getReference().child("players").child(temp.getUid());
 
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("Players").child("JF8mmf9m00VfHF3SbLKJ5xi1e3B3");
-
+        //DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("Players").child("JF8mmf9m00VfHF3SbLKJ5xi1e3B3");
+        //TEEEEEEEEEEST IT
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String playeId = user.getUid();
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Players").child(playeId);
         rootRef.addValueEventListener(new ValueEventListener() {
 
             @Override
@@ -132,9 +137,11 @@ public class update_accountActivity extends AppCompatActivity implements View.On
                     //Log.d(TAG, "onDateSet: mm/dd/yyy: " + month + "/" + day + "/" + year);
                     String date = month + "/" + day + "/" + year;
                     mDisplayDate.setText(date);
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference myRef = database.getReference().child("Players").child("JF8mmf9m00VfHF3SbLKJ5xi1e3B3");
-                    myRef.child("birthDate").setValue(date);
+                    Bdate=date;
+                   // FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                  //  String playeId = user.getUid();
+                  //  DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Players").child(playeId);
+                   // rootRef.child("birthDate").setValue(date);
                 }
             };
         }
@@ -184,13 +191,15 @@ public class update_accountActivity extends AppCompatActivity implements View.On
             }
             else{
 
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference().child("Players").child("JF8mmf9m00VfHF3SbLKJ5xi1e3B3");
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String playeId = user.getUid();
+                DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Players").child(playeId);
 
-            myRef.child("email").setValue(email);
-            myRef.child("countyCode").setValue(countryCode);
-            myRef.child("username").setValue(name);
-            myRef.child("picURL").setValue(pic);
+            rootRef.child("email").setValue(email);
+            rootRef.child("countyCode").setValue(countryCode);
+            rootRef.child("username").setValue(name);
+            rootRef.child("picURL").setValue(pic);
+            rootRef.child("birthDate").setValue(Bdate);
             updateSuccessfully();
 
         }}

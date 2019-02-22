@@ -1,0 +1,945 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<android.support.constraint.ConstraintLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+
+    tools:context=".leaders.LeadersActivity"
+
+    android:background="@drawable/back">
+
+
+    <android.support.design.widget.AppBarLayout
+
+        android:id="@+id/appBarLayout"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+
+        android:theme="@style/AppTheme.AppBarOverlay"
+
+        app:layout_constraintBottom_toTopOf="parent" />
+
+
+    <include
+
+        android:id="@+id/include"
+
+        layout="@layout/content_leaders" />
+
+
+    <ImageView
+
+        android:id="@+id/imageView7"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:srcCompat="@drawable/board1" />
+
+
+    <Button
+
+        android:id="@+id/WbuttonO"
+
+        android:layout_width="90dp"
+
+        android:layout_height="33dp"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        android:background="@drawable/buttonon"
+
+        android:text="THE WORLD"
+
+        android:textColor="@color/white"
+
+        android:textStyle="bold"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.721"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="@+id/appBarLayout"
+
+        app:layout_constraintVertical_bias="0.255"
+
+
+        />
+
+
+    <Button
+
+        android:id="@+id/CbuttonOF"
+
+        android:layout_width="90dp"
+
+        android:layout_height="30dp"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        android:background="@drawable/buttonof"
+
+        android:text="MY COUNTRY"
+
+        android:textStyle="bold"
+
+        android:textColor="@color/white"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.298"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.258" />
+
+
+    <Button
+
+        android:id="@+id/backButton"
+
+        android:layout_width="60dp"
+
+        android:layout_height="60dp"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:background="@drawable/iconback"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.038"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.844" />
+
+
+
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+
+        android:id="@+id/Player1Pic"
+
+        android:layout_width="75dp"
+
+        android:layout_height="75dp"
+
+        android:layout_gravity="center_horizontal"
+
+        android:layout_marginStart="24dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        app:civ_border_width="2dp"
+
+        app:civ_border_color="#FF000000"
+
+        android:padding="4dp"
+
+        android:src="@drawable/ic_person_24dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.473"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.335" />
+
+
+    <ImageView
+
+        android:id="@+id/first"
+
+        android:layout_width="153dp"
+
+        android:layout_height="112dp"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@+id/imageView7"
+
+        app:layout_constraintHorizontal_bias="0.402"
+
+        app:layout_constraintStart_toStartOf="@+id/include"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.38"
+
+        app:srcCompat="@drawable/ffirst" />
+
+
+    <TextView
+
+        android:id="@+id/Player1Name"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="19dp"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        android:text="Shahad1"
+
+        android:textSize="16dp"
+
+        android:textColor="#5C3317"
+
+        app:layout_constraintBottom_toBottomOf="@+id/include"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.514"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="@+id/imageView7"
+
+        app:layout_constraintVertical_bias="0.424" />
+
+
+    <TextView
+
+        android:id="@+id/Player1Score"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        android:text="Score1"
+
+        android:textSize="16dp"
+
+        android:textColor="#417432"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@+id/imageView7"
+
+        app:layout_constraintHorizontal_bias="0.477"
+
+        app:layout_constraintStart_toStartOf="@+id/imageView7"
+
+        app:layout_constraintTop_toTopOf="@+id/include"
+
+        app:layout_constraintVertical_bias="0.455" />
+
+
+    <com.haipq.android.flagkit.FlagImageView
+
+        android:id="@+id/Player1Country"
+
+        android:layout_width="25dp"
+
+        android:layout_height="20dp"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        app:layout_constraintBottom_toBottomOf="@+id/imageView7"
+
+        app:layout_constraintEnd_toEndOf="@+id/imageView7"
+
+        app:layout_constraintHorizontal_bias="0.493"
+
+        app:layout_constraintStart_toStartOf="@+id/include"
+
+        app:layout_constraintTop_toTopOf="@+id/imageView7"
+
+        app:layout_constraintVertical_bias="0.487"
+
+        app:srcCompat="@drawable/flag_ae" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+
+        android:id="@+id/Player2Pic"
+
+        android:layout_width="55dp"
+
+        android:layout_height="55dp"
+
+        android:layout_gravity="center_horizontal"
+
+        android:layout_marginStart="24dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        app:civ_border_width="2dp"
+
+        app:civ_border_color="#FF000000"
+
+        android:padding="4dp"
+
+        android:src="@drawable/ic_person_24dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.231"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.35" />
+
+
+    <ImageView
+
+        android:id="@+id/second"
+
+        android:layout_width="100dp"
+
+        android:layout_height="100dp"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@+id/imageView7"
+
+        app:layout_constraintHorizontal_bias="0.153"
+
+        app:layout_constraintStart_toStartOf="@+id/include"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.372"
+
+        app:srcCompat="@drawable/ssecond" />
+
+
+    <TextView
+
+        android:id="@+id/Player2Name"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        android:text="Shahad2"
+
+        android:textSize="16dp"
+
+        android:textColor="#5C3317"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@+id/imageView7"
+
+        app:layout_constraintHorizontal_bias="0.267"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.42" />
+
+
+    <TextView
+
+        android:id="@+id/Player2Score"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        android:text="Score2"
+
+        android:textSize="16dp"
+
+        android:textColor="#417432"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@+id/imageView7"
+
+        app:layout_constraintHorizontal_bias="0.281"
+
+        app:layout_constraintStart_toStartOf="@+id/include"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.451" />
+
+
+
+    <com.haipq.android.flagkit.FlagImageView
+
+
+        android:id="@+id/Player2Country"
+
+        android:layout_width="25dp"
+
+        android:layout_height="20dp"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.277"
+
+        app:layout_constraintStart_toStartOf="@+id/include"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.487"
+
+        app:srcCompat="@drawable/flag_ae" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+
+        android:id="@+id/Player3Pic"
+
+        android:layout_width="55dp"
+
+        android:layout_height="55dp"
+
+        android:layout_gravity="center_horizontal"
+
+        android:layout_marginStart="24dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        app:civ_border_width="2dp"
+
+        app:civ_border_color="#FF000000"
+
+        android:padding="4dp"
+
+        android:src="@drawable/ic_person_24dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.728"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.35" />
+
+
+    <ImageView
+
+        android:id="@+id/third"
+
+        android:layout_width="100dp"
+
+        android:layout_height="100dp"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@+id/imageView7"
+
+        app:layout_constraintHorizontal_bias="0.692"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.375"
+
+        app:srcCompat="@drawable/tthhird" />
+
+
+    <TextView
+
+        android:id="@+id/Player3Name"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        android:text="Shahad3"
+
+        android:textSize="16dp"
+
+        android:textColor="#5C3317"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@+id/imageView7"
+
+        app:layout_constraintHorizontal_bias="0.712"
+
+        app:layout_constraintStart_toStartOf="@+id/include"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.42" />
+
+
+    <TextView
+
+        android:id="@+id/Player3Score"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        android:text="50"
+
+        android:textSize="16dp"
+
+        android:textColor="#417432"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.713"
+
+        app:layout_constraintStart_toStartOf="@+id/imageView7"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.448" />
+
+
+    <com.haipq.android.flagkit.FlagImageView
+
+        android:id="@+id/Player3Country"
+
+        android:layout_width="25dp"
+
+        android:layout_height="20dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@+id/imageView7"
+
+        app:layout_constraintHorizontal_bias="0.726"
+
+        app:layout_constraintStart_toStartOf="@+id/imageView7"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.487"
+
+        app:srcCompat="@drawable/flag_ae" />
+
+
+    <ImageView
+
+        android:id="@+id/Spreator1"
+
+        android:layout_width="285dp"
+
+        android:layout_height="13dp"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.575"
+
+        app:layout_constraintStart_toStartOf="@+id/imageView7"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.517"
+
+        app:srcCompat="@drawable/separator1" />
+
+
+    <!--<ImageView-->
+
+    <!--android:id="@+id/Spreator2"-->
+
+    <!--android:layout_width="311dp"-->
+
+    <!--android:layout_height="15dp"-->
+
+    <!--android:layout_marginStart="8dp"-->
+
+    <!--android:layout_marginTop="8dp"-->
+
+    <!--android:layout_marginEnd="8dp"-->
+
+    <!--android:layout_marginBottom="8dp"-->
+
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+
+    <!--app:layout_constraintHorizontal_bias="0.575"-->
+
+    <!--app:layout_constraintStart_toStartOf="@+id/imageView7"-->
+
+    <!--app:layout_constraintTop_toTopOf="parent"-->
+
+    <!--app:layout_constraintVertical_bias="0.595"-->
+
+    <!--app:srcCompat="@drawable/separator1" />-->
+
+
+    <android.support.v7.widget.RecyclerView
+
+        android:id="@+id/reciclerView1"
+
+        android:layout_width="312dp"
+
+        android:layout_height="154dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:scrollbars="vertical"
+
+        app:layout_constraintBottom_toBottomOf="@+id/include"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.725"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="@+id/include"
+
+        app:layout_constraintVertical_bias="0.759"
+
+        tools:listitem="@layout/board_item" />
+
+
+    <TextView
+
+        android:id="@+id/CurrentPlayerOrder"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        android:text="#9"
+
+        android:textSize="20dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.188"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.557"
+
+        android:textColor="#5C3317"/>
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+
+        android:id="@+id/CurrentPlayerPic"
+
+        android:layout_width="40dp"
+
+        android:layout_height="40dp"
+
+        android:layout_gravity="center_horizontal"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        app:civ_border_width="2dp"
+
+        app:civ_border_color="#FF000000"
+
+        android:padding="4dp"
+
+        android:src="@drawable/ic_person_24dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.273"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.551" />
+
+
+    <TextView
+
+        android:id="@+id/CurrentPlayerName"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        android:text="Shahad"
+
+        android:textSize="18dp"
+
+        android:textColor="#5C3317"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.416"
+
+        app:layout_constraintStart_toStartOf="@+id/include"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.557" />
+
+
+    <TextView
+
+        android:id="@+id/CurrentPlayerScore"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        android:text="0"
+
+        android:textSize="16dp"
+
+        android:textColor="#417432"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.586"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.557" />
+
+
+    <com.haipq.android.flagkit.FlagImageView
+
+        android:id="@+id/CurrentPlayerCountry"
+
+        android:layout_width="25dp"
+
+        android:layout_height="20dp"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="8dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.743"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.557"
+
+        app:srcCompat="@drawable/flag_ae" />
+
+
+</android.support.constraint.ConstraintLayout>
+

@@ -14,47 +14,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AccountActivity.CropView" />
+        <activity android:name=".AccountActivity.CropView"></activity>
         <activity android:name=".AccountActivity.FirstPage">
-
-
-        </activity>
-        <activity android:name=".AccountActivity.UploadProfileImageActivity" />
-        <activity android:name=".AccountActivity.SignUpActivity" />
-        <activity android:name=".AccountActivity.SignInActivity" />
-        <activity android:name=".MainActivity">
-
-        </activity>
-        <activity android:name=".AccountActivity.ResetPasswordActivity" />
-        <activity android:name=".AccountActivity.changeUserPassword" />
-        <activity android:name=".AccountActivity.update_accountActivity" />
-        <activity android:name=".AccountActivity.view_accountActivity" />
-        <activity android:name=".Game.SelectGameActivity"></activity>
-        <activity android:name=".DeviceList.DeviceListActivity" />
-        <activity android:name=".DeviceList.AfterConnectionActivity" />
-        <activity android:name=".Training.NSBTrainingActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo">
-
-        </activity>
-
-        <service android:name="com.neeuro.NativeNSBPlugin.DeviceServicesActivity" android:enabled="true"/>
-        <service android:name="com.neeuro.NativeNSBPlugin.senzeBandActivity" android:enabled="true"/>
-
+        <activity android:name=".AccountActivity.UploadProfileImageActivity" />
+        <activity android:name=".AccountActivity.SignUpActivity" />
+        <activity android:name=".AccountActivity.SignInActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".AccountActivity.ResetPasswordActivity" />
+        <activity android:name=".AccountActivity.changeUserPassword" />
+        <activity android:name=".AccountActivity.update_accountActivity" />
+        <activity android:name=".AccountActivity.view_accountActivity" />
     </application>
-
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
-
 
 </manifest>
