@@ -21,16 +21,82 @@
 
     <ImageView
         android:id="@+id/levelView_iv"
-        android:layout_width="450dp"
+        android:layout_width="460dp"
         android:layout_height="400dp"
         android:layout_marginTop="116dp"
         app:layout_constraintBottom_toBottomOf="@+id/sky_l"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.204"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/im_level" />
+
+    <ImageView
+        android:id="@+id/small_stone"
+        android:layout_width="40dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/stone"
+        app:layout_constraintBottom_toBottomOf="@+id/apple_tree_iv"
+        app:layout_constraintEnd_toEndOf="@+id/apple_tree_iv"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/apple_tree_iv"
+        app:layout_constraintTop_toTopOf="@+id/apple_tree_iv"
+        app:layout_constraintVertical_bias="0.433" />
+
+    <ImageView
+        android:id="@+id/big_stone"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/stone"
+        app:layout_constraintBottom_toBottomOf="@+id/apple_tree_iv"
+        app:layout_constraintEnd_toEndOf="@+id/apple_tree_iv"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/apple_tree_iv"
+        app:layout_constraintTop_toTopOf="@+id/apple_tree_iv"
+        app:layout_constraintVertical_bias="0.52" />
+
+
+    <ImageView
+        android:id="@+id/apple_tree_iv"
+        android:layout_width="200dp"
+        android:layout_height="400dp"
+
+        android:layout_marginBottom="100dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/im_apple_tree"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.597" />
+
+
+    <TextView
+        android:id="@+id/selectGameLevel_tv"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Select Game Level "
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/apple_tree_iv"
+        app:layout_constraintEnd_toEndOf="@+id/apple_tree_iv"
+        app:layout_constraintHorizontal_bias="0.817"
+        app:layout_constraintStart_toStartOf="@+id/apple_tree_iv"
+        app:layout_constraintTop_toTopOf="@+id/apple_tree_iv"
+        app:layout_constraintVertical_bias="0.534" />
 
 
     <ImageView
@@ -41,75 +107,115 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/im_car_2"
         android:rotation="0"
+        android:src="@drawable/im_car_2"
         app:layout_constraintBottom_toBottomOf="@+id/sky_l"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.226"
-
+        app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/levelView_iv"
         app:layout_constraintVertical_bias="0.079" />
 
     <TextView
         android:id="@+id/carLevel4_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginBottom="20dp"
         android:layout_marginEnd="8dp"
-        android:background="#8affffff"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/level_number"
         android:text="4"
-        android:textSize="16sp"
+        android:textAlignment="center"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/carLevel4_iv"
         app:layout_constraintEnd_toEndOf="@+id/carLevel4_iv"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/carLevel4_iv" />
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toStartOf="@+id/carLevel4_iv"
+        app:layout_constraintTop_toTopOf="@+id/levelView_iv" />
+
+
+    <ImageView
+        android:id="@+id/lockLevel4"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/lock_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/carLevel4_iv"
+        app:layout_constraintEnd_toEndOf="@+id/carLevel4_iv"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="@+id/carLevel4_iv"
+        app:layout_constraintTop_toBottomOf="@+id/carLevel4_tv"
+        app:layout_constraintVertical_bias="0.42000002" />
+
 
     <ImageView
         android:id="@+id/carLevel3_iv"
         android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/im_car_2"
-        android:rotation="0"
-        app:layout_constraintBottom_toBottomOf="@+id/sky_l"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.295"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/levelView_iv"
-        app:layout_constraintVertical_bias="0.371"
-        tools:ignore="MissingConstraints" />
-
-
-    <TextView
-        android:id="@+id/carLevel3_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:background="#8affffff"
-        android:text="3"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/carLevel3_iv"
-        app:layout_constraintEnd_toEndOf="@+id/carLevel3_iv"
-        app:layout_constraintHorizontal_bias="0.181"
-        app:layout_constraintStart_toStartOf="@+id/carLevel3_iv" />
-
-
-    <ImageView
-        android:id="@+id/carLevel2_iv"
-        android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/im_car_2"
         android:rotation="0"
+        android:src="@drawable/im_car_2"
+        app:layout_constraintBottom_toBottomOf="@+id/sky_l"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.27"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/levelView_iv"
+        app:layout_constraintVertical_bias="0.33999997"
+        tools:ignore="MissingConstraints" />
+
+
+    <TextView
+        android:id="@+id/carLevel3_tv"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/level_number"
+        android:text="3"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/carLevel3_iv"
+        app:layout_constraintEnd_toEndOf="@+id/carLevel3_iv"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="@+id/carLevel3_iv"
+        app:layout_constraintTop_toBottomOf="@+id/lockLevel4"
+        app:layout_constraintVertical_bias="0.897" />
+
+
+    <ImageView
+        android:id="@+id/lockLevel3"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/lock_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/carLevel3_iv"
+        app:layout_constraintEnd_toEndOf="@+id/carLevel3_iv"
+        app:layout_constraintHorizontal_bias="0.41"
+        app:layout_constraintStart_toStartOf="@+id/carLevel3_iv"
+        app:layout_constraintTop_toTopOf="@+id/carLevel3_iv"
+        app:layout_constraintVertical_bias="0.51" />
+
+
+    <ImageView
+        android:id="@+id/carLevel2_iv"
+        android:layout_width="60dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:rotation="0"
+        android:src="@drawable/im_car_2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.376"
@@ -120,88 +226,92 @@
 
     <TextView
         android:id="@+id/carLevel2_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginBottom="60dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:background="#8affffff"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/level_number"
         android:text="2"
-        android:textSize="24sp"
+        android:textAlignment="center"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/carLevel2_iv"
         app:layout_constraintEnd_toEndOf="@+id/carLevel2_iv"
-        app:layout_constraintHorizontal_bias="0.483"
-        app:layout_constraintStart_toStartOf="@+id/carLevel2_iv" />
+        app:layout_constraintStart_toStartOf="@+id/carLevel2_iv"
+        app:layout_constraintTop_toBottomOf="@+id/carLevel3_iv"
+        app:layout_constraintVertical_bias="0.81" />
+
+    <ImageView
+        android:id="@+id/lockLevel2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/lock_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/carLevel2_iv"
+        app:layout_constraintEnd_toEndOf="@+id/carLevel2_iv"
+        app:layout_constraintHorizontal_bias="0.24"
+        app:layout_constraintStart_toStartOf="@+id/carLevel2_iv"
+        app:layout_constraintTop_toBottomOf="@+id/carLevel2_tv"
+        app:layout_constraintVertical_bias="0.51" />
 
 
     <ImageView
         android:id="@+id/carLevel1_iv"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="80dp"
+        android:layout_height="100dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/im_car_2"
         android:rotation="0"
+        android:src="@drawable/im_car_2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.818"
+        app:layout_constraintHorizontal_bias="0.79"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/levelView_iv"
-        app:layout_constraintVertical_bias="0.79"
+        app:layout_constraintVertical_bias="0.99"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/carLevel1_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="68dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:background="#8affffff"
-        android:text="1"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/carLevel1_iv"
-        app:layout_constraintEnd_toEndOf="@+id/carLevel1_iv"
-        app:layout_constraintHorizontal_bias="0.512"
-        app:layout_constraintStart_toStartOf="@+id/carLevel1_iv" />
-
-
-    <ImageView
-        android:id="@+id/apple_tree_iv"
-        android:layout_width="250dp"
-        android:layout_height="500dp"
-        android:layout_marginBottom="108dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/im_apple_tree"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/levelView_iv"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sky_l"
-        app:layout_constraintVertical_bias="0.0" />
-
-
-    <TextView
-        android:id="@+id/selectGameLevel_tv"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Select Game Level "
-        android:textStyle="bold"
-        android:textColor="#ffffff"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="@+id/apple_tree_iv"
-        app:layout_constraintEnd_toEndOf="@+id/apple_tree_iv"
-        app:layout_constraintHorizontal_bias="0.82"
-        app:layout_constraintStart_toStartOf="@+id/apple_tree_iv"
-        app:layout_constraintTop_toTopOf="@+id/apple_tree_iv"
-        app:layout_constraintVertical_bias="0.534" />
+        android:background="@drawable/level_number"
+        android:text="1"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/carLevel1_iv"
+        app:layout_constraintEnd_toEndOf="@+id/carLevel1_iv"
+        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintStart_toStartOf="@+id/carLevel1_iv"
+        app:layout_constraintTop_toTopOf="@+id/lockLevel2"
+        app:layout_constraintVertical_bias="0.48000002" />
+
+
+    <ImageView
+        android:id="@+id/lockLevel1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/lock_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/carLevel1_iv"
+        app:layout_constraintEnd_toEndOf="@+id/carLevel1_iv"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/carLevel1_iv"
+        app:layout_constraintTop_toBottomOf="@+id/carLevel1_tv" />
+
+
+
+
 
 </android.support.constraint.ConstraintLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fillAfter="true">
+
+
+    <scale
+        android:duration="30000"
+        android:fromXScale="0.1"
+        android:fromYScale="0.1"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:toXScale="1.0"
+        android:toYScale="1.0" />
+
+
+    <translate
+        android:interpolator="@android:anim/linear_interpolator"
+        android:fromXDelta="-600"
+        android:toXDelta="-600"
+        android:duration="1400" />
+
+    <translate
+        android:interpolator="@android:anim/linear_interpolator"
+        android:fromYDelta="-840"
+        android:toYDelta="-840"
+        android:duration="300" />
+
+    <translate
+        android:interpolator="@android:anim/linear_interpolator"
+        android:fromXDelta="0"
+        android:toXDelta="700"
+        android:duration="8000" />
+
+    <translate
+        android:interpolator="@android:anim/linear_interpolator"
+        android:fromYDelta="0"
+        android:toYDelta="200"
+        android:duration="12000" />
+
+
+    <translate
+        android:interpolator="@android:anim/linear_interpolator"
+        android:fromXDelta="0"
+        android:toXDelta="-1000"
+        android:duration="14000" />
+
+    <translate
+        android:interpolator="@android:anim/linear_interpolator"
+        android:fromYDelta="0"
+        android:toYDelta="300"
+        android:duration="24000" />
+
+    <translate
+        android:interpolator="@android:anim/linear_interpolator"
+        android:fromXDelta="0"
+        android:toXDelta="500"
+        android:duration="24000" />
+
+    <translate
+        android:interpolator="@android:anim/linear_interpolator"
+        android:fromYDelta="0"
+        android:toYDelta="300"
+        android:duration="24000" />
+
+    <translate
+        android:interpolator="@android:anim/linear_interpolator"
+        android:fromXDelta="0"
+        android:toXDelta="500"
+        android:duration="30000" />
+
+</set>

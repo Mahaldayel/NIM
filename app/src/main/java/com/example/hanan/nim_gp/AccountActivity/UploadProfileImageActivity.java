@@ -91,7 +91,7 @@ public class UploadProfileImageActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String playeId = user.getUid();
         DatabaseReference updateData = FirebaseDatabase.getInstance().getReference("Players").child(playeId);
-        updateData.child("picURL").setValue("https://firebasestorage.googleapis.com/v0/b/nim1-2ba46.appspot.com/o/images%2Fdefault-avatar.png?alt=media&token=20c99135-29ce-4f60-8972-aaf4aff2b21a");
+        updateData.child("picURL").setValue("https://firebasestorage.googleapis.com/v0/b/nim1-2ba46.appspot.com/o/images%2Fdefault-level_number.png?alt=media&token=20c99135-29ce-4f60-8972-aaf4aff2b21a");
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();
 

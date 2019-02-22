@@ -17,8 +17,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.hanan.nim_gp.R;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -58,7 +58,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private StorageReference mStorage;
     private DatabaseReference mDatabase;
     private PlayerInformation player;
-    boolean available=false;
+    boolean available = false;
 
 
     @Override
@@ -67,7 +67,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_up);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        player=new PlayerInformation();
+        player = new PlayerInformation();
 
         //if the objects getcurrentuser method is not null
         //means user is already logged in
@@ -258,7 +258,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
 
     public boolean checkUsernameAvailability(){
-        String username=editTextUserName.getText().toString();
+        String username = editTextUserName.getText().toString();
         player.setUsername(username);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Players");
 

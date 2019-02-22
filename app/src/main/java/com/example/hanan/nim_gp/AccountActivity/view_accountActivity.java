@@ -64,7 +64,9 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
                 Toast.makeText(view_accountActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
             }
 
-        });}
+        });
+
+    }
 
 
         private void initElements(){
