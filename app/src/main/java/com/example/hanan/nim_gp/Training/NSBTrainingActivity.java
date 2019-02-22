@@ -65,6 +65,14 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     private FirebaseAuth firebaseAuth;
     private DatabaseReference mDatabase;
 
+    private TrainingInformation mTainingInformation;
+
+    /** training callback **/
+    BeforeTrainingConnectingWithNeeruo.senzeBandDelegates sbDelegate ;
+    BeforeTrainingConnectingWithNeeruo.scanCallBack scanCB ;
+    BeforeTrainingConnectingWithNeeruo.connectionCallBack connectionCB ;
+    BeforeTrainingConnectingWithNeeruo.NSBFunctionsCallBack nsbFunctionsCB ;
+
 
     private void initElements(){
 
@@ -90,14 +98,16 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mDesciption.setText("Wear your headset, you will be training on two modes the first one will be Focus on pushing the car");
 
         initTrainingArray();
+        setTrainingCallBack();
 
     }
 
     private void initTrainingArray() {
 
         trainingInformationsArray = new ArrayList<>();
+        mTainingInformation = new TrainingInformation();
 
-        }
+    }
 
     private void initTestElements() {
 
@@ -111,15 +121,16 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         avg_relax = findViewById(R.id.avg_relax);
         max_relax = findViewById(R.id.max_relax);
 
-
     }
 
+    private void setTrainingCallBack(){
 
-    BeforeTrainingConnectingWithNeeruo.senzeBandDelegates sbDelegate =  BeforeTrainingConnectingWithNeeruo.sbDelegate;
-    BeforeTrainingConnectingWithNeeruo.scanCallBack scanCB = BeforeTrainingConnectingWithNeeruo.scanCB ;
-    BeforeTrainingConnectingWithNeeruo.connectionCallBack connectionCB =  BeforeTrainingConnectingWithNeeruo.connectionCB;
-    BeforeTrainingConnectingWithNeeruo.NSBFunctionsCallBack nsbFunctionsCB = BeforeTrainingConnectingWithNeeruo.nsbFunctionsCB;
+        sbDelegate =  BeforeTrainingConnectingWithNeeruo.sbDelegate;
+        scanCB = BeforeTrainingConnectingWithNeeruo.scanCB ;
+        connectionCB =  BeforeTrainingConnectingWithNeeruo.connectionCB;
+        nsbFunctionsCB = BeforeTrainingConnectingWithNeeruo.nsbFunctionsCB;
 
+    }
 
     public void initializeSenzeBandBasic()
     {
@@ -156,34 +167,37 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     }
 
 
-
-
     @Override
     public void onClick(View view) {
 
         if(view == mStartTraining_bt){
 
             if(mStartTraining_bt.getBackground().equals(getResources().getDrawable(R.drawable.finish_bt))){
-                saveTrainingInformation();
-                goToSelectGame();
-            }else {
+                saveTrainingInformationOnDatabase();
+            }else{
 
                 startTraining();
             }
 
         }else if(mTryAgain_bt == view){
+
+            savefinishedTriningOnarray();
             startTraining();
         }
+    }
 
+    private void savefinishedTriningOnarray(){
 
-}
+        mTainingInformation.setPlayerEmail(firebaseAuth.getCurrentUser().getEmail());
+        trainingInformationsArray.add(mTainingInformation);
+        mTainingInformation = new TrainingInformation();
+    }
 
-    private void saveTrainingInformation() {
+    private void saveTrainingInformationOnDatabase() {
 
-//        String playerId = firebaseAuth.getCurrentUser().getUid();
-//        mDatabase = FirebaseDatabase.getInstance().getReference();
-//        mDatabase.child("Players").child(playerId).setValue(player);
-        goToSelectGame();
+        String playerId = firebaseAuth.getCurrentUser().getUid();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("TrainingInformation").child(playerId).setValue(trainingInformationsArray);
 
     }
 
@@ -200,9 +214,26 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
     private void endTraining(){
 
-        TrainingInformation trainingInformation ;
-        trainingInformation = sbDelegate.endTrain();
 
+        updateUi();
+
+        if(mCurrentTrainingMode == TRAINING_MODE_FOCUS){
+
+            mTainingInformation = sbDelegate.endTrainFocus(mTainingInformation);
+            mCurrentTrainingMode = TRAINING_MODE_RELAX;
+
+
+        }else if(mCurrentTrainingMode == TRAINING_MODE_RELAX){
+            mTainingInformation = sbDelegate.endTrainRelax(mTainingInformation);
+            mCurrentTrainingMode = TRAINING_MODE_FOCUS;
+        }
+
+        sbDelegate.clearCount();
+
+
+    }
+
+    private void updateUi() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -215,42 +246,21 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
                     mTryAgain_bt.setVisibility(View.VISIBLE);
             }
         });
-
-        if(mCurrentTrainingMode == TRAINING_MODE_FOCUS){
-
-            trainingInformation.setTrainingType("Focus");
-            mCurrentTrainingMode = TRAINING_MODE_RELAX;
-
-        }else if(mCurrentTrainingMode == TRAINING_MODE_RELAX){
-
-            trainingInformation.setTrainingType("Relax");
-            mCurrentTrainingMode = TRAINING_MODE_FOCUS;
-
-        }
-
-        trainingInformationsArray.add(trainingInformation);
-        sbDelegate.clearCount();
-
-
-
     }
 
     private void startTraining() {
 
-        sbDelegate.setCountToZero();
+
         sbDelegate.clearLayout();
-        mStartTraining_bt.setVisibility(View.GONE);
-        mTraining_layout.setVisibility(View.GONE);
+        startTrainingUiUpdate();
 
         if(mCurrentTrainingMode == TRAINING_MODE_FOCUS){
+
             startFocusTraining();
-            mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.next_bt));
-            mDesciption.setText("Now,  you will be training the second one is Relax in order to pull the car.");
         }
         else if(mCurrentTrainingMode == TRAINING_MODE_RELAX) {
+
             startRelaxTraining();
-            mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.finish_bt));
-            mDesciption.setVisibility(View.GONE);
 
         }
 
@@ -259,8 +269,16 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
     }
 
+    private void startTrainingUiUpdate() {
+
+        mStartTraining_bt.setVisibility(View.GONE);
+        mTraining_layout.setVisibility(View.GONE);
+    }
+
     private void startRelaxTraining() {
 
+        mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.finish_bt));
+        mDesciption.setVisibility(View.GONE);
         mCurrentTrainingMode_tv.setText("Relaxation Mode");
         moveBackword();
 
@@ -268,6 +286,8 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
     private void startFocusTraining() {
 
+        mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.next_bt));
+        mDesciption.setText("Now,  you will be training the second one is Relax in order to pull the car.");
         mCurrentTrainingMode_tv.setText("Focus \n Mode");
         moveForward();
     }

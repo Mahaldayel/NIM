@@ -24,9 +24,10 @@ import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.DeviceCallback;
 import me.aflak.bluetooth.DiscoveryCallback;
 
-import com.example.hanan.nim_gp.Game.SelectGameActivity;
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
+
+import static com.example.hanan.nim_gp.Game.SelectGameActivity.SELECTED_GAME_LEVEL_INTENT;
 
 
 public class DeviceListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener ,View.OnClickListener {
@@ -58,6 +59,8 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
 
     private Context mContext;
 
+    private int mSelectedGameLevel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,8 +68,17 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
 
         setContentView(R.layout.activity_device_list);
         initElements();
+        getSelectedLevelFromIntent();
         check();
 
+    }
+
+    private void getSelectedLevelFromIntent() {
+
+        Intent intent = getIntent();
+
+        if(intent.hasExtra(SELECTED_GAME_LEVEL_INTENT))
+            mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,0);
     }
 
     private void initElements(){
@@ -266,6 +278,7 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
 
         Intent intent = new Intent(context,nextClass);
         startActivity(intent);
+
     }
 
     private void goToPullAndPush(){
@@ -279,8 +292,13 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
         Intent intent = new Intent(context,PullAndPushClass);
         int index = mPairedDevices.indexOf(mConnectedDevice);
         intent.putExtra(CONNECTED_DEVICE_INTENT,index);
+        intent.putExtra(SELECTED_GAME_LEVEL_INTENT, mSelectedGameLevel);
+
         startActivity(intent);
+
     }
+
+
 
     private void check(){
 

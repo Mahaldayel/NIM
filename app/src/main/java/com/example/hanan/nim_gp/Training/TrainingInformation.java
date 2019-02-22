@@ -7,27 +7,18 @@ import java.util.List;
 public class TrainingInformation implements Serializable {
 
 
-    private String trainingType;
     private double maxRelax;
     private double avgRelax;
     private double maxFocus;
     private double avgFocus;
+    private String playerEmail;
 
 
-    public TrainingInformation(String trainingType, double maxRelax, double avgRelax, double maxFocus, double avgFocus) {
-        this.trainingType = trainingType;
-        this.maxRelax = maxRelax;
-        this.avgRelax = avgRelax;
-        this.maxFocus = maxFocus;
-        this.avgFocus = avgFocus;
-    }
+
 
     public TrainingInformation() {
     }
 
-    public void setTrainingType(String trainingType) {
-        this.trainingType = trainingType;
-    }
 
     public void setMaxRelax(double maxRelax) {
         this.maxRelax = maxRelax;
@@ -43,6 +34,31 @@ public class TrainingInformation implements Serializable {
 
     public void setAvgFocus(double avgFocus) {
         this.avgFocus = avgFocus;
+    }
+
+
+    public double getMaxRelax() {
+        return maxRelax;
+    }
+
+    public double getAvgRelax() {
+        return avgRelax;
+    }
+
+    public double getMaxFocus() {
+        return maxFocus;
+    }
+
+    public double getAvgFocus() {
+        return avgFocus;
+    }
+
+    public void setPlayerEmail(String playerEmail) {
+        this.playerEmail = playerEmail;
+    }
+
+    public String getPlayerEmail() {
+        return playerEmail;
     }
 }
 

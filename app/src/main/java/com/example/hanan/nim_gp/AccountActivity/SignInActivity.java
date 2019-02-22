@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
+import com.example.hanan.nim_gp.Training.NSBTrainingActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -114,7 +115,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                         if(task.isSuccessful()){
                             //start the profile activity
                             finish();
-                            startActivity(new Intent(getApplicationContext(), view_accountActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }else {
                             String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
                             displayErrorMsg(errorCode);

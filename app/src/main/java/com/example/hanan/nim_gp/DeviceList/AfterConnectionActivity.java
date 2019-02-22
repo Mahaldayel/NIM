@@ -21,6 +21,7 @@ import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.DeviceCallback;
 
 import static com.example.hanan.nim_gp.DeviceList.DeviceListActivity.CONNECTED_DEVICE_INTENT;
+import static com.example.hanan.nim_gp.Game.SelectGameActivity.SELECTED_GAME_LEVEL_INTENT;
 
 
 public class AfterConnectionActivity extends AppCompatActivity implements View.OnClickListener {
@@ -42,6 +43,8 @@ public class AfterConnectionActivity extends AppCompatActivity implements View.O
 
     private Timer timer;
     private TimerTask timerTask;
+
+    private int mSelectedGameLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +137,9 @@ public class AfterConnectionActivity extends AppCompatActivity implements View.O
         if(intent.hasExtra(CONNECTED_DEVICE_INTENT))
             mConnectedDeviceIndex = intent.getIntExtra(CONNECTED_DEVICE_INTENT,-1);
 
+
+        if(intent.hasExtra(SELECTED_GAME_LEVEL_INTENT))
+            mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,0);
     }
 
 

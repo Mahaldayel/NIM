@@ -30,6 +30,19 @@
         <activity android:name=".AccountActivity.changeUserPassword" />
         <activity android:name=".AccountActivity.update_accountActivity" />
         <activity android:name=".AccountActivity.view_accountActivity" />
+        <activity android:name=".DeviceList.DeviceListActivity"/>
+        <activity android:name=".DeviceList.AfterConnectionActivity"/>
+        <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo"/>
+        <activity android:name=".Training.NSBTrainingActivity"/>
+        <activity android:name=".Game.SelectGameActivity"/>
     </application>
+
+
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
 
 </manifest>

@@ -1,7 +1,9 @@
 package com.example.hanan.nim_gp.Game;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,7 +17,9 @@ import com.example.hanan.nim_gp.AccountActivity.view_accountActivity;
 import com.example.hanan.nim_gp.DeviceList.DeviceListActivity;
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
+import com.example.hanan.nim_gp.Training.NSBTrainingActivity;
 import com.example.hanan.nim_gp.Training.TrainingInformation;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +36,10 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
     private final int SCORE_LEVEL_THREE = 300;
     private final int SCORE_LEVEL_FOUR = 400;
 
+    public static final String SELECTED_GAME_LEVEL_INTENT = "SELECTED_GAME_LEVEL_INTENT" ;
+
+
+
 
     private ImageView gameLevel1_iv;
     private ImageView gameLevel2_iv;
@@ -42,9 +50,9 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
     private ProgressDialog progressDialog;
 
     private int mSelectdGameLevel;
-    private long mPlyaerScore = 200;
-    private int mHigherAvalableLevel = 2;
-    private String mPlayerEmail = "hanooon300@gmail.com";
+    private long mPlyaerScore ;
+    private int mHigherAvalableLevel ;
+    private String mPlayerEmail ;
 
 
 
@@ -55,21 +63,10 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.select_level);
 
         initElements();
-        getIntentValue();
         getPlayerScore();
 
 
 
-    }
-
-    private void getIntentValue() {
-
-
-        Intent intent = getIntent();
-        if( intent != null && intent.hasExtra("trainingInformationsArray")) {
-            ArrayList<TrainingInformation> trainingInformationArrayList = (ArrayList<TrainingInformation>) intent.getSerializableExtra("trainingInformationsArray");
-
-        }
     }
 
     private void initElements() {
@@ -87,6 +84,8 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
         gameLevel4_iv.setOnClickListener(this);
 
         progressDialog = new ProgressDialog(this);
+
+       mPlayerEmail =  FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
     }
 
@@ -148,12 +147,40 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
             findViewById(R.id.lockLevel4).setVisibility(View.GONE);
 
 
-
-
         mHigherAvalableLevel = (int)(mPlyaerScore/100);
 
     }
 
+    private void checkAvailableLevel() {
+
+        if(mSelectdGameLevel < mHigherAvalableLevel)
+            showUnavailable();
+        else {
+            goTo(DeviceListActivity.class);
+        }
+    }
+
+    private void showUnavailable() {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                SelectGameActivity.this);
+        // set title
+        alertDialogBuilder.setTitle("Lock Level");
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("Sorry this level not available. \n You need to get more score to play on it. ")
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(
+                                    DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
 
 
     @Override
@@ -179,9 +206,8 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
 
         }
 
-        Toast.makeText(SelectGameActivity.this,"click :"+String.valueOf(mSelectdGameLevel),Toast.LENGTH_SHORT).show();
+        checkAvailableLevel();
 
-        goTo(DeviceListActivity.class);
 
 
     }
@@ -191,6 +217,7 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
         Context context = SelectGameActivity.this;
 
         Intent intent = new Intent(context,nextClass);
+        intent.putExtra(SELECTED_GAME_LEVEL_INTENT,mSelectdGameLevel);
         startActivity(intent);
     }
 

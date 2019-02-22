@@ -23,6 +23,9 @@ import java.util.Collections;
 
 public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
+
+    public final String NEEURO_ADDRESS_OF_SELECTED_DEVICE = "NEEURO_ADDRESS_OF_SELECTED_DEVICE";
+
     private ListView headsetsListView;
     private ArrayList<String> headsetsAddressArray;
     private ArrayAdapter<String> adapter;
@@ -106,7 +109,7 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
         Class nextClass = NSBTrainingActivity.class;
 
         Intent intent = new Intent(context,nextClass);
-        intent.putExtra("neeuroAddress",neeuroAddress);
+        intent.putExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE,neeuroAddress);
         startActivity(intent);
 
 
@@ -272,15 +275,20 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         }
 
-        public TrainingInformation endTrain(){
+        public TrainingInformation endTrainFocus(TrainingInformation trainingInformation){
 
             count = 0;
 
-
-            TrainingInformation trainingInformation = new TrainingInformation();
-
             trainingInformation.setAvgFocus(getAvarage(mFocusArray));
             trainingInformation.setMaxFocus(Collections.max(mFocusArray));
+
+
+            return trainingInformation;
+
+        }
+        public TrainingInformation endTrainRelax(TrainingInformation trainingInformation){
+
+            count = 0;
 
             trainingInformation.setAvgRelax(getAvarage(mRelaxArray));
             trainingInformation.setMaxRelax(Collections.max(mRelaxArray));
@@ -289,11 +297,14 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         }
 
+
         public void clearLayout(){
 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
+                    count = 0;
 
                     relaxationText.setText("");
                     avg_relax.setText("");
