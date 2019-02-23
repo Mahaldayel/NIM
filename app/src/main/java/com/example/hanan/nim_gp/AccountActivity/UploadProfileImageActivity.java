@@ -32,7 +32,6 @@ import java.util.UUID;
 
 public class UploadProfileImageActivity extends AppCompatActivity {
 
-
     private Button buttonUpload,buttonSkip;
     private ImageView imageViewPic;
 
@@ -43,8 +42,6 @@ public class UploadProfileImageActivity extends AppCompatActivity {
     StorageReference storageReference;
     private DatabaseReference mDatabase;
     FirebaseAuth firebaseAuth;
-
-
 
 
 
@@ -91,7 +88,7 @@ public class UploadProfileImageActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String playeId = user.getUid();
         DatabaseReference updateData = FirebaseDatabase.getInstance().getReference("Players").child(playeId);
-        updateData.child("picURL").setValue("https://firebasestorage.googleapis.com/v0/b/nim1-2ba46.appspot.com/o/images%2Fdefault-level_number.png?alt=media&token=20c99135-29ce-4f60-8972-aaf4aff2b21a");
+        updateData.child("picURL").setValue("https://firebasestorage.googleapis.com/v0/b/nim1-2ba46.appspot.com/o/images%2Fdriver.png?alt=media&token=f4c00115-8c40-402d-a552-b4358fbbcbbb");
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();
 
