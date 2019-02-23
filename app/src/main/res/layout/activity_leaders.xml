@@ -684,7 +684,7 @@
 
         android:id="@+id/Spreator1"
 
-        android:layout_width="285dp"
+        android:layout_width="270dp"
 
         android:layout_height="13dp"
 
