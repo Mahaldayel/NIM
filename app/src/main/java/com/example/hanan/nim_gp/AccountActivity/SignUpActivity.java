@@ -9,7 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -58,8 +60,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private StorageReference mStorage;
     private DatabaseReference mDatabase;
     private PlayerInformation player;
-    boolean available=false;
-
+    boolean available ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +140,24 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         };
         //Date Picker END
 
+        editTextUserName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkUsernameAvailability();
+            }
+        });
+
     }
 
 
@@ -168,7 +187,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
 
-        if(!checkUsernameAvailability()){
+        if(!available){
+
             Toast.makeText(SignUpActivity.this,"Please enter another username",Toast.LENGTH_LONG).show();
             return;
         }
@@ -257,54 +277,45 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    public boolean checkUsernameAvailability(){
+    public void checkUsernameAvailability(){
+
 
         String username=editTextUserName.getText().toString();
-
         player.setUsername(username);
-
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Players");
 
-
-
         //check if the username exist in Database or not
-
         mDatabase.orderByChild("username").equalTo(username)
-
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-
                     @Override
-
                     public void onDataChange(DataSnapshot dataSnapshot) {
-
                         if (dataSnapshot.exists()) {
 
+                            setAvailable(false);
+
                             //the username exists
-
                         } else {
-
-                            available = true;
+                            setAvailable(true);
 
                         }
-
                     }
-
-
 
                     @Override
-
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
-
 
                     }
 
-
-
                 });
-        return available;
+
 
     }
+
+    /**/
+    private void setAvailable(boolean ava){
+        available = ava;
+
+    }
+
 
 
     public void addPlayer(){
