@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -370,7 +371,16 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
                                 });
 
                 AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
+                try {
+
+                    alertDialog.show();
+                }
+catch (WindowManager.BadTokenException e) {
+                    //use a log message
+                }
+
+
+
             }
         });
     }
