@@ -63,6 +63,8 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     private TimerTask timerTask;
     private Timer timer;
 
+    private boolean mFinish = false;
+
     private FirebaseAuth firebaseAuth;
     private DatabaseReference mDatabase;
 
@@ -179,12 +181,13 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         switch (view.getId()){
 
             case R.id.start_training_bt:
-                if(mStartTraining_bt.getBackground().equals(getResources().getDrawable(R.drawable.finish_bt)))
+                if(mFinish)
                     saveTrainingInformationOnDatabase();
                 else
                     startTraining();
                 break;
             case R.id.try_again_bt:
+                mFinish = false;
                 initTrainingInformation();
                 startTraining();
                 break;
@@ -203,6 +206,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("TrainingInformation").child(playerId).setValue(mTainingInformation);
 
+        goToMainActivity();
     }
     private void goToMainActivity() {
 
@@ -280,8 +284,9 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
     private void startRelaxTraining() {
 
+        mFinish = true;
         mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.finish_bt));
-        mDesciption.setVisibility(View.GONE);
+        mDesciption.setText("");
         mCurrentTrainingMode_tv.setText("Relaxation Mode");
         moveBackword();
 
