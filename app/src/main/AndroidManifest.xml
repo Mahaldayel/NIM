@@ -35,8 +35,12 @@
         <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo"/>
         <activity android:name=".Training.NSBTrainingActivity"/>
         <activity android:name=".Game.SelectGameActivity"/>
-        <activity android:name=".leaders.LeadersActivity"/>
-        <activity android:name=".leaders.CountryLeadersActivity"/>
+        <activity android:name=".AccountActivity.DeleteAccount" />
+        <activity android:name=".leaders.CountryLeadersActivity" />
+        <activity android:name=".leaders.LeadersActivity" />
+        <activity android:name=".Game.control_modeActivity" />
+        <activity android:name=".Game.player_modeActivity" />
+        <activity android:name=".Game.play_gameActivity" />
     </application>
 
 

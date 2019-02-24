@@ -33,7 +33,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="95dp"
         android:background="@drawable/view_account_one"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -159,14 +159,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
                     app:countryCode="US"
-                    tools:src="@drawable/flag_us" />
+                    tools:src="@drawable/flag_us"/>
 
                 <ImageView
                     android:id="@+id/SA_FLAG"
-                    android:layout_width="60dp"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="-15dp"
                     android:src="@drawable/saudi_flag"
                     android:visibility="gone" />
+
+
 
             </LinearLayout>
 
@@ -190,17 +194,11 @@
                 android:paddingLeft="25dp">
 
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/icon_email" />
 
-                    android:src="@drawable/email" />
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="36dp"
-                    android:layout_marginLeft="-40dp"
-                    android:layout_marginTop="5dp"
-                    android:src="@drawable/ic_email_24dp" />
 
                 <TextView
                     android:id="@+id/email_tv"
@@ -222,19 +220,13 @@
                 android:paddingLeft="25dp">
 
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_marginTop="20dp"
 
-                    android:src="@drawable/email" />
+                    android:src="@drawable/icon_date" />
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="36dp"
-                    android:layout_marginLeft="-40dp"
-                    android:layout_marginTop="25dp"
 
-                    android:src="@drawable/ic_date_gray_24dp" />
 
 
                 <TextView
@@ -254,7 +246,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical"
                 android:paddingLeft="25dp">
 
@@ -291,8 +283,8 @@
 
     <Button
         android:id="@+id/update_button"
-        android:layout_width="143dp"
-        android:layout_height="56dp"
+        android:layout_width="130dp"
+        android:layout_height="45dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="50dp"
@@ -300,10 +292,10 @@
         android:textColor="#fff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
-        app:layout_constraintHorizontal_bias="0.62"
+        app:layout_constraintHorizontal_bias="0.611"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/opacityFullView_iv"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.946" />
 
     <ImageView
         android:id="@+id/back"

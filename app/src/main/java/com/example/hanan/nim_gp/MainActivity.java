@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.example.hanan.nim_gp.AccountActivity.view_accountActivity;
 import com.example.hanan.nim_gp.Game.SelectGameActivity;
-import com.example.hanan.nim_gp.Training.BeforeTrainingConnectingWithNeeruo;
 import com.example.hanan.nim_gp.Training.NSBTrainingActivity;
 import com.example.hanan.nim_gp.leaders.LeadersActivity;
 
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
                 goTo(view_accountActivity.class);
                 break;
             case R.id.training_tv:
-                goTo(BeforeTrainingConnectingWithNeeruo.class);
+                goTo(NSBTrainingActivity.class);
                 break;
             case R.id.leaderboard_iv:
                 goTo(LeadersActivity.class);

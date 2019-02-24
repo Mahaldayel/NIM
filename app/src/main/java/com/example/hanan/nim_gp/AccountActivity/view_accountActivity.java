@@ -71,9 +71,7 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
                 Toast.makeText(view_accountActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
             }
 
-        });
-
-    }
+        });}
 
 
         private void initElements(){
@@ -130,7 +128,7 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
         if(view == mUpdateButton){
             startActivity(new Intent(view_accountActivity.this,update_accountActivity.class));
             }
-            if(view==password){  startActivity(new Intent(view_accountActivity.this,changeUserPassword.class));
+            if(view==password){  startActivity(new Intent(view_accountActivity.this, changeUserPassword.class));
             }
             if(view==deleteAccount){
                 startActivity(new Intent(view_accountActivity.this,DeleteAccount.class));

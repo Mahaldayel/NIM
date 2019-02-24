@@ -37,6 +37,7 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
     private final int SCORE_LEVEL_FOUR = 400;
 
     public static final String SELECTED_GAME_LEVEL_INTENT = "SELECTED_GAME_LEVEL_INTENT" ;
+    public static final String CONTROL_MODE_GAME_INTENT ="controlMode";
 
 
 
@@ -53,7 +54,7 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
     private long mPlyaerScore ;
     private int mHigherAvalableLevel ;
     private String mPlayerEmail ;
-
+    private String controlType;
 
 
 
@@ -61,7 +62,8 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_level);
-
+        Intent intent = getIntent();
+        controlType = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
         initElements();
         getPlayerScore();
 
@@ -216,8 +218,12 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
 
         Context context = SelectGameActivity.this;
 
-        Intent intent = new Intent(context,nextClass);
+       ///////////////////////////////// Intent intent = new Intent(context,nextClass);//MAKE IT COMMENT JUST FOR NOW
+        //////////////////////////////////////////////////////////////NEXT LINE
+        Intent intent = new Intent(SelectGameActivity.this, player_modeActivity.class);/////////////////////HERE
+        //////////////////////////////////////////////////////////////LINE BEFOTE THIS
         intent.putExtra(SELECTED_GAME_LEVEL_INTENT,mSelectdGameLevel);
+        intent.putExtra(CONTROL_MODE_GAME_INTENT,controlType);
         startActivity(intent);
     }
 

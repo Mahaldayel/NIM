@@ -33,13 +33,13 @@
                 android:layout_marginBottom="8dp"
                 android:text="1"
                 android:textColor="#5C3317"
-                android:textSize="20dp"
+                android:textSize="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/playerCountry_iv"
-                app:layout_constraintHorizontal_bias="0.036"
+                app:layout_constraintHorizontal_bias="0.087"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintVertical_bias="0.6" />
 
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -50,16 +50,16 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                app:civ_border_width="2dp"
-                app:civ_border_color="#FF000000"
                 android:padding="4dp"
                 android:src="@drawable/ic_person_24dp"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.147"
+                app:layout_constraintHorizontal_bias="0.196"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/playerName_tv"
@@ -70,14 +70,14 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="shahad"
-                android:textSize="18dp"
                 android:textColor="#5C3317"
+                android:textSize="13dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.385"
+                app:layout_constraintHorizontal_bias="0.439"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.600" />
+                app:layout_constraintVertical_bias="0.625" />
 
             <TextView
                 android:id="@+id/playerScore_tv"
@@ -88,20 +88,20 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="5000"
-                android:textSize="16dp"
                 android:textColor="#417432"
+                android:textSize="13dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.62"
+                app:layout_constraintHorizontal_bias="0.651"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.538" />
+                app:layout_constraintVertical_bias="0.545" />
 
 
             <com.haipq.android.flagkit.FlagImageView
                 android:id="@+id/playerCountry_iv"
-                android:layout_width="25dp"
-                android:layout_height="20dp"
+                android:layout_width="20dp"
+                android:layout_height="15dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"

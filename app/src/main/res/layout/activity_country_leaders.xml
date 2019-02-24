@@ -35,7 +35,7 @@
     <Button
         android:id="@+id/CCbuttonon"
         android:layout_width="90dp"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -53,8 +53,8 @@
 
     <Button
         android:id="@+id/CCbackButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -108,7 +108,7 @@
         android:layout_height="19dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="16dp"
+        android:textSize="13dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Shahad1"
@@ -122,8 +122,8 @@
 
     <com.haipq.android.flagkit.FlagImageView
         android:id="@+id/CPlayer1Country"
-        android:layout_width="25dp"
-        android:layout_height="20dp"
+        android:layout_width="20dp"
+        android:layout_height="15dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
@@ -180,7 +180,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Shahad2"
-        android:textSize="16dp"
+        android:textSize="13dp"
         android:textColor="#5C3317"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/imageView7"
@@ -198,7 +198,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="50"
-        android:textSize="16dp"
+        android:textSize="13dp"
         android:textColor="#417432"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/imageView7"
@@ -209,8 +209,8 @@
 
     <com.haipq.android.flagkit.FlagImageView
         android:id="@+id/CPlayer2Country"
-        android:layout_width="25dp"
-        android:layout_height="20dp"
+        android:layout_width="20dp"
+        android:layout_height="15dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -267,7 +267,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Shahad3"
-        android:textSize="16dp"
+        android:textSize="13dp"
         android:textColor="#5C3317"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/imageView7"
@@ -285,7 +285,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="50"
-        android:textSize="16dp"
+        android:textSize="13dp"
         android:textColor="#417432"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -296,8 +296,8 @@
 
     <com.haipq.android.flagkit.FlagImageView
         android:id="@+id/CPlayer3Country"
-        android:layout_width="25dp"
-        android:layout_height="20dp"
+        android:layout_width="20dp"
+        android:layout_height="15dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -310,7 +310,7 @@
 
     <ImageView
         android:id="@+id/Spreator1"
-        android:layout_width="285dp"
+        android:layout_width="270dp"
         android:layout_height="13dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -366,14 +366,14 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="#1"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:textColor="#5C3317"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.188"
+        app:layout_constraintHorizontal_bias="0.145"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.553" />
+        app:layout_constraintVertical_bias="0.556" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/CCurrentPlayerPic"
@@ -383,16 +383,16 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        app:civ_border_width="2dp"
-        app:civ_border_color="#FF000000"
         android:padding="4dp"
         android:src="@drawable/ic_person_24dp"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.273"
+        app:layout_constraintHorizontal_bias="0.256"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.551" />
+        app:layout_constraintVertical_bias="0.55" />
 
     <TextView
         android:id="@+id/CCurrentPlayerName"
@@ -403,7 +403,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Shahad"
-        android:textSize="18dp"
+        android:textSize="13dp"
         android:textColor="#5C3317"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -421,7 +421,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="5000"
-        android:textSize="16dp"
+        android:textSize="13dp"
         android:textColor="#417432"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -432,8 +432,8 @@
 
     <com.haipq.android.flagkit.FlagImageView
         android:id="@+id/CCurrentPlayerCountry"
-        android:layout_width="25dp"
-        android:layout_height="20dp"
+        android:layout_width="20dp"
+        android:layout_height="15dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -449,21 +449,21 @@
     <Button
         android:id="@+id/CWbuttonof"
         android:layout_width="90dp"
-        android:layout_height="33dp"
+        android:layout_height="23dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:background="@drawable/buttonof"
         android:text="THE WORLD"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:background="@drawable/buttonof"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.721"
+        app:layout_constraintHorizontal_bias="0.711"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.255" />
+        app:layout_constraintVertical_bias="0.26" />
 
     <TextView
         android:id="@+id/CPlayer1score"
@@ -474,7 +474,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="50"
-        android:textSize="16dp"
+
+        android:textSize="13dp"
         android:textColor="#417432"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/imageView7"
