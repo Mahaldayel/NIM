@@ -35,6 +35,8 @@
         <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo"/>
         <activity android:name=".Training.NSBTrainingActivity"/>
         <activity android:name=".Game.SelectGameActivity"/>
+        <activity android:name=".leaders.LeadersActivity"/>
+        <activity android:name=".leaders.CountryLeadersActivity"/>
     </application>
 
 

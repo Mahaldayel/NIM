@@ -183,9 +183,26 @@
                 android:background="@drawable/try_again_bt"
                 android:visibility="gone" />
 
+
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 
+
+    <Button
+        android:id="@+id/back_bt"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#00678909"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.142"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.845" />
     <!--this layout will delete later it just for test and see the data-->
     <LinearLayout
         android:id="@+id/test_layout"

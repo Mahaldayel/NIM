@@ -153,7 +153,7 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
 
     private void checkAvailableLevel() {
 
-        if(mSelectdGameLevel < mHigherAvalableLevel)
+        if(mSelectdGameLevel > mHigherAvalableLevel)
             showUnavailable();
         else {
             goTo(DeviceListActivity.class);
@@ -188,19 +188,19 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
 
         switch (view.getId()){
             case R.id.carLevel1_iv:
-                if(mHigherAvalableLevel >= 1)
+//                if(mHigherAvalableLevel >= 1)
                     mSelectdGameLevel = 1;
                 break;
             case R.id.carLevel2_iv:
-                if(mHigherAvalableLevel >= 2)
+//                if(mHigherAvalableLevel >= 2)
                     mSelectdGameLevel = 2;
                 break;
             case R.id.carLevel3_iv:
-                if(mHigherAvalableLevel >= 3)
+//                if(mHigherAvalableLevel >= 3)
                     mSelectdGameLevel = 3;
                 break;
             case R.id.carLevel4_iv:
-                if(mHigherAvalableLevel >= 4)
+//                if(mHigherAvalableLevel >= 4)
                     mSelectdGameLevel = 4;
                 break;
 

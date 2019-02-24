@@ -56,7 +56,7 @@ public class AfterConnectionActivity extends AppCompatActivity implements View.O
         getConnectedDeviceIndexFromIntent();
         Connect();
         check();
-//        checkOfConnect();
+
     }
 
 

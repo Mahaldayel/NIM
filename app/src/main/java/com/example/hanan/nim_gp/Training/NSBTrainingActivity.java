@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.hanan.nim_gp.Game.SelectGameActivity;
+import com.example.hanan.nim_gp.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -49,12 +50,12 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
     /***/
 
-    private ArrayList<TrainingInformation> trainingInformationsArray;
 
     private ConstraintLayout mTraining_layout;
     private TextView mCurrentTrainingMode_tv;
     private Button mStartTraining_bt;
     private Button mTryAgain_bt;
+    private Button mBack_bt;
     private ImageView mTrainingCar_iv;
     private TextView mDesciption;
     private int mCurrentTrainingMode;
@@ -90,6 +91,9 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mTryAgain_bt = findViewById(R.id.try_again_bt);
         mTryAgain_bt.setOnClickListener(this);
 
+        mBack_bt = findViewById(R.id.back_bt);
+        mBack_bt.setOnClickListener(this);
+
         mTraining_layout = findViewById(R.id.training_layout);
 
         mTrainingCar_iv = findViewById(R.id.training_car);
@@ -97,15 +101,16 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mDesciption = findViewById(R.id.training_deception);
         mDesciption.setText("Wear your headset, you will be training on two modes the first one will be Focus on pushing the car");
 
-        initTrainingArray();
+        initTrainingInformation();
         setTrainingCallBack();
 
     }
 
-    private void initTrainingArray() {
+    private void initTrainingInformation() {
 
-        trainingInformationsArray = new ArrayList<>();
         mTainingInformation = new TrainingInformation();
+        mTainingInformation.setPlayerEmail(firebaseAuth.getCurrentUser().getEmail());
+
 
     }
 
@@ -150,6 +155,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         setTextView();
 
 
+
     }
 
 
@@ -170,47 +176,44 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View view) {
 
-        if(view == mStartTraining_bt){
+        switch (view.getId()){
 
-            if(mStartTraining_bt.getBackground().equals(getResources().getDrawable(R.drawable.finish_bt))){
-                saveTrainingInformationOnDatabase();
-            }else{
-
+            case R.id.start_training_bt:
+                if(mStartTraining_bt.getBackground().equals(getResources().getDrawable(R.drawable.finish_bt)))
+                    saveTrainingInformationOnDatabase();
+                else
+                    startTraining();
+                break;
+            case R.id.try_again_bt:
+                initTrainingInformation();
                 startTraining();
-            }
-
-        }else if(mTryAgain_bt == view){
-
-            savefinishedTriningOnarray();
-            startTraining();
+                break;
+            case R.id.back_bt:
+                goToMainActivity();
+                break;
         }
+
     }
 
-    private void savefinishedTriningOnarray(){
-
-        mTainingInformation.setPlayerEmail(firebaseAuth.getCurrentUser().getEmail());
-        trainingInformationsArray.add(mTainingInformation);
-        mTainingInformation = new TrainingInformation();
-    }
 
     private void saveTrainingInformationOnDatabase() {
 
         String playerId = firebaseAuth.getCurrentUser().getUid();
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("TrainingInformation").child(playerId).setValue(trainingInformationsArray);
+        mDatabase.child("TrainingInformation").child(playerId).setValue(mTainingInformation);
 
     }
-
-    private void goToSelectGame() {
-
+    private void goToMainActivity() {
 
         Context context = NSBTrainingActivity.this;
-        Class nextClass = SelectGameActivity.class;
-
+        Class nextClass = MainActivity.class;
         Intent intent = new Intent(context,nextClass);
-        intent.putExtra("trainingInformationsArray",trainingInformationsArray);
         startActivity(intent);
     }
+
+
+
 
     private void endTraining(){
 
