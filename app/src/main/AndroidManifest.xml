@@ -4,6 +4,15 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +23,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AccountActivity.CropView"></activity>
+        <activity android:name=".GameOver.FailedActivity"></activity>
+        <activity android:name=".GameOver.CompletedActivity" />
+        <activity android:name=".AccountActivity.CropView" />
         <activity android:name=".AccountActivity.FirstPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,11 +41,11 @@
         <activity android:name=".AccountActivity.changeUserPassword" />
         <activity android:name=".AccountActivity.update_accountActivity" />
         <activity android:name=".AccountActivity.view_accountActivity" />
-        <activity android:name=".DeviceList.DeviceListActivity"/>
-        <activity android:name=".DeviceList.AfterConnectionActivity"/>
-        <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo"/>
-        <activity android:name=".Training.NSBTrainingActivity"/>
-        <activity android:name=".Game.SelectGameActivity"/>
+        <activity android:name=".DeviceList.DeviceListActivity" />
+        <activity android:name=".DeviceList.AfterConnectionActivity" />
+        <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo" />
+        <activity android:name=".Training.NSBTrainingActivity" />
+        <activity android:name=".Game.SelectGameActivity" />
         <activity android:name=".AccountActivity.DeleteAccount" />
         <activity android:name=".leaders.CountryLeadersActivity" />
         <activity android:name=".leaders.LeadersActivity" />
@@ -42,13 +53,5 @@
         <activity android:name=".Game.player_modeActivity" />
         <activity android:name=".Game.play_gameActivity" />
     </application>
-
-
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
 
 </manifest>
