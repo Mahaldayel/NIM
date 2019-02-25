@@ -39,39 +39,24 @@ public class DeleteAccount extends AppCompatActivity implements View.OnClickList
 
 
         database = FirebaseDatabase.getInstance().getReference().child("Players");
-        //database.
-        // FirebaseDatabase.getInstance().getReference().child("Players").child("eYZDnDhr2ShG6Ra3bNrqyFzj2PJ2").removeValue();
+
         DeleteButton = findViewById(R.id.DeleteAccount);
 
         DeleteButton.setOnClickListener(this);
-        //   DatabaseReference myRef = database.getReference("PName");
 
-        //  myRef.setValue("Hellodklsm");
     }
-//    void DeleteAcc(){
-//
-//
-//        DeleteButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //DeletePlayer(Pid);
-//                DeleteFromSystem();
-//
-//            }
-//        });
-//    }
+
 
     private void DeleteFromSystem() {
 
 
-       //me
+
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("Players").child(currentUser.getUid());
-        ///works DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("Players").child("kjh");
+
         rootRef.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                // Deleted = true;
-//                DeleteAuth(currentUser);
+
                 DeleteSuccefully();
                 progressDialog.dismiss();
             }
@@ -81,36 +66,10 @@ public class DeleteAccount extends AppCompatActivity implements View.OnClickList
                 DeleteUnsuccefully(e);
             }
         });
-//
-//        currentUser.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void aVoid) {
-//                DeleteSuccefully();
-////
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                DeleteUnsuccefully(e);
-//            }
-//        });
+
     }
 
 
-//    private void DeleteAuth(FirebaseUser currentUser) {
-//        currentUser.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void aVoid) {
-//                DeleteSuccefully();
-////
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                DeleteUnsuccefully(e);
-//            }
-//        });
-//
 
 
     private void DeleteSuccefully(){
@@ -118,7 +77,7 @@ public class DeleteAccount extends AppCompatActivity implements View.OnClickList
         Toast.makeText(DeleteAccount.this,"Your account has been deleted succefully!",Toast.LENGTH_SHORT).show();
         progressDialog.dismiss();
         startActivity(new Intent(DeleteAccount.this, FirstPage.class));
-        //  FirebaseAuth.getInstance().signOut();
+
     }
 
     private void DeleteUnsuccefully(Exception e){
@@ -168,8 +127,6 @@ public class DeleteAccount extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         if(v == DeleteButton){
             DeleteMessage();
-            //  DeleteFromSystem();
-            //    FirebaseDatabase.getInstance().getReference().child("Players").child("APiOSwxL0bZG7TTi9MAHqKmtRRW2").removeValue();
-            // database.removeValue();
+
         }}
 }
