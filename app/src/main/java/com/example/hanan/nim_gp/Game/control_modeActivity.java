@@ -127,11 +127,11 @@ public class control_modeActivity extends AppCompatActivity implements View.OnCl
 
 
     public void onClick(View view) {
-        if(shaz==false){
-            CreateMessage();
-        return;}
 
-        checkAvalibiltyOfTrainingInformation();
+if(view==relax || view==focus)
+    if(shaz==false){
+        CreateMessage();
+        return;}
         if(view ==relax){
 
 
