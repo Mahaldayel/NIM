@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
 
         switch (view.getId()){
             case R.id.play_tv:
-                goTo(control_modeActivity.class);
+                goTo(SelectGameActivity.class);
                 break;
             case R.id.account_tv:
                 goTo(view_accountActivity.class);

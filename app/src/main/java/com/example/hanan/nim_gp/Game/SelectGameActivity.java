@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 public class SelectGameActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private final int SCORE_LEVEL_ONE = 100;
+    private final int SCORE_LEVEL_ONE = 0;
     private final int SCORE_LEVEL_TWO = 200;
     private final int SCORE_LEVEL_THREE = 300;
     private final int SCORE_LEVEL_FOUR = 400;
@@ -158,7 +158,7 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
         if(mSelectdGameLevel > mHigherAvalableLevel)
             showUnavailable();
         else {
-            goTo(DeviceListActivity.class);
+            goTo(control_modeActivity.class);
         }
     }
 
@@ -190,19 +190,15 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
 
         switch (view.getId()){
             case R.id.carLevel1_iv:
-//                if(mHigherAvalableLevel >= 1)
-                    mSelectdGameLevel = 1;
+                    mSelectdGameLevel = 0;
                 break;
             case R.id.carLevel2_iv:
-//                if(mHigherAvalableLevel >= 2)
                     mSelectdGameLevel = 2;
                 break;
             case R.id.carLevel3_iv:
-//                if(mHigherAvalableLevel >= 3)
                     mSelectdGameLevel = 3;
                 break;
             case R.id.carLevel4_iv:
-//                if(mHigherAvalableLevel >= 4)
                     mSelectdGameLevel = 4;
                 break;
 
@@ -218,10 +214,7 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
 
         Context context = SelectGameActivity.this;
 
-       ///////////////////////////////// Intent intent = new Intent(context,nextClass);//MAKE IT COMMENT JUST FOR NOW
-        //////////////////////////////////////////////////////////////NEXT LINE
-        Intent intent = new Intent(SelectGameActivity.this, player_modeActivity.class);/////////////////////HERE
-        //////////////////////////////////////////////////////////////LINE BEFOTE THIS
+        Intent intent = new Intent(context,nextClass);
         intent.putExtra(SELECTED_GAME_LEVEL_INTENT,mSelectdGameLevel);
         intent.putExtra(CONTROL_MODE_GAME_INTENT,controlType);
         startActivity(intent);
