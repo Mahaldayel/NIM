@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -92,6 +93,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         mStorage = FirebaseStorage.getInstance().getReference();
         mDisplayDate = (TextView) findViewById(R.id.tvDate);
         editTextUserName = (EditText) findViewById(R.id.editTextUserName);
+
+        //Changing fonts
+        Typeface typeface=Typeface.createFromAsset(getAssets(), "fonts/Lalezar-Regular.ttf");
+        setCountry.setTypeface(typeface);
+        mDisplayDate.setTypeface(typeface);
+
 
 
 
