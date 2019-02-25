@@ -42,14 +42,14 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/buttonon"
         android:text="MY COUNTRY"
-        android:textStyle="bold"
         android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.298"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.258" />
+        app:layout_constraintVertical_bias="0.26" />
 
     <Button
         android:id="@+id/CCbackButton"

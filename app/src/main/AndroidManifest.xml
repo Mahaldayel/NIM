@@ -23,7 +23,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".GameOver.FailedActivity"></activity>
+        <activity
+            android:name=".Game.StartPlay1Activity"
+            android:label="@string/title_activity_start_play1"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".GameOver.FailedActivity" />
         <activity android:name=".GameOver.CompletedActivity" />
         <activity android:name=".AccountActivity.CropView" />
         <activity android:name=".AccountActivity.FirstPage">
@@ -51,7 +55,7 @@
         <activity android:name=".leaders.LeadersActivity" />
         <activity android:name=".Game.control_modeActivity" />
         <activity android:name=".Game.player_modeActivity" />
-        <activity android:name=".Game.play_gameActivity" />
+        <activity android:name=".Game.connectionWithHeadset" />
     </application>
 
 </manifest>
