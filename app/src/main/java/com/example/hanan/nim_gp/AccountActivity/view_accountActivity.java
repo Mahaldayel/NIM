@@ -44,7 +44,6 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading...");
         initElements();
 
 
@@ -76,6 +75,8 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
 
         private void initElements(){
          //TO Tondu font
+            progressDialog.setMessage("Loading ...");
+            progressDialog.show();
             TextView scorelable=(TextView) findViewById(R.id.scoreLabel_tv);
             Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
             scorelable.setTypeface(custom_font);
