@@ -128,7 +128,8 @@ public class control_modeActivity extends AppCompatActivity implements View.OnCl
 
     public void onClick(View view) {
 
-if(view==relax || view==focus)
+if(view==relax || view==focus){
+
     if(shaz==false){
         CreateMessage();
         return;}
@@ -147,5 +148,5 @@ if(view==relax || view==focus)
             startActivity(intent);
 
         }
-        if(view==back){   startActivity(new Intent(control_modeActivity.this, MainActivity.class));}
-}}
+        if(view==back){   startActivity(new Intent(control_modeActivity.this, SelectGameActivity.class));}
+}}}

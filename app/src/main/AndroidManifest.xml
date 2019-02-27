@@ -56,6 +56,7 @@
         <activity android:name=".Game.control_modeActivity" />
         <activity android:name=".Game.player_modeActivity" />
         <activity android:name=".Game.connectionWithHeadset" />
+        <activity android:name=".Game.play" />
     </application>
 
 </manifest>
