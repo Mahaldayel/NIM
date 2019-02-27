@@ -183,12 +183,13 @@
         android:layout_marginStart="24dp"
 
         android:layout_marginTop="8dp"
+        app:civ_border_width="1dp"
 
         android:layout_marginEnd="8dp"
 
         android:layout_marginBottom="8dp"
 
-        app:civ_border_width="2dp"
+
 
         app:civ_border_color="#FF000000"
 
@@ -355,10 +356,11 @@
         android:layout_marginTop="8dp"
 
         android:layout_marginEnd="8dp"
+        app:civ_border_width="1dp"
 
         android:layout_marginBottom="8dp"
 
-        app:civ_border_width="2dp"
+
 
         app:civ_border_color="#FF000000"
 
@@ -516,7 +518,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
 
         android:id="@+id/Player3Pic"
-
+        app:civ_border_width="1dp"
         android:layout_width="55dp"
 
         android:layout_height="55dp"
@@ -531,7 +533,6 @@
 
         android:layout_marginBottom="8dp"
 
-        app:civ_border_width="2dp"
 
         app:civ_border_color="#FF000000"
 
@@ -748,7 +749,7 @@
 
         android:layout_width="312dp"
 
-        android:layout_height="154dp"
+        android:layout_height="144dp"
 
         android:layout_marginTop="8dp"
 
@@ -760,13 +761,13 @@
 
         app:layout_constraintEnd_toEndOf="parent"
 
-        app:layout_constraintHorizontal_bias="0.725"
+        app:layout_constraintHorizontal_bias="0.692"
 
         app:layout_constraintStart_toStartOf="parent"
 
         app:layout_constraintTop_toTopOf="@+id/include"
 
-        app:layout_constraintVertical_bias="0.759"
+        app:layout_constraintVertical_bias="0.758"
 
         tools:listitem="@layout/board_item" />
 
@@ -789,7 +790,7 @@
 
         android:text="#9"
 
-        android:textColor="#5C3317"
+        android:textColor="#ffa500"
 
         android:textSize="15dp"
 
@@ -828,7 +829,7 @@
 
         app:civ_border_color="#FF000000"
 
-        app:civ_border_width="2dp"
+        app:civ_border_width="1dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
 
@@ -862,8 +863,9 @@
         android:text="Shahad"
 
         android:textSize="13dp"
+       android:textStyle="italic"
 
-        android:textColor="#5C3317"
+        android:textColor="#ffa500"
 
         app:layout_constraintBottom_toBottomOf="parent"
 
@@ -898,7 +900,7 @@
 
         android:textSize="13dp"
 
-        android:textColor="#417432"
+        android:textColor="#ffa500"
 
         app:layout_constraintBottom_toBottomOf="parent"
 
@@ -933,15 +935,16 @@
 
         app:layout_constraintEnd_toEndOf="parent"
 
-        app:layout_constraintHorizontal_bias="0.743"
+        app:layout_constraintHorizontal_bias="0.751"
 
         app:layout_constraintStart_toStartOf="parent"
 
         app:layout_constraintTop_toTopOf="parent"
 
-        app:layout_constraintVertical_bias="0.557"
+        app:layout_constraintVertical_bias="0.555"
 
         app:srcCompat="@drawable/flag_ae" />
+
 
 
 </android.support.constraint.ConstraintLayout>
