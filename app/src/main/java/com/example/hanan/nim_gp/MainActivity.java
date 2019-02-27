@@ -2,17 +2,16 @@ package com.example.hanan.nim_gp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.hanan.nim_gp.AccountActivity.view_accountActivity;
 import com.example.hanan.nim_gp.Game.SelectGameActivity;
-import com.example.hanan.nim_gp.Game.control_modeActivity;
 import com.example.hanan.nim_gp.Training.BeforeTrainingConnectingWithNeeruo;
-import com.example.hanan.nim_gp.Training.NSBTrainingActivity;
 import com.example.hanan.nim_gp.leaders.LeadersActivity;
 
 public class MainActivity extends AppCompatActivity  implements View.OnClickListener{
@@ -21,6 +20,11 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
     private ImageView leaderBord_tv;
     private TextView play_tv;
     private TextView training_tv;
+
+    private Button buttonPlay;
+    private Button buttonAccount;
+    private Button buttonTraining;
+    private Button buttonLeaders;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,17 +38,17 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
 
         private void initElemens(){
 
-            account_tv = findViewById(R.id.account_tv);
-            account_tv.setOnClickListener(this);
+            buttonAccount = findViewById(R.id.buttonAccount);
+            buttonAccount.setOnClickListener(this);
 
-            leaderBord_tv = findViewById(R.id.leaderboard_iv);
-            leaderBord_tv.setOnClickListener(this);
+            buttonLeaders = findViewById(R.id.buttonLeaders);
+            buttonLeaders.setOnClickListener(this);
 
-            play_tv = findViewById(R.id.play_tv);
-            play_tv.setOnClickListener(this);
+            buttonPlay = findViewById(R.id.buttonPlay);
+            buttonPlay.setOnClickListener(this);
 
-            training_tv = findViewById(R.id.training_tv);
-            training_tv.setOnClickListener(this);
+            buttonTraining = findViewById(R.id.buttonTraining);
+            buttonTraining.setOnClickListener(this);
 
         }
 
@@ -52,16 +56,16 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
     public void onClick(View view) {
 
         switch (view.getId()){
-            case R.id.play_tv:
+            case R.id.buttonPlay:
                 goTo(SelectGameActivity.class);
                 break;
-            case R.id.account_tv:
+            case R.id.buttonAccount:
                 goTo(view_accountActivity.class);
                 break;
-            case R.id.training_tv:
+            case R.id.buttonTraining:
                 goTo(BeforeTrainingConnectingWithNeeruo.class);
                 break;
-            case R.id.leaderboard_iv:
+            case R.id.buttonLeaders:
                 goTo(LeadersActivity.class);
                 break;
 
@@ -69,9 +73,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
     }
 
     private void goTo(Class nextClass){
-
         Context context = MainActivity.this;
-
         Intent intent = new Intent(context,nextClass);
         startActivity(intent);
     }
