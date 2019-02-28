@@ -7,7 +7,23 @@
     android:layout_height="match_parent"
     android:background="@drawable/primarybackground"
     >
-
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="369dp"
+        android:layout_height="269dp"
+        android:layout_marginLeft="85dp"
+        android:layout_marginBottom="200dp"
+        android:text="  3"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="200dp"
+        app:autoSizeMaxTextSize="500dp"
+        app:autoSizeMinTextSize="500dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.503" />
     <TextView
         android:id="@+id/controlMode"
         android:layout_width="247dp"
@@ -18,7 +34,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="428dp"
-        android:text="Control Mode"
+        android:text=""
         android:textColor="@color/colorAccent"
         android:textSize="40sp"
         android:textStyle="bold"
@@ -27,7 +43,8 @@
         app:layout_constraintHorizontal_bias="0.432"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.996" />
+        app:layout_constraintVertical_bias="0.996"
+        android:visibility="gone"/>
 
   <!--  <TextView
         android:id="@+id/gameMode"
@@ -63,6 +80,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:visibility="gone"/>
 
 </android.support.constraint.ConstraintLayout>

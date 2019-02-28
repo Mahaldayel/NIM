@@ -46,7 +46,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class update_accountActivity extends AppCompatActivity implements View.OnClickListener {
-    String email,name,countryCode,Bdate,pic;
+    String email,name1,name,countryCode,Bdate,pic;
     private TextView mTextViewName;
     private TextView mTextViewEmail;
     private Button mTextViewCountry;
@@ -57,6 +57,8 @@ public class update_accountActivity extends AppCompatActivity implements View.On
     private TextView mDisplayDate;
     private static final int GALLERY_INTENT = 2;
     private StorageReference mStorage;
+    private DatabaseReference mDatabase;
+    boolean  available ;
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     @Override
@@ -75,10 +77,7 @@ public class update_accountActivity extends AppCompatActivity implements View.On
             }
         });
 
-//        ref =  database.getReference().child("players").child(temp.getUid());
-
-        //DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("Players").child("JF8mmf9m00VfHF3SbLKJ5xi1e3B3");
-        //TEEEEEEEEEEST IT
+//
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String playeId = user.getUid();
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Players").child(playeId);
@@ -138,10 +137,7 @@ public class update_accountActivity extends AppCompatActivity implements View.On
                     String date = month + "/" + day + "/" + year;
                     mDisplayDate.setText(date);
                     Bdate=date;
-                   // FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                  //  String playeId = user.getUid();
-                  //  DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Players").child(playeId);
-                   // rootRef.child("birthDate").setValue(date);
+
                 }
             };
         }
@@ -180,6 +176,7 @@ public class update_accountActivity extends AppCompatActivity implements View.On
 
 
     }
+
     @Override
     public void onClick(View view) {
         if(view == mUpdateButton) {
@@ -188,6 +185,13 @@ public class update_accountActivity extends AppCompatActivity implements View.On
             Bdate =mDisplayDate.getText().toString();
             if(email.equals("")||countryCode.equals("")||name.equals("")|| Bdate.equals("")){
                 Toast.makeText(update_accountActivity.this, "empty field not accepted ", Toast.LENGTH_SHORT).show();
+            }
+            if(!name1.equals(name)){
+                checkUsernameAvailability();
+            if(!available){
+
+                Toast.makeText(update_accountActivity.this,"This username is already taken, Please enter another one",Toast.LENGTH_LONG).show();
+                return;}
             }
             else{
 
@@ -225,12 +229,12 @@ public class update_accountActivity extends AppCompatActivity implements View.On
         countryCode = (String) dataSnapshot.child("countyCode").getValue();
         Bdate=(String)dataSnapshot.child("birthDate").getValue();
         email = (String) dataSnapshot.child("email").getValue();
-        name = (String) dataSnapshot.child("username").getValue();
+        name1 = (String) dataSnapshot.child("username").getValue();
         pic=(String)dataSnapshot.child("picURL").getValue();
         Picasso.get().load(pic).into(mTextViewPic);
             mTextViewEmail.setText(email);
             mTextViewCountry.setText(String.valueOf(countryCode));
-            mTextViewName.setText(name);
+            mTextViewName.setText(name1);
             mDisplayDate.setText(Bdate);
         }
     @Override
@@ -256,6 +260,37 @@ public class update_accountActivity extends AppCompatActivity implements View.On
                 }
             });*/
         }
+    }
+    public void checkUsernameAvailability(){
+
+
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Players");
+
+        //check if the username exist in Database or not
+        mDatabase.orderByChild("username").equalTo(name)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+
+                            available =false;
+
+                            //the username exists
+                        } else {
+                            available =true;
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+
+                });
+
+
     }
   /*  private Bitmap getPath(Uri uri) {
 
