@@ -55,7 +55,9 @@
         <activity android:name=".leaders.LeadersActivity" />
         <activity android:name=".Game.control_modeActivity" />
         <activity android:name=".Game.player_modeActivity" />
-        <activity android:name=".Game.connectionWithHeadset" />
+        <activity android:name=".Game.ConnectionWithHeadset" />
+        <activity android:name=".Game.ControlRobotCarActivity"/>
+        <activity android:name=".Game.ConnectionWithRobotCarActivity"/>
     </application>
 
 </manifest>

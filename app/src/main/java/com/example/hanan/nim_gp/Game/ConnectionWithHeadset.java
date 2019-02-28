@@ -3,20 +3,26 @@ package com.example.hanan.nim_gp.Game;
 
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
+
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import com.google.firebase.auth.FirebaseUser;
-import com.example.hanan.nim_gp.MainActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,10 +31,20 @@ import com.google.firebase.database.ValueEventListener;
 import com.neeuro.NativeNSBPlugin.NativeNSBInterface;
 import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import me.aflak.bluetooth.Bluetooth;
+import me.aflak.bluetooth.DeviceCallback;
+
+import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.CONNECTED_DEVICE_INTENT;
+import static com.example.hanan.nim_gp.Game.SelectGameActivity.SELECTED_GAME_LEVEL_INTENT;
+import static com.example.hanan.nim_gp.Game.StartPlay1Activity.END_GAME_TIME;
 import static com.example.hanan.nim_gp.Game.control_modeActivity.CONTROL_MODE_GAME_INTENT;
 
 
-public class connectionWithHeadset extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class ConnectionWithHeadset extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     public final String NEEURO_ADDRESS_OF_SELECTED_DEVICE = "NEEURO_ADDRESS_OF_SELECTED_DEVICE";
     FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
@@ -56,6 +72,18 @@ public class connectionWithHeadset extends AppCompatActivity implements AdapterV
     public static connectionCallBack connectionCB ;
 
     private int controlModeNumber;
+    private int mSelectedGameLevel;
+    private int mConnectedDeviceIndex;
+
+    private Timer timer;
+    private TimerTask timerTask;
+    private int mPlayCounter;
+    private Context mContext;
+
+
+    private Bluetooth bluetooth ;
+    private BluetoothDevice mConnectedDevice ;
+
 
 
 
@@ -63,6 +91,7 @@ public class connectionWithHeadset extends AppCompatActivity implements AdapterV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_before_trining_connecting_with_neeruo);
+
         getFormIntent();
         connectWithDataBase(controlModeNumber);
         initElements();
@@ -81,6 +110,14 @@ public class connectionWithHeadset extends AppCompatActivity implements AdapterV
             if(controlMode.equals("Focus"))
                 controlModeNumber=2;
         }
+
+        if(intent.hasExtra(CONNECTED_DEVICE_INTENT))
+            mConnectedDeviceIndex = intent.getIntExtra(CONNECTED_DEVICE_INTENT,-1);
+
+
+        if(intent.hasExtra(SELECTED_GAME_LEVEL_INTENT))
+            mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,0);
+
     }
 
 
@@ -117,6 +154,7 @@ public class connectionWithHeadset extends AppCompatActivity implements AdapterV
 
     private void initElements() {
 
+
         headsetsListView = findViewById(R.id.headsets_lv);
         headsetsListView.setOnItemClickListener(this);
 
@@ -132,13 +170,24 @@ public class connectionWithHeadset extends AppCompatActivity implements AdapterV
 
         initAdapter();
         initInterfaces();
+        initBluetoothForRobot();
+//
+//        ConnectToRobot();
+//        checkOfConnectionToRobotTimer();
+    }
+
+    private void initBluetoothForRobot() {
+
+        bluetooth = new Bluetooth(this);
+        bluetooth.enable();
+
     }
 
     private void initInterfaces() {
-        scanCB = new connectionWithHeadset.scanCallBack();
-        nsbFunctionsCB = new connectionWithHeadset.NSBFunctionsCallBack();
-        sbDelegate = new connectionWithHeadset.senzeBandDelegates();
-      connectionCB = new connectionWithHeadset.connectionCallBack();
+        scanCB = new ConnectionWithHeadset.scanCallBack();
+        nsbFunctionsCB = new ConnectionWithHeadset.NSBFunctionsCallBack();
+        sbDelegate = new ConnectionWithHeadset.senzeBandDelegates();
+        connectionCB = new ConnectionWithHeadset.connectionCallBack();
 
     }
 
@@ -163,11 +212,14 @@ public class connectionWithHeadset extends AppCompatActivity implements AdapterV
 
         NativeNSBInterface.getInstance().connectBT(neeuroAddress);
 
-        Context context = connectionWithHeadset.this;
-        Class nextClass =StartPlay1Activity.class;
+        Context context = ConnectionWithHeadset.this;
+        Class nextClass = StartPlay1Activity.class;
 
         Intent intent = new Intent(context,nextClass);
         intent.putExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE,neeuroAddress);
+        intent.putExtra(CONNECTED_DEVICE_INTENT,mConnectedDeviceIndex);
+        intent.putExtra(SELECTED_GAME_LEVEL_INTENT, mSelectedGameLevel);
+        intent.putExtra(CONTROL_MODE_GAME_INTENT,controlModeNumber);
         startActivity(intent);
 
 
@@ -190,7 +242,7 @@ public class connectionWithHeadset extends AppCompatActivity implements AdapterV
 
     private void goToMainActivity() {
 
-        Context context = connectionWithHeadset.this;
+        Context context = ConnectionWithHeadset.this;
         Class nextClass = MainActivity.class;
 
         Intent intent = new Intent(context,nextClass);
@@ -259,38 +311,64 @@ public class connectionWithHeadset extends AppCompatActivity implements AdapterV
         }
     }
 
+    /***/
     public class senzeBandDelegates implements NativeNSBInterface.EEGBasicDelegateInterface {
 
 
 
 
-
+        private Bluetooth controlRobotBluetooth;
+        private float relax ;
 
         public void EEG_GetAttention(float result) {
-            if(controlModeNumber==2){
-//                if (result>SignalsAvreg)
-                }
 
 
+            if(controlModeNumber == 2){
 
-
-             }
-
-
-
-
-
-
-
-
-        public void EEG_GetRelaxation(float result) {
-
-
-
+            }
 
 
         }
 
+
+        public void sendToRobot(String msg) {
+
+            if(controlRobotBluetooth != null) {
+                if (controlRobotBluetooth.getBluetoothAdapter() != null && controlRobotBluetooth.isConnected()) {
+                    controlRobotBluetooth.send(String.valueOf(msg));
+
+                    Log.e("hanan", "in : sendToRobot  " + msg);
+
+                }
+            }
+
+        }
+
+
+        public void EEG_GetRelaxation(float result) {
+
+            relax = result;
+            Log.e("hanan", "in : EEG_GetRelaxation  " + relax);
+
+
+
+            if(controlModeNumber == 1){
+//                if(result>SignalsAvreg)
+//                    sendToRobot(String.valueOf(1));
+
+            }
+
+
+        }
+
+        public void setControlRobotBluetooth(Bluetooth controlRobotBluetooth,Context context) {
+            this.controlRobotBluetooth = controlRobotBluetooth;
+            mContext = context;
+        }
+
+        public float getRelax() {
+            return relax;
+        }
 
 
         //Too long, its 1000 floats so we won't print this
@@ -325,8 +403,90 @@ public class connectionWithHeadset extends AppCompatActivity implements AdapterV
         }
 
 
+        /***/
+
+        public void startPlay() {
+
+            Log.e("hanan", "in : startPlay  " + SignalsAvreg);
+
+            mPlayCounter = 0;
+//        SignalsAvreg = 0.445f;
+
+            timer = new Timer();
+            initPlayTask();
+            timer.schedule(timerTask,0,100);
 
 
+        }
+
+        private void initPlayTask() {
+
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+
+                    checkOFPlayerSignle();
+
+                    if( mPlayCounter == END_GAME_TIME){
+                        // TODO end game
+                        endPlay();
+                        timer.cancel();
+                        timerTask.cancel();
+                    }
+
+                    Log.e("hanan", "in : initPlayTask  " + mPlayCounter);
+                    mPlayCounter ++;
+                }
+            };
+
+
+        }
+
+        private void checkOFPlayerSignle() {
+
+            Log.e("hanan", "in : checkOFPlayerSignle  " + relax);
+
+            if(relax > SignalsAvreg)
+                sendToRobot(String.valueOf((int)Math.ceil(relax/SignalsAvreg)));
+        }
+
+        private void endPlay() {
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                            mContext);
+                    // set title
+                    alertDialogBuilder.setTitle("End");
+                    // set dialog message
+                    alertDialogBuilder
+                            .setMessage("The game is over ")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(
+                                                DialogInterface dialog, int which) {
+
+                                        }
+                                    });
+
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    try {
+
+                        alertDialog.show();
+                    }
+                    catch (WindowManager.BadTokenException e) {
+                        //use a log message
+                    }
+
+
+
+                }
+            });
+        }
 
 
     }
@@ -354,4 +514,111 @@ public class connectionWithHeadset extends AppCompatActivity implements AdapterV
             Log.e(TAG,"connectionCB error Log " + s );
         }
     }
+
+
+    /**Robot Car**/
+//
+//    private void checkOfConnectionToRobotTimer(){
+//
+//        timer = new Timer();
+//        initTask();
+//        timer.schedule(timerTask,20,100);
+//
+//    }
+//
+//    private void initTask(){
+//
+//        timerTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//                checkOfConnectToRobot();
+//
+//            }
+//        };
+//    }
+
+//    private void checkOfConnectToRobot(){
+//
+//
+//
+//        if(bluetooth.getBluetoothAdapter() != null && !bluetooth.isConnected()){
+//            ConnectToRobot();
+//            Log.e("hanan", "out : ConnectToRobot  " );
+//        }
+//
+//        if(!bluetooth.isConnected()){
+//            ConnectToRobot();
+//            Log.e("hanan", "out : ConnectToRobot  " );
+//        }
+//
+//
+//        bluetooth.setDeviceCallback(new DeviceCallback() {
+//            @Override public void onDeviceConnected(BluetoothDevice device) {
+//                hander.sendEmptyMessage(1);
+//                timer.cancel();
+//            }
+//            @Override public void onDeviceDisconnected(BluetoothDevice device, String message) {}
+//            @Override public void onMessage(final String message) {
+//                //TODO get score from robot
+//                hander.sendEmptyMessage(0);
+//
+//            }
+//            @Override public void onError(String message) {}
+//            @Override public void onConnectError(BluetoothDevice device, String message) {
+//
+//            }
+//        });
+//
+//        Log.e("hanan", "out : startPlay  " );
+//
+//        if(bluetooth.isConnected()){
+//            sbDelegate.setControlRobotBluetooth(bluetooth,this);
+//            sbDelegate.startPlay();
+////            startPlay();
+//            Log.e("hanan", "in : startPlay  ");
+//
+//        }
+//    }
+//
+//    private void ConnectToRobot() {
+//
+//
+//        if(bluetooth.getBluetoothAdapter() != null){
+//            List<BluetoothDevice> device = bluetooth.getPairedDevices();
+//
+//
+//            if(mConnectedDeviceIndex < 0)
+//                getFormIntent();
+//
+//            mConnectedDevice = device.get(mConnectedDeviceIndex);
+//
+//            if(!bluetooth.isConnected())
+//                bluetooth.connectToDevice(mConnectedDevice);
+//
+//            Log.e("hanan", "in if : ConnectToRobot  " );
+//
+//        }
+//        Log.e("hanan", "out if : ConnectToRobot  " );
+//
+//    }
+//
+//
+//    Handler hander = new Handler() {
+//        public void handleMessage(Message msg) {
+//
+//            switch (msg.what) {
+//                case 0:
+//                    //TODO display score
+//                    break;
+//                case 1:
+//                    progressDialog.dismiss();
+//                    break;
+//
+//            }
+//        }};
+//
+
+
+
 }
+
