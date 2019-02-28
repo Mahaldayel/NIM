@@ -3,37 +3,70 @@ package com.example.hanan.nim_gp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.hanan.nim_gp.AccountActivity.FirstPage;
 import com.example.hanan.nim_gp.AccountActivity.view_accountActivity;
 import com.example.hanan.nim_gp.Game.SelectGameActivity;
 import com.example.hanan.nim_gp.Training.BeforeTrainingConnectingWithNeeruo;
 import com.example.hanan.nim_gp.leaders.LeadersActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity  implements View.OnClickListener{
-
-    private TextView account_tv;
-    private ImageView leaderBord_tv;
-    private TextView play_tv;
-    private TextView training_tv;
-
+    FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
+    String CurrentplayeId = CurrentPlayer.getUid();
+    DatabaseReference refrence= FirebaseDatabase.getInstance().getReference().child("Players");
     private Button buttonPlay;
     private Button buttonAccount;
     private Button buttonTraining;
     private Button buttonLeaders;
+    private Button signout;
+    private TextView ScoreView;
+    private String Score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+   getScore();
         initElemens();
     }
 
+    private void getScore(){
+        refrence.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot child : snapshot.getChildren()) {
+
+                    if(child.getKey().equals(CurrentplayeId))
+                        Score=child.child("score").getValue().toString();
+                    System.out.println("************************");
+                    System.out.println(Score);
+
+                }}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+
+
+        });
+
+    }
 
 
         private void initElemens(){
@@ -50,6 +83,11 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
             buttonTraining = findViewById(R.id.buttonTraining);
             buttonTraining.setOnClickListener(this);
 
+            signout=findViewById(R.id.SignOut);
+            signout.setOnClickListener(this);
+
+            ScoreView=findViewById(R.id.score1);
+            ScoreView.setText(Score);
         }
 
     @Override
@@ -68,6 +106,13 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
             case R.id.buttonLeaders:
                 goTo(LeadersActivity.class);
                 break;
+            case R.id.SignOut:
+                FirebaseAuth.getInstance().signOut();
+                goTo(FirstPage.class);
+                break;
+
+
+
 
         }
     }
