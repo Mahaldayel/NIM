@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -63,6 +62,7 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
         controlType = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
         initElements();
         getPlayerScore();
+        mBackButton.setVisibility(View.INVISIBLE);
 
 
 
@@ -207,7 +207,7 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
                     mSelectdGameLevel = 4;
                 break;
             case R.id.back_bt:
-                goTo(control_modeActivity.class);
+                startActivity(new Intent(this, control_modeActivity.class));
                 break;
 
         }
