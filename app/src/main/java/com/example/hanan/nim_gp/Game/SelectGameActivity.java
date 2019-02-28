@@ -15,20 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.hanan.nim_gp.AccountActivity.view_accountActivity;
-import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
-import com.example.hanan.nim_gp.Training.NSBTrainingActivity;
-import com.example.hanan.nim_gp.Training.TrainingInformation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 
 public class SelectGameActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -214,6 +208,7 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.back_bt:
                 goTo(control_modeActivity.class);
+                break;
 
         }
 

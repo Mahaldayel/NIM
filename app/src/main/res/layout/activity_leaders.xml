@@ -2,120 +2,72 @@
 
 
 <android.support.constraint.ConstraintLayout
-
     xmlns:android="http://schemas.android.com/apk/res/android"
-
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
-
     android:layout_height="match_parent"
-
     tools:context=".leaders.LeadersActivity"
-
     android:background="@drawable/back">
 
 
     <android.support.design.widget.AppBarLayout
-
         android:id="@+id/appBarLayout"
-
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
-
         android:theme="@style/AppTheme.AppBarOverlay"
-
         app:layout_constraintBottom_toTopOf="parent" />
 
 
     <include
-
         android:id="@+id/include"
-
         layout="@layout/content_leaders" />
 
 
     <ImageView
-
         android:id="@+id/imageView7"
-
         android:layout_width="wrap_content"
-
         android:layout_height="wrap_content"
-
         android:layout_marginStart="8dp"
-
         android:layout_marginTop="8dp"
-
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toTopOf="parent"
-
         app:srcCompat="@drawable/board1" />
 
 
     <Button
-
         android:id="@+id/WbuttonO"
-
         android:layout_width="90dp"
-
         android:layout_height="25dp"
-
-        android:layout_marginStart="8dp"
-
-        android:layout_marginTop="8dp"
-
-        android:layout_marginEnd="8dp"
-
         android:layout_marginBottom="8dp"
-
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/buttonon"
-
         android:text="THE WORLD"
-
         android:textColor="@color/white"
-
         android:textStyle="bold"
-
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:layout_constraintEnd_toEndOf="parent"
-
-        app:layout_constraintHorizontal_bias="0.711"
-
+        app:layout_constraintHorizontal_bias="0.714"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toTopOf="@+id/appBarLayout"
-
-        app:layout_constraintVertical_bias="0.258"
-
-
+        app:layout_constraintVertical_bias="0.27"
         />
 
 
     <Button
-
         android:id="@+id/CbuttonOF"
-
         android:layout_width="90dp"
-
         android:layout_height="23dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
 
         android:layout_marginStart="8dp"
 
         android:layout_marginTop="8dp"
-
-        android:layout_marginEnd="8dp"
-
-        android:layout_marginBottom="8dp"
 
         android:background="@drawable/buttonof"
 
@@ -128,43 +80,54 @@
         app:layout_constraintBottom_toBottomOf="parent"
 
         app:layout_constraintEnd_toEndOf="parent"
-
-        app:layout_constraintHorizontal_bias="0.298"
-
+        app:layout_constraintHorizontal_bias="0.285"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toTopOf="parent"
-
-        app:layout_constraintVertical_bias="0.26" />
-
+        app:layout_constraintVertical_bias="0.27" />
 
     <Button
-
         android:id="@+id/backButton"
-
         android:layout_width="50dp"
-
         android:layout_height="50dp"
-
         android:layout_marginStart="8dp"
-
         android:layout_marginTop="8dp"
-
         android:layout_marginEnd="8dp"
-
         android:background="@drawable/iconback"
-
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintHorizontal_bias="0.038"
-
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toTopOf="parent"
-
         app:layout_constraintVertical_bias="0.844" />
+
+
+    <!--<Button-->
+
+        <!--android:id="@+id/backButton"-->
+
+        <!--android:layout_width="50dp"-->
+
+        <!--android:layout_height="50dp"-->
+
+        <!--android:layout_marginStart="8dp"-->
+
+        <!--android:layout_marginTop="8dp"-->
+
+        <!--android:layout_marginEnd="8dp"-->
+
+        <!--android:background="@drawable/iconback"-->
+
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+
+        <!--app:layout_constraintHorizontal_bias="0.038"-->
+
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+
+        <!--app:layout_constraintVertical_bias="0.844" />-->
 
 
 
