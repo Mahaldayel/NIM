@@ -47,7 +47,7 @@ public class player_modeActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View view) {
         if(view ==single){
-            Intent intent = new Intent(player_modeActivity.this, connectionWithHeadset.class);
+          Intent intent = new Intent(player_modeActivity.this, connectionWithHeadset.class);
             intent.putExtra(CONTROL_MODE_GAME_INTENT,controlType);
             intent.putExtra(SELECTED_GAME_LEVEL_INTENT,gameLEVEL);
             intent.putExtra(CONTROL_GAME_INTENT, "Single");

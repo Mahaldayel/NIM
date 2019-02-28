@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.hanan.nim_gp.AccountActivity.view_accountActivity;
 import com.example.hanan.nim_gp.Game.SelectGameActivity;
 import com.example.hanan.nim_gp.Game.control_modeActivity;
+import com.example.hanan.nim_gp.Game.play;
 import com.example.hanan.nim_gp.Training.BeforeTrainingConnectingWithNeeruo;
 import com.example.hanan.nim_gp.Training.NSBTrainingActivity;
 import com.example.hanan.nim_gp.leaders.LeadersActivity;
