@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
                         Score=child.child("score").getValue().toString();
                     System.out.println("************************");
                     System.out.println(Score);
+                    ScoreView.setText(Score);
+
 
                 }}
 
@@ -87,7 +89,6 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
             signout.setOnClickListener(this);
 
             ScoreView=findViewById(R.id.score1);
-            ScoreView.setText(Score);
         }
 
     @Override
