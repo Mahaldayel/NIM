@@ -219,7 +219,7 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
         public TextView avg_relax;
         public TextView max_relax;
 
-        public int count = -1;
+        public  int count = -1;
 
         private ArrayList<Double> mRelaxArray;
         private ArrayList<Double> mFocusArray;

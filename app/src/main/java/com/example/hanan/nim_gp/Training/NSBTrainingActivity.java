@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -106,6 +107,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mTrainingCar_iv = findViewById(R.id.training_car);
 
         mDesciption = findViewById(R.id.training_deception);
+        mDesciption.setTypeface(font);
         mDesciption.setText("Wear your headset, you will be training on two modes the first one will be Focus on pushing the car");
 
         initTrainingInformation();
@@ -332,7 +334,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mTraining_layout.setVisibility(View.VISIBLE);
         mTryAgain_bt.setVisibility(View.GONE);
         mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.start_bt));
-        mDesciption.setText("Wear your headset, you will be training on two modes the first one will be Focus on pushing the car");
+        mDesciption.setText("Wear your headset, you will be training on two modes the first one will be focus on pushing the car");
 
     }
 
@@ -352,7 +354,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
 //        mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.next_bt));
 //        mDesciption.setText("Now,  you will be training the second one is Relax in order to pull the car.");
-//
+
         mCurrentTrainingMode_tv.setText("Focus \n Mode");
         moveForward();
         prepareForRelaxTraining();
@@ -372,7 +374,10 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void run() {
 
-                if(sbDelegate.getCounter() == TRAINING_TIME){
+                if(sbDelegate.count == TRAINING_TIME){
+//                    databaseList();
+                    Log.e("hanan", "in : initTask  " +sbDelegate.getCounter());
+
                     trainSucceed();
                     timer.cancel();
                     timerTask.cancel();
@@ -435,8 +440,6 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
                     catch (WindowManager.BadTokenException e) {
                     //use a log message
                 }
-
-
 
             }
         });

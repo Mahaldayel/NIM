@@ -49,7 +49,7 @@
         app:layout_constraintHorizontal_bias="0.298"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.26" />
+        app:layout_constraintVertical_bias="0.265" />
 
     <Button
         android:id="@+id/CCbackButton"
@@ -463,7 +463,7 @@
         app:layout_constraintHorizontal_bias="0.711"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.26" />
+        app:layout_constraintVertical_bias="0.27" />
 
     <TextView
         android:id="@+id/CPlayer1score"
