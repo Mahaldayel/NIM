@@ -41,7 +41,6 @@ public class FirstPage extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onClick(View view){
 
-
         if(view == buttonSignUp){
             if(!isNetworkAvailable())
                 Toast.makeText(FirstPage.this,"Check your internet connection and try again :)",Toast.LENGTH_LONG).show();
