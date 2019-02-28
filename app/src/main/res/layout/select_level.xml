@@ -67,7 +67,6 @@
         android:id="@+id/apple_tree_iv"
         android:layout_width="200dp"
         android:layout_height="400dp"
-
         android:layout_marginBottom="100dp"
         android:layout_marginStart="8dp"
         android:src="@drawable/im_apple_tree"
@@ -76,7 +75,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.597" />
+        app:layout_constraintVertical_bias="0.591" />
 
 
     <TextView
@@ -88,15 +87,15 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="Select Game Level "
+        android:text="Game  Levels"
         android:textColor="#ffffff"
-        android:textStyle="bold"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/apple_tree_iv"
         app:layout_constraintEnd_toEndOf="@+id/apple_tree_iv"
-        app:layout_constraintHorizontal_bias="0.817"
+        app:layout_constraintHorizontal_bias="0.788"
         app:layout_constraintStart_toStartOf="@+id/apple_tree_iv"
         app:layout_constraintTop_toTopOf="@+id/apple_tree_iv"
-        app:layout_constraintVertical_bias="0.534" />
+        app:layout_constraintVertical_bias="0.55" />
 
 
     <ImageView
@@ -310,6 +309,22 @@
         app:layout_constraintStart_toStartOf="@+id/carLevel1_iv"
         app:layout_constraintTop_toBottomOf="@+id/carLevel1_tv" />
 
+
+    <Button
+        android:id="@+id/back_bt"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/iconback"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.023"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.985" />
 
 
 

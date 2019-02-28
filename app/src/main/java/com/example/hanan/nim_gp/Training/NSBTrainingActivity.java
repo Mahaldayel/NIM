@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -87,6 +88,9 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         firebaseAuth = FirebaseAuth.getInstance();
 
         mCurrentTrainingMode_tv = findViewById(R.id.training_mode_tv);
+        Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
+        mCurrentTrainingMode_tv.setTypeface(font);
+
 
         mStartTraining_bt = findViewById(R.id.start_training_bt);
         mStartTraining_bt.setOnClickListener(this);
@@ -128,6 +132,8 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         relaxation = findViewById(R.id.relax);
         avg_relax = findViewById(R.id.avg_relax);
         max_relax = findViewById(R.id.max_relax);
+
+
 
     }
 
@@ -206,7 +212,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
                 prepareForFocusTraining();
                 break;
             case R.id.back_bt:
-                goToMainActivity();
+                goTo(BeforeTrainingConnectingWithNeeruo.class);
                 break;
         }
 
@@ -233,13 +239,13 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("TrainingInformation").child(playerId).setValue(mTainingInformation);
 
-        goToMainActivity();
+        goTo(MainActivity.class);
     }
 
-    private void goToMainActivity() {
+    private void goTo(Class nextClass) {
 
         Context context = NSBTrainingActivity.this;
-        Class nextClass = MainActivity.class;
+
         Intent intent = new Intent(context,nextClass);
         startActivity(intent);
     }
@@ -336,7 +342,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
         mFinish = true;
         mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.finish_bt));
-        mDesciption.setText("");
+        mDesciption.setText("You have completed the training ");
         mCurrentTrainingMode_tv.setText("Relaxation Mode");
         moveBackword();
 

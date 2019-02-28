@@ -58,6 +58,6 @@ public class player_modeActivity extends AppCompatActivity implements View.OnCli
             intent.putExtra(CONTROL_GAME_INTENT, "MultiPlayer");
             startActivity(intent);
         }
-        if(view==back){   startActivity(new Intent(player_modeActivity.this, control_modeActivity.class));}
+        if(view==back){   startActivity(new Intent(player_modeActivity.this, SelectGameActivity.class));}
     }}
 

@@ -32,27 +32,29 @@
         <activity android:name=".GameOver.CompletedActivity" />
         <activity android:name=".AccountActivity.CropView" />
         <activity android:name=".AccountActivity.FirstPage">
-
-        </activity>
-        <activity android:name=".AccountActivity.UploadProfileImageActivity" />
-        <activity android:name=".AccountActivity.SignUpActivity" />
-        <activity android:name=".AccountActivity.SignInActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".AccountActivity.ResetPasswordActivity" />
-        <activity android:name=".AccountActivity.changeUserPassword" />
-        <activity android:name=".AccountActivity.update_accountActivity" />
-        <activity android:name=".AccountActivity.view_accountActivity" />
-        <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AccountActivity.UploadProfileImageActivity" />
+        <activity android:name=".AccountActivity.SignUpActivity" />
+        <activity android:name=".AccountActivity.SignInActivity" />w
+        <activity android:name=".MainActivity" />
+        <activity android:name=".AccountActivity.ResetPasswordActivity" />
+        <activity android:name=".AccountActivity.changeUserPassword" />
+        <activity android:name=".AccountActivity.update_accountActivity" />
+        <activity android:name=".AccountActivity.view_accountActivity" />
+        <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo" >
+
+        </activity>
         <activity android:name=".Training.NSBTrainingActivity" >
 
         </activity>
-        <activity android:name=".Game.SelectGameActivity" />
+        <activity android:name=".Game.SelectGameActivity" >
+
+        </activity>
         <activity android:name=".AccountActivity.DeleteAccount" />
         <activity android:name=".leaders.CountryLeadersActivity" />
         <activity android:name=".leaders.LeadersActivity" />

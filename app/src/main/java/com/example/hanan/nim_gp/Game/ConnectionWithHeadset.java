@@ -236,7 +236,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             startScan = !startScan;
 
         }else if(view == mBack_bt){
-            goTo(ControlRobotCarActivity.class);
+            goTo(ConnectionWithRobotCarActivity.class);
         }
     }
 

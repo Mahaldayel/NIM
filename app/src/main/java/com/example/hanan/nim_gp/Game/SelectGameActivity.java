@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hanan.nim_gp.AccountActivity.view_accountActivity;
@@ -46,6 +48,8 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
     private ImageView gameLevel3_iv;
     private ImageView gameLevel4_iv;
 
+    private TextView mSelectGameTitle;
+    private Button mBackButton;
 
     private ProgressDialog progressDialog;
 
@@ -83,6 +87,14 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
 
         gameLevel4_iv = findViewById(R.id.carLevel4_iv);
         gameLevel4_iv.setOnClickListener(this);
+
+        mBackButton = findViewById(R.id.back_bt);
+        mBackButton.setOnClickListener(this);
+
+        mSelectGameTitle = findViewById(R.id.selectGameLevel_tv);
+        Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
+        mSelectGameTitle.setTypeface(font);
+
 
         progressDialog = new ProgressDialog(this);
 
@@ -157,7 +169,7 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
         if(mSelectdGameLevel > mHigherAvalableLevel)
             showUnavailable();
         else {
-            goTo(control_modeActivity.class);
+            goTo(player_modeActivity.class);
         }
     }
 
@@ -200,6 +212,8 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
             case R.id.carLevel4_iv:
                     mSelectdGameLevel = 4;
                 break;
+            case R.id.back_bt:
+                goTo(control_modeActivity.class);
 
         }
 
