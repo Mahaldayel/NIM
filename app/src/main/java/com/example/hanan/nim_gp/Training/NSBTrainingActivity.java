@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -87,6 +89,9 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         firebaseAuth = FirebaseAuth.getInstance();
 
         mCurrentTrainingMode_tv = findViewById(R.id.training_mode_tv);
+        Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
+        mCurrentTrainingMode_tv.setTypeface(font);
+
 
         mStartTraining_bt = findViewById(R.id.start_training_bt);
         mStartTraining_bt.setOnClickListener(this);
@@ -102,6 +107,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mTrainingCar_iv = findViewById(R.id.training_car);
 
         mDesciption = findViewById(R.id.training_deception);
+        mDesciption.setTypeface(font);
         mDesciption.setText("Wear your headset, you will be training on two modes the first one will be Focus on pushing the car");
 
         initTrainingInformation();
@@ -128,6 +134,8 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         relaxation = findViewById(R.id.relax);
         avg_relax = findViewById(R.id.avg_relax);
         max_relax = findViewById(R.id.max_relax);
+
+
 
     }
 
@@ -156,9 +164,18 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         initializeSenzeBandBasic();
         mCurrentTrainingMode = TRAINING_MODE_FOCUS;
         setTextView();
+        setContext();
+
+        /***/
+        prepareForFocusTraining();
 
 
 
+    }
+
+    private void setContext() {
+
+        connectionCB.setTraniningContext(NSBTrainingActivity.this);
     }
 
 
@@ -183,22 +200,39 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
             case R.id.start_training_bt:
                 if(mFinish)
-                    saveTrainingInformationOnDatabase();
+                    if(checkOfData())
+                        saveTrainingInformationOnDatabase();
+                    else
+                        trainFailed();
                 else
                     startTraining();
                 break;
             case R.id.try_again_bt:
-                mFinish = false;
                 initTrainingInformation();
-                startTraining();
+//              mFinish = false;
+//              startTraining();
+                prepareForFocusTraining();
                 break;
             case R.id.back_bt:
-                goToMainActivity();
+                goTo(BeforeTrainingConnectingWithNeeruo.class);
                 break;
         }
 
     }
 
+    private boolean checkOfData() {
+
+        if(mTainingInformation.getAvgFocus() == 0)
+            return false;
+        if(mTainingInformation.getMaxFocus() == 0)
+            return false;
+        if(mTainingInformation.getAvgRelax() == 0)
+            return false;
+        if(mTainingInformation.getMaxRelax() == 0)
+            return false;
+
+        return true;
+    }
 
     private void saveTrainingInformationOnDatabase() {
 
@@ -207,12 +241,13 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("TrainingInformation").child(playerId).setValue(mTainingInformation);
 
-        goToMainActivity();
+        goTo(MainActivity.class);
     }
-    private void goToMainActivity() {
+
+    private void goTo(Class nextClass) {
 
         Context context = NSBTrainingActivity.this;
-        Class nextClass = MainActivity.class;
+
         Intent intent = new Intent(context,nextClass);
         startActivity(intent);
     }
@@ -283,11 +318,33 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mTraining_layout.setVisibility(View.GONE);
     }
 
+
+    /***/
+    private void prepareForRelaxTraining(){
+
+        mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.next_bt));
+        mDesciption.setText("Now,  you will be training the second one is Relax in order to pull the car.");
+
+    }
+
+    private void prepareForFocusTraining(){
+
+        mFinish = false;
+        mStartTraining_bt.setVisibility(View.VISIBLE);
+        mTraining_layout.setVisibility(View.VISIBLE);
+        mTryAgain_bt.setVisibility(View.GONE);
+        mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.start_bt));
+        mDesciption.setText("Wear your headset, you will be training on two modes the first one will be focus on pushing the car");
+
+    }
+
+    /***/
+
     private void startRelaxTraining() {
 
         mFinish = true;
         mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.finish_bt));
-        mDesciption.setText("");
+        mDesciption.setText("You have completed the training ");
         mCurrentTrainingMode_tv.setText("Relaxation Mode");
         moveBackword();
 
@@ -295,10 +352,12 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
     private void startFocusTraining() {
 
-        mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.next_bt));
-        mDesciption.setText("Now,  you will be training the second one is Relax in order to pull the car.");
+//        mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.next_bt));
+//        mDesciption.setText("Now,  you will be training the second one is Relax in order to pull the car.");
+
         mCurrentTrainingMode_tv.setText("Focus \n Mode");
         moveForward();
+        prepareForRelaxTraining();
     }
 
 
@@ -315,7 +374,10 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void run() {
 
-                if(sbDelegate.getCounter() == TRAINING_TIME){
+                if(sbDelegate.count == TRAINING_TIME){
+//                    databaseList();
+                    Log.e("hanan", "in : initTask  " +sbDelegate.getCounter());
+
                     trainSucceed();
                     timer.cancel();
                     timerTask.cancel();
@@ -375,7 +437,44 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
                     alertDialog.show();
                 }
-catch (WindowManager.BadTokenException e) {
+                    catch (WindowManager.BadTokenException e) {
+                    //use a log message
+                }
+
+            }
+        });
+    }
+
+    public void trainFailed() {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        NSBTrainingActivity.this);
+                // set title
+                alertDialogBuilder.setTitle("Training Failed");
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("Training is Failed.\nPlease make sure yor are wearing your headset correctly ")
+                        .setCancelable(false)
+                        .setPositiveButton("Ok",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(
+                                            DialogInterface dialog, int which) {
+
+                                        prepareForFocusTraining();
+                                    }
+                                });
+
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                try {
+
+                    alertDialog.show();
+                }
+                catch (WindowManager.BadTokenException e) {
                     //use a log message
                 }
 
@@ -384,5 +483,4 @@ catch (WindowManager.BadTokenException e) {
             }
         });
     }
-
 }

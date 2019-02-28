@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.hanan.nim_gp.DeviceList.DeviceListActivity;
-import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
 
 public class player_modeActivity extends AppCompatActivity implements View.OnClickListener  {
@@ -47,19 +45,19 @@ public class player_modeActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View view) {
         if(view ==single){
-          Intent intent = new Intent(player_modeActivity.this, connectionWithHeadset.class);
+            Intent intent = new Intent(player_modeActivity.this, ConnectionWithRobotCarActivity.class);
             intent.putExtra(CONTROL_MODE_GAME_INTENT,controlType);
             intent.putExtra(SELECTED_GAME_LEVEL_INTENT,gameLEVEL);
             intent.putExtra(CONTROL_GAME_INTENT, "Single");
             startActivity(intent);
         }
         if (view==multi){
-            Intent intent = new Intent(player_modeActivity.this, connectionWithHeadset.class);
+            Intent intent = new Intent(player_modeActivity.this, ConnectionWithRobotCarActivity.class);
             intent.putExtra(CONTROL_MODE_GAME_INTENT,controlType);
             intent.putExtra(SELECTED_GAME_LEVEL_INTENT,gameLEVEL);
             intent.putExtra(CONTROL_GAME_INTENT, "MultiPlayer");
             startActivity(intent);
         }
-        if(view==back){   startActivity(new Intent(player_modeActivity.this, control_modeActivity.class));}
+        if(view==back){   startActivity(new Intent(player_modeActivity.this, SelectGameActivity.class));}
     }}
 

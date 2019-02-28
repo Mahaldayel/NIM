@@ -137,14 +137,14 @@ if(view==relax || view==focus){
         if(view ==relax){
 
 
-            Intent intent = new Intent(control_modeActivity.this,player_modeActivity.class);
+            Intent intent = new Intent(control_modeActivity.this,SelectGameActivity.class);
             intent.putExtra(CONTROL_MODE_GAME_INTENT, "Relax");
 
             startActivity(intent);
 
         }
         if (view==focus){
-            Intent intent = new Intent(control_modeActivity.this, player_modeActivity.class);
+            Intent intent = new Intent(control_modeActivity.this, SelectGameActivity.class);
             intent.putExtra(CONTROL_MODE_GAME_INTENT, "Focus");
             startActivity(intent);
 

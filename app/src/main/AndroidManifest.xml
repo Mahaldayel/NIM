@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
@@ -39,24 +40,29 @@
         </activity>
         <activity android:name=".AccountActivity.UploadProfileImageActivity" />
         <activity android:name=".AccountActivity.SignUpActivity" />
-        <activity android:name=".AccountActivity.SignInActivity" />
+        <activity android:name=".AccountActivity.SignInActivity" />w
         <activity android:name=".MainActivity" />
         <activity android:name=".AccountActivity.ResetPasswordActivity" />
         <activity android:name=".AccountActivity.changeUserPassword" />
         <activity android:name=".AccountActivity.update_accountActivity" />
         <activity android:name=".AccountActivity.view_accountActivity" />
-        <activity android:name=".DeviceList.DeviceListActivity" />
-        <activity android:name=".DeviceList.AfterConnectionActivity" />
-        <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo" />
-        <activity android:name=".Training.NSBTrainingActivity" />
-        <activity android:name=".Game.SelectGameActivity" />
+        <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo" >
+
+        </activity>
+        <activity android:name=".Training.NSBTrainingActivity" >
+
+        </activity>
+        <activity android:name=".Game.SelectGameActivity" >
+
+        </activity>
         <activity android:name=".AccountActivity.DeleteAccount" />
         <activity android:name=".leaders.CountryLeadersActivity" />
         <activity android:name=".leaders.LeadersActivity" />
         <activity android:name=".Game.control_modeActivity" />
         <activity android:name=".Game.player_modeActivity" />
-        <activity android:name=".Game.connectionWithHeadset" />
-        <activity android:name=".Game.play" />
+        <activity android:name=".Game.ConnectionWithHeadset" />
+        <activity android:name=".Game.ControlRobotCarActivity"/>
+        <activity android:name=".Game.ConnectionWithRobotCarActivity"/>
     </application>
 
 </manifest>

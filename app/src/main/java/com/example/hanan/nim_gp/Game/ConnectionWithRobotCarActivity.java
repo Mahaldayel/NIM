@@ -1,4 +1,4 @@
-package com.example.hanan.nim_gp.DeviceList;
+package com.example.hanan.nim_gp.Game;
 
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -15,6 +15,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.hanan.nim_gp.MainActivity;
+import com.example.hanan.nim_gp.R;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -24,21 +27,21 @@ import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.DeviceCallback;
 import me.aflak.bluetooth.DiscoveryCallback;
 
-import com.example.hanan.nim_gp.MainActivity;
-import com.example.hanan.nim_gp.R;
-
 import static com.example.hanan.nim_gp.Game.SelectGameActivity.SELECTED_GAME_LEVEL_INTENT;
+import static com.example.hanan.nim_gp.Game.control_modeActivity.CONTROL_MODE_GAME_INTENT;
 
 
-public class DeviceListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener ,View.OnClickListener {
+public class ConnectionWithRobotCarActivity extends AppCompatActivity implements AdapterView.OnItemClickListener ,View.OnClickListener {
 
 
     private static final int REQUEST_ENABLE_BT = 1111;
     public static final String CONNECTED_DEVICE_INTENT = "connected device index";
 
+    public static final int ROBOT_TYPER = 1;
+
     // you must have bluetooth permissions before calling the constructor
-    Bluetooth bluetooth ;
-    BluetoothAdapter mBluetoothAdapter;
+    private Bluetooth bluetooth ;
+    private BluetoothAdapter mBluetoothAdapter;
 
     private List<BluetoothDevice> mPairedDevices;
     private List<BluetoothDevice> mNewDevices;
@@ -58,6 +61,7 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
     private Button mBack_bt;
 
     private Context mContext;
+    private String mControlMode;
 
     private int mSelectedGameLevel;
 
@@ -65,12 +69,23 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.activity_device_list);
+
+
         initElements();
+        getControlModeFromIntent();
         getSelectedLevelFromIntent();
         check();
 
+
+    }
+
+    private void getControlModeFromIntent() {
+
+        Intent intent = getIntent();
+        if(intent.hasExtra(CONTROL_MODE_GAME_INTENT)){
+           mControlMode = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
+        }
     }
 
     private void getSelectedLevelFromIntent() {
@@ -99,7 +114,7 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
         mBack_bt = findViewById(R.id.button_back);
         mBack_bt.setOnClickListener(this);
 
-        mContext = DeviceListActivity.this;
+        mContext = ConnectionWithRobotCarActivity.this;
 
         progressDialog = new ProgressDialog(this);
 
@@ -149,12 +164,15 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
             @Override public void onDiscoveryFinished() {}
             @Override public void onDeviceFound(BluetoothDevice device) {
                 progressDialog.dismiss();
-                addNewDeviceToListView(device);
+
+                if ( (!mNewDevices.contains(device)) && device.getType() == ROBOT_TYPER )
+                    addNewDeviceToListView(device);
 
 
             }
             @Override public void onDevicePaired(BluetoothDevice device) {
                 connectPairedDevice(device);
+
 
             }
             @Override public void onDeviceUnpaired(BluetoothDevice device) {}
@@ -171,7 +189,7 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
 
     private void addNewDeviceToListView(BluetoothDevice device) {
         mNewDevices.add(device);
-        mNewDeviceListAdapter = new DeviceListAdapter(DeviceListActivity.this, R.layout.device_adapter_view,(ArrayList<BluetoothDevice>) mNewDevices);
+        mNewDeviceListAdapter = new DeviceListAdapter(ConnectionWithRobotCarActivity.this, R.layout.device_adapter_view,(ArrayList<BluetoothDevice>) mNewDevices);
         mLvNewDevices.setAdapter(mNewDeviceListAdapter);
     }
 
@@ -212,7 +230,8 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
         bluetooth.setDeviceCallback(new DeviceCallback() {
             @Override public void onDeviceConnected(BluetoothDevice device) {
                 timerTask.cancel();
-                goToPullAndPush();
+                goToNextActivity();
+
 
             }
             @Override public void onDeviceDisconnected(BluetoothDevice device, String message) {}
@@ -265,7 +284,7 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
 
         else if(view == mBack_bt){
 
-            goTo(MainActivity.class);
+            goTo(player_modeActivity.class);
 
         }
 
@@ -274,25 +293,27 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
 
     private void goTo(Class nextClass) {
 
-        Context context = DeviceListActivity.this;
+        Context context = ConnectionWithRobotCarActivity.this;
 
         Intent intent = new Intent(context,nextClass);
         startActivity(intent);
 
     }
 
-    private void goToPullAndPush(){
+    private void goToNextActivity(){
 
 
         progressDialog.dismiss();
 
-        Context context = DeviceListActivity.this;
-        Class PullAndPushClass = AfterConnectionActivity.class;
+//        bluetooth.unpair(mConnectedDevice);
+        Context context = ConnectionWithRobotCarActivity.this;
+        Class nextClass = ConnectionWithHeadset.class;
 
-        Intent intent = new Intent(context,PullAndPushClass);
+        Intent intent = new Intent(context,nextClass);
         int index = mPairedDevices.indexOf(mConnectedDevice);
         intent.putExtra(CONNECTED_DEVICE_INTENT,index);
         intent.putExtra(SELECTED_GAME_LEVEL_INTENT, mSelectedGameLevel);
+        intent.putExtra(CONTROL_MODE_GAME_INTENT,mControlMode);
 
         startActivity(intent);
 

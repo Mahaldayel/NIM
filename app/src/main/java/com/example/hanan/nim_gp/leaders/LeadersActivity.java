@@ -29,8 +29,6 @@ public class LeadersActivity extends AppCompatActivity {
    ArrayList<PlayersDB> players=new ArrayList<PlayersDB>();
    ArrayList<PlayersLB> Fplayers =new ArrayList<PlayersLB>();
    RecyclerView recyclerView ;
-TextView world;
-TextView country;
 
 String CurrentPlayerUserName;
 ImageView Player1Pic,Player2Pic,Player3Pic,CurrentPlayerPic,secondpic,thirdpic;
@@ -106,9 +104,10 @@ FlagImageView Player1Country,Player2Country,Player3Country,CurrentPlayerCountry;
                 CurrentPlayerOrder.setTypeface(typeface);
 
 
-        refrence.addValueEventListener(new ValueEventListener() {
+        refrence.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+players.clear();
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
 
                     int score =Integer.parseInt(child.child("score").getValue().toString()) ;
@@ -120,7 +119,9 @@ if(child.getKey().equals(CurrentplayeId))
                     String Country=child.child("countyCode").getValue().toString();
                     PlayersDB p = new PlayersDB(score,Uname,pic,Country);
                     if(p!=null)
-                        players.add(p);
+players.add(p);
+
+
 
 
 
@@ -141,9 +142,6 @@ if(child.getKey().equals(CurrentplayeId))
                     thirdpic.setVisibility(View.INVISIBLE);
                 }
                 if(players.size()==2){
-
-
-
                     Player3Name.setVisibility(View.INVISIBLE);
                     Player3Score.setVisibility(View.INVISIBLE);
                     Player3Pic.setVisibility(View.INVISIBLE);
@@ -151,7 +149,8 @@ if(child.getKey().equals(CurrentplayeId))
                     thirdpic.setVisibility(View.INVISIBLE);
                 }
               arrange();
-               ininatadapter();
+                ininatadapter();
+
 
             }
             @Override
@@ -204,12 +203,16 @@ if(child.getKey().equals(CurrentplayeId))
 
     }
 
+
+
+
     public  ArrayList<PlayersLB> read(){
 
         String Country;
 
 
         for(int z=0;z<players.size();z++) {
+
 
             if(players.get(z).getCountry().equals("SA"))
                 Country="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Flag_of_Saudi_Arabia.svg/2000px-Flag_of_Saudi_Arabia.svg.png";

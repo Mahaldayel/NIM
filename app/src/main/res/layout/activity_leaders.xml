@@ -2,120 +2,72 @@
 
 
 <android.support.constraint.ConstraintLayout
-
     xmlns:android="http://schemas.android.com/apk/res/android"
-
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
-
     android:layout_height="match_parent"
-
     tools:context=".leaders.LeadersActivity"
-
     android:background="@drawable/back">
 
 
     <android.support.design.widget.AppBarLayout
-
         android:id="@+id/appBarLayout"
-
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
-
         android:theme="@style/AppTheme.AppBarOverlay"
-
         app:layout_constraintBottom_toTopOf="parent" />
 
 
     <include
-
         android:id="@+id/include"
-
         layout="@layout/content_leaders" />
 
 
     <ImageView
-
         android:id="@+id/imageView7"
-
         android:layout_width="wrap_content"
-
         android:layout_height="wrap_content"
-
         android:layout_marginStart="8dp"
-
         android:layout_marginTop="8dp"
-
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toTopOf="parent"
-
         app:srcCompat="@drawable/board1" />
 
 
     <Button
-
         android:id="@+id/WbuttonO"
-
         android:layout_width="90dp"
-
         android:layout_height="25dp"
-
-        android:layout_marginStart="8dp"
-
-        android:layout_marginTop="8dp"
-
-        android:layout_marginEnd="8dp"
-
         android:layout_marginBottom="8dp"
-
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/buttonon"
-
         android:text="THE WORLD"
-
         android:textColor="@color/white"
-
         android:textStyle="bold"
-
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:layout_constraintEnd_toEndOf="parent"
-
-        app:layout_constraintHorizontal_bias="0.711"
-
+        app:layout_constraintHorizontal_bias="0.714"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toTopOf="@+id/appBarLayout"
-
-        app:layout_constraintVertical_bias="0.258"
-
-
+        app:layout_constraintVertical_bias="0.265"
         />
 
 
     <Button
-
         android:id="@+id/CbuttonOF"
-
         android:layout_width="90dp"
-
         android:layout_height="23dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
 
         android:layout_marginStart="8dp"
 
         android:layout_marginTop="8dp"
-
-        android:layout_marginEnd="8dp"
-
-        android:layout_marginBottom="8dp"
 
         android:background="@drawable/buttonof"
 
@@ -128,43 +80,54 @@
         app:layout_constraintBottom_toBottomOf="parent"
 
         app:layout_constraintEnd_toEndOf="parent"
-
-        app:layout_constraintHorizontal_bias="0.298"
-
+        app:layout_constraintHorizontal_bias="0.285"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toTopOf="parent"
-
-        app:layout_constraintVertical_bias="0.26" />
-
+        app:layout_constraintVertical_bias="0.27" />
 
     <Button
-
         android:id="@+id/backButton"
-
         android:layout_width="50dp"
-
         android:layout_height="50dp"
-
         android:layout_marginStart="8dp"
-
         android:layout_marginTop="8dp"
-
         android:layout_marginEnd="8dp"
-
         android:background="@drawable/iconback"
-
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintHorizontal_bias="0.038"
-
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toTopOf="parent"
-
         app:layout_constraintVertical_bias="0.844" />
+
+
+    <!--<Button-->
+
+        <!--android:id="@+id/backButton"-->
+
+        <!--android:layout_width="50dp"-->
+
+        <!--android:layout_height="50dp"-->
+
+        <!--android:layout_marginStart="8dp"-->
+
+        <!--android:layout_marginTop="8dp"-->
+
+        <!--android:layout_marginEnd="8dp"-->
+
+        <!--android:background="@drawable/iconback"-->
+
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+
+        <!--app:layout_constraintHorizontal_bias="0.038"-->
+
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+
+        <!--app:layout_constraintVertical_bias="0.844" />-->
 
 
 
@@ -183,12 +146,13 @@
         android:layout_marginStart="24dp"
 
         android:layout_marginTop="8dp"
+        app:civ_border_width="1dp"
 
         android:layout_marginEnd="8dp"
 
         android:layout_marginBottom="8dp"
 
-        app:civ_border_width="2dp"
+
 
         app:civ_border_color="#FF000000"
 
@@ -355,10 +319,11 @@
         android:layout_marginTop="8dp"
 
         android:layout_marginEnd="8dp"
+        app:civ_border_width="1dp"
 
         android:layout_marginBottom="8dp"
 
-        app:civ_border_width="2dp"
+
 
         app:civ_border_color="#FF000000"
 
@@ -516,7 +481,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
 
         android:id="@+id/Player3Pic"
-
+        app:civ_border_width="1dp"
         android:layout_width="55dp"
 
         android:layout_height="55dp"
@@ -531,7 +496,6 @@
 
         android:layout_marginBottom="8dp"
 
-        app:civ_border_width="2dp"
 
         app:civ_border_color="#FF000000"
 
@@ -748,7 +712,7 @@
 
         android:layout_width="312dp"
 
-        android:layout_height="154dp"
+        android:layout_height="144dp"
 
         android:layout_marginTop="8dp"
 
@@ -760,13 +724,13 @@
 
         app:layout_constraintEnd_toEndOf="parent"
 
-        app:layout_constraintHorizontal_bias="0.725"
+        app:layout_constraintHorizontal_bias="0.692"
 
         app:layout_constraintStart_toStartOf="parent"
 
         app:layout_constraintTop_toTopOf="@+id/include"
 
-        app:layout_constraintVertical_bias="0.759"
+        app:layout_constraintVertical_bias="0.758"
 
         tools:listitem="@layout/board_item" />
 
@@ -789,7 +753,7 @@
 
         android:text="#9"
 
-        android:textColor="#5C3317"
+        android:textColor="#ffa500"
 
         android:textSize="15dp"
 
@@ -828,7 +792,7 @@
 
         app:civ_border_color="#FF000000"
 
-        app:civ_border_width="2dp"
+        app:civ_border_width="1dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
 
@@ -862,8 +826,9 @@
         android:text="Shahad"
 
         android:textSize="13dp"
+       android:textStyle="italic"
 
-        android:textColor="#5C3317"
+        android:textColor="#ffa500"
 
         app:layout_constraintBottom_toBottomOf="parent"
 
@@ -898,7 +863,7 @@
 
         android:textSize="13dp"
 
-        android:textColor="#417432"
+        android:textColor="#ffa500"
 
         app:layout_constraintBottom_toBottomOf="parent"
 
@@ -933,15 +898,16 @@
 
         app:layout_constraintEnd_toEndOf="parent"
 
-        app:layout_constraintHorizontal_bias="0.743"
+        app:layout_constraintHorizontal_bias="0.751"
 
         app:layout_constraintStart_toStartOf="parent"
 
         app:layout_constraintTop_toTopOf="parent"
 
-        app:layout_constraintVertical_bias="0.557"
+        app:layout_constraintVertical_bias="0.555"
 
         app:srcCompat="@drawable/flag_ae" />
+
 
 
 </android.support.constraint.ConstraintLayout>

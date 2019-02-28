@@ -1,4 +1,4 @@
-package com.example.hanan.nim_gp.DeviceList;
+package com.example.hanan.nim_gp.Game;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
 import com.example.hanan.nim_gp.R;
 
 import java.util.ArrayList;
