@@ -3,13 +3,17 @@ package com.example.hanan.nim_gp.Training;
 import com.example.hanan.nim_gp.Game.SelectGameActivity;
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
+
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -393,6 +397,9 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
     /**connection**/
     public class connectionCallBack implements NativeNSBInterface.connectionCallBackInterface
     {
+
+        private Context traniningContext;
+
         public void connectionSucceed(String address)
         {
             Log.e(TAG,"Connection succeed!");
@@ -408,11 +415,66 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
         public void connectionBroken(String s)
         {
             Log.e(TAG,"connection broken " + s );
+            displayDialog();
 
         }
 
+
         public void errorLog(String s) {
             Log.e(TAG,"connectionCB error Log " + s );
+        }
+
+
+
+        private void displayDialog(){
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                            traniningContext);
+                    // set title
+                    alertDialogBuilder.setTitle("Connection Broken");
+                    // set dialog message
+                    alertDialogBuilder
+                            .setMessage("The Connection with your headset was Broken. \n Please make sure your headset is working and has enough battery ")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(
+                                                DialogInterface dialog, int which) {
+                                            goToScanningActivity();
+                                        }
+                                    });
+
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    try {
+
+                        alertDialog.show();
+                    }
+                    catch (WindowManager.BadTokenException e) {
+                        //use a log message
+                    }
+
+
+
+                }
+            });
+
+        }
+
+        private void goToScanningActivity(){
+
+            Context context = traniningContext;
+            Class nextClass = BeforeTrainingConnectingWithNeeruo.class;
+            Intent intent = new Intent(context,nextClass);
+            startActivity(intent);
+        }
+
+        public void setTraniningContext(Context context){
+            traniningContext = context;
         }
     }
 

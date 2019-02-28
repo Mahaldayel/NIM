@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.hanan.nim_gp.AccountActivity.view_accountActivity;
-import com.example.hanan.nim_gp.DeviceList.DeviceListActivity;
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
 import com.example.hanan.nim_gp.Training.NSBTrainingActivity;

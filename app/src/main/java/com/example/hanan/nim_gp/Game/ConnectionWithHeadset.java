@@ -236,17 +236,17 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             startScan = !startScan;
 
         }else if(view == mBack_bt){
-            goToMainActivity();
+            goTo(ControlRobotCarActivity.class);
         }
     }
 
-    private void goToMainActivity() {
+    private void goTo(Class nextClass) {
 
         Context context = ConnectionWithHeadset.this;
-        Class nextClass = MainActivity.class;
 
         Intent intent = new Intent(context,nextClass);
         startActivity(intent);
+
     }
 
     /***scan***/
@@ -331,16 +331,28 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         }
 
 
-        public void sendToRobot(String msg) {
+        public void sendToRobot(final String msg) {
 
-            if(controlRobotBluetooth != null) {
-                if (controlRobotBluetooth.getBluetoothAdapter() != null && controlRobotBluetooth.isConnected()) {
-                    controlRobotBluetooth.send(String.valueOf(msg));
+            Log.e("hanan", "in : sendToRobot  " + msg);
 
-                    Log.e("hanan", "in : sendToRobot  " + msg);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
 
+                    Log.e("hanan", "in runOnUiThread out if : sendToRobot  ");
+
+                    if(controlRobotBluetooth != null) {
+
+                        if (controlRobotBluetooth.getBluetoothAdapter() != null && controlRobotBluetooth.isConnected()) {
+                            controlRobotBluetooth.send(String.valueOf(msg));
+
+                            Log.e("hanan", "in runOnUiThread in if : sendToRobot  " + msg);
+
+                        }
+                    }
                 }
-            }
+            });
+
 
         }
 
@@ -348,13 +360,16 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         public void EEG_GetRelaxation(float result) {
 
             relax = result;
-            Log.e("hanan", "in : EEG_GetRelaxation  " + relax);
+            Log.e("hanan", "out if : EEG_GetRelaxation  " + relax);
 
 
 
             if(controlModeNumber == 1){
-//                if(result>SignalsAvreg)
-//                    sendToRobot(String.valueOf(1));
+                if(result>SignalsAvreg){
+                    sendToRobot(String.valueOf(1));
+                    Log.e("hanan", "in if : EEG_GetRelaxation  " + relax);
+                }
+
 
             }
 

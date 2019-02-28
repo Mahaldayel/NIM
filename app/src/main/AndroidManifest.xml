@@ -32,11 +32,7 @@
         <activity android:name=".GameOver.CompletedActivity" />
         <activity android:name=".AccountActivity.CropView" />
         <activity android:name=".AccountActivity.FirstPage">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".AccountActivity.UploadProfileImageActivity" />
         <activity android:name=".AccountActivity.SignUpActivity" />
@@ -46,10 +42,16 @@
         <activity android:name=".AccountActivity.changeUserPassword" />
         <activity android:name=".AccountActivity.update_accountActivity" />
         <activity android:name=".AccountActivity.view_accountActivity" />
-        <activity android:name=".DeviceList.DeviceListActivity" />
-        <activity android:name=".DeviceList.AfterConnectionActivity" />
-        <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo" />
-        <activity android:name=".Training.NSBTrainingActivity" />
+        <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Training.NSBTrainingActivity" >
+
+        </activity>
         <activity android:name=".Game.SelectGameActivity" />
         <activity android:name=".AccountActivity.DeleteAccount" />
         <activity android:name=".leaders.CountryLeadersActivity" />

@@ -284,7 +284,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
         else if(view == mBack_bt){
 
-            goTo(MainActivity.class);
+            goTo(player_modeActivity.class);
 
         }
 
@@ -307,7 +307,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
 //        bluetooth.unpair(mConnectedDevice);
         Context context = ConnectionWithRobotCarActivity.this;
-        Class nextClass = ControlRobotCarActivity.class;
+        Class nextClass = ConnectionWithHeadset.class;
 
         Intent intent = new Intent(context,nextClass);
         int index = mPairedDevices.indexOf(mConnectedDevice);

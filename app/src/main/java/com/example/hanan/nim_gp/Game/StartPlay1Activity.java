@@ -4,6 +4,7 @@ package com.example.hanan.nim_gp.Game;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -166,7 +167,7 @@ public class StartPlay1Activity extends AppCompatActivity {
 
         initElements();
         getFormIntent();
-        initializeSenzeBandBasic();
+//        initializeSenzeBandBasic();
 
         initBluetoothForRobot();
         ConnectToRobot();
@@ -215,7 +216,7 @@ public class StartPlay1Activity extends AppCompatActivity {
 
         timer = new Timer();
         initTask();
-        timer.schedule(timerTask,20,100);
+        timer.schedule(timerTask,10,50);
 
     }
 
@@ -257,13 +258,25 @@ public class StartPlay1Activity extends AppCompatActivity {
 
         Log.e("hanan", "out : startPlay  " + SignalsAvreg);
 
+
         if(bluetooth.isConnected()){
-            sbDelegate.setControlRobotBluetooth(bluetooth,this);
-            sbDelegate.startPlay();
-//            startPlay();
             Log.e("hanan", "in : startPlay  " + SignalsAvreg);
+//            final Context context = this;
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Log.e("hanan", "in : initializeSenzeBandBasic  " + SignalsAvreg);
+//                    initializeSenzeBandBasic();
+//                    sbDelegate.setControlRobotBluetooth(bluetooth,context);
+//
+//                }
+//            });
+//            sbDelegate.startPlay();
+//            startPlay();
 
         }
+        Log.e("hanan", "out after : startPlay  " + SignalsAvreg);
+
 
     }
 
@@ -276,7 +289,7 @@ public class StartPlay1Activity extends AppCompatActivity {
 
         timer = new Timer();
         initPlayTask();
-        timer.schedule(timerTask,0,100);
+        timer.schedule(timerTask,0,10);
 
 
     }
@@ -371,6 +384,8 @@ public class StartPlay1Activity extends AppCompatActivity {
     }
 
 
+    private Context context = this;
+
     Handler hander = new Handler() {
         public void handleMessage(Message msg) {
 
@@ -380,6 +395,13 @@ public class StartPlay1Activity extends AppCompatActivity {
                     break;
                 case 1:
                     progressDialog.dismiss();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            sbDelegate.setControlRobotBluetooth(bluetooth,context);
+                        }
+                    });
+
 
                     break;
 
