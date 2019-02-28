@@ -474,7 +474,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="50"
-
         android:textSize="13dp"
         android:textColor="#417432"
         app:layout_constraintBottom_toBottomOf="parent"
