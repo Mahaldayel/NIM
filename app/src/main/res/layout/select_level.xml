@@ -78,24 +78,39 @@
         app:layout_constraintVertical_bias="0.591" />
 
 
-    <TextView
-        android:id="@+id/selectGameLevel_tv"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
+    <ImageView
+        android:id="@+id/selectGameLevel_iv"
+        android:layout_width="400dp"
+        android:layout_height="100dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="Game  Levels"
-        android:textColor="#ffffff"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/apple_tree_iv"
-        app:layout_constraintEnd_toEndOf="@+id/apple_tree_iv"
-        app:layout_constraintHorizontal_bias="0.788"
-        app:layout_constraintStart_toStartOf="@+id/apple_tree_iv"
-        app:layout_constraintTop_toTopOf="@+id/apple_tree_iv"
-        app:layout_constraintVertical_bias="0.55" />
+        android:src="@drawable/game_level_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.073" />
+    <!--<TextView-->
+        <!--android:id="@+id/selectGameLevel_tv"-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:gravity="center"-->
+        <!--android:text="Game  Levels"-->
+        <!--android:textColor="#ffffff"-->
+        <!--android:textSize="20sp"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/apple_tree_iv"-->
+        <!--app:layout_constraintEnd_toEndOf="@+id/apple_tree_iv"-->
+        <!--app:layout_constraintHorizontal_bias="0.788"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/apple_tree_iv"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/apple_tree_iv"-->
+        <!--app:layout_constraintVertical_bias="0.55" />-->
 
 
     <ImageView
@@ -318,7 +333,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:background="@drawable/iconback"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -326,6 +341,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.985" />
+
+    <Button
+        android:id="@+id/quit_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background=""
+
+        />
 
 
 
