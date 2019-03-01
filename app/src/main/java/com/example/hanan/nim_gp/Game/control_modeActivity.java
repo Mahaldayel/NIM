@@ -95,7 +95,7 @@ public class control_modeActivity extends AppCompatActivity implements View.OnCl
         builder.setCancelable(true);
         builder.setTitle("Confirmation message");
         builder.setMessage(
-                "You did not Train, Train to Start the fun");
+                "You didn't train, train to start the fun");
         builder.setPositiveButton("Go to training",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -128,8 +128,10 @@ public class control_modeActivity extends AppCompatActivity implements View.OnCl
 
     public void onClick(View view) {
 
-if(view==relax || view==focus)
-    if(shaz==false){
+if(view==relax || view==focus){
+
+
+   if(shaz==false){
         CreateMessage();
         return;}
         if(view ==relax){
@@ -147,5 +149,5 @@ if(view==relax || view==focus)
             startActivity(intent);
 
         }
-        if(view==back){   startActivity(new Intent(control_modeActivity.this, MainActivity.class));}
-}}
+        if(view==back){   startActivity(new Intent(control_modeActivity.this, SelectGameActivity.class));}
+}}}
