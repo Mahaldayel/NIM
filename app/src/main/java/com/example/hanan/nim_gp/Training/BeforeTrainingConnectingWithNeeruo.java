@@ -35,6 +35,7 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
     private ArrayAdapter<String> adapter;
     private Button mStart_bt;
     private Button mBack_bt;
+    private Button mQuit_bt;
     private ProgressDialog progressDialog;
 
 
@@ -73,6 +74,9 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         mBack_bt = findViewById(R.id.button_back);
         mBack_bt.setOnClickListener(this);
+
+        mQuit_bt = findViewById(R.id.quit_bt);
+        mQuit_bt.setOnClickListener(this);
 
         progressDialog = new ProgressDialog(this);
 
@@ -130,14 +134,17 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
             startScan = !startScan;
 
         }else if(view == mBack_bt){
-            goToMainActivity();
+            goTo(MainActivity.class);
+        }else if(view == mQuit_bt)
+        {
+            goTo(MainActivity.class);
+
         }
     }
 
-    private void goToMainActivity() {
+    private void goTo(Class nextClass) {
 
         Context context = BeforeTrainingConnectingWithNeeruo.this;
-        Class nextClass = MainActivity.class;
 
         Intent intent = new Intent(context,nextClass);
         startActivity(intent);

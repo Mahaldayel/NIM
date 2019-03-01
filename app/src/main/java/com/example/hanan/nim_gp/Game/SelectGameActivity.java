@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -43,6 +44,7 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
 
     private TextView mSelectGameTitle;
     private Button mBackButton;
+    private Button mQuitButton;
 
     private ProgressDialog progressDialog;
 
@@ -62,9 +64,6 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
         controlType = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
         initElements();
         getPlayerScore();
-        mBackButton.setVisibility(View.INVISIBLE);
-
-
 
     }
 
@@ -84,6 +83,9 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
 
         mBackButton = findViewById(R.id.back_bt);
         mBackButton.setOnClickListener(this);
+
+        mQuitButton = findViewById(R.id.quit_bt);
+        mQuitButton.setOnClickListener(this);
 
         mSelectGameTitle = findViewById(R.id.selectGameLevel_tv);
         Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
@@ -207,8 +209,10 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
                     mSelectdGameLevel = 4;
                 break;
             case R.id.back_bt:
-                startActivity(new Intent(this, control_modeActivity.class));
+                goTo(control_modeActivity.class);
                 break;
+            case R.id.quit_bt:
+                goTo(MainActivity.class);
 
         }
 
