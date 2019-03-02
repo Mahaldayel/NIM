@@ -87,10 +87,6 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
         mQuitButton = findViewById(R.id.quit_bt);
         mQuitButton.setOnClickListener(this);
 
-        mSelectGameTitle = findViewById(R.id.selectGameLevel_tv);
-        Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
-        mSelectGameTitle.setTypeface(font);
-
 
         progressDialog = new ProgressDialog(this);
 
@@ -210,9 +206,10 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.back_bt:
                 goTo(control_modeActivity.class);
-                break;
+                return;
             case R.id.quit_bt:
                 goTo(MainActivity.class);
+                return;
 
         }
 
