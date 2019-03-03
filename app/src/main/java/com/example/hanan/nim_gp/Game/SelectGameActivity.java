@@ -7,7 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class SelectGameActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private final int SCORE_LEVEL_ONE = 0;
+    private final int SCORE_LEVEL_ONE = 100;
     private final int SCORE_LEVEL_TWO = 200;
     private final int SCORE_LEVEL_THREE = 300;
     private final int SCORE_LEVEL_FOUR = 400;
@@ -53,6 +55,21 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
     private int mHigherAvalableLevel ;
     private String mPlayerEmail ;
     private String controlType;
+
+    /*score layout*/
+    private ConstraintLayout mScoreLayout;
+    private ImageView mScoreFullScreen;
+
+    private TextView mLevelNumber_tv;
+    private TextView mLevelScore_tv;
+    private TextView mPlayerScore_tv;
+
+    private Button mQuitScore_bt;
+    private Button mNext_bt;
+
+    private int mSeletedLevelScore;
+
+
 
 
 
@@ -88,9 +105,33 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
         mQuitButton.setOnClickListener(this);
 
 
+        initScoreLayoutElements();
+
+
         progressDialog = new ProgressDialog(this);
 
        mPlayerEmail =  FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+    }
+
+    private void initScoreLayoutElements() {
+
+        mLevelNumber_tv = findViewById(R.id.level_number);
+        Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
+        mLevelNumber_tv.setTypeface(font);
+
+
+        mPlayerScore_tv = findViewById(R.id.player_score);
+        mLevelScore_tv = findViewById(R.id.level_score);
+
+        mQuitScore_bt = findViewById(R.id.score_quit_bt);
+        mQuitScore_bt.setOnClickListener(this);
+
+        mNext_bt = findViewById(R.id.next_bt);
+        mNext_bt.setOnClickListener(this);
+
+        mScoreLayout = findViewById(R.id.score_layout);
+        mScoreFullScreen = findViewById(R.id.score_full_screen);
 
     }
 
@@ -139,20 +180,29 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
 
         progressDialog.dismiss();
 
-        if(mPlyaerScore >= SCORE_LEVEL_ONE)
+        if(mPlyaerScore >= SCORE_LEVEL_ONE){
             findViewById(R.id.lockLevel1).setVisibility(View.GONE);
+            mSeletedLevelScore = SCORE_LEVEL_ONE;
+        }
 
-        if(mPlyaerScore >= SCORE_LEVEL_TWO)
+        else if(mPlyaerScore >= SCORE_LEVEL_TWO){
             findViewById(R.id.lockLevel2).setVisibility(View.GONE);
 
-        if(mPlyaerScore >= SCORE_LEVEL_THREE)
+        }
+
+        else if(mPlyaerScore >= SCORE_LEVEL_THREE){
             findViewById(R.id.lockLevel3).setVisibility(View.GONE);
 
-        if(mPlyaerScore >= SCORE_LEVEL_FOUR)
+        }
+
+        else if(mPlyaerScore >= SCORE_LEVEL_FOUR){
             findViewById(R.id.lockLevel4).setVisibility(View.GONE);
+
+        }
 
 
         mHigherAvalableLevel = (int)(mPlyaerScore/100);
+
 
     }
 
@@ -193,17 +243,30 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
 
         switch (view.getId()){
             case R.id.carLevel1_iv:
-                    mSelectdGameLevel = 0;
+                    mSelectdGameLevel = 1;
+                    mSeletedLevelScore = SCORE_LEVEL_ONE;
                 break;
             case R.id.carLevel2_iv:
                     mSelectdGameLevel = 2;
+                    mSeletedLevelScore = SCORE_LEVEL_TWO;
                 break;
             case R.id.carLevel3_iv:
                     mSelectdGameLevel = 3;
+                    mSeletedLevelScore = SCORE_LEVEL_THREE;
+
                 break;
             case R.id.carLevel4_iv:
                     mSelectdGameLevel = 4;
+                    mSeletedLevelScore = SCORE_LEVEL_FOUR;
                 break;
+            case R.id.score_quit_bt:
+                hideScoreLayout();
+                mSelectdGameLevel = 0;
+                mSeletedLevelScore = 0;
+                return;
+            case R.id.next_bt:
+                checkAvailableLevel();
+                return;
             case R.id.back_bt:
                 goTo(control_modeActivity.class);
                 return;
@@ -213,8 +276,8 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
 
         }
 
-        checkAvailableLevel();
-
+        setDataOnScoreLayout();
+        displayScoreLayout();
 
 
     }
@@ -229,4 +292,32 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
         startActivity(intent);
     }
 
+
+    private void setDataOnScoreLayout(){
+
+
+        mLevelNumber_tv.setText("Level "+String.valueOf(mSelectdGameLevel));
+        mPlayerScore_tv.setText(String.valueOf(mPlyaerScore));
+        mLevelScore_tv.setText(String.valueOf(mSeletedLevelScore));
+
+    }
+
+    private void displayScoreLayout(){
+
+        mScoreFullScreen.setVisibility(View.VISIBLE);
+        mScoreLayout.setVisibility(View.VISIBLE);
+
+        mQuitButton.setVisibility(View.GONE);
+        mBackButton.setVisibility(View.GONE);
+
+    }
+
+    private void hideScoreLayout(){
+
+        mScoreFullScreen.setVisibility(View.GONE);
+        mScoreLayout.setVisibility(View.GONE);
+
+        mQuitButton.setVisibility(View.VISIBLE);
+        mBackButton.setVisibility(View.VISIBLE);
+    }
 }
