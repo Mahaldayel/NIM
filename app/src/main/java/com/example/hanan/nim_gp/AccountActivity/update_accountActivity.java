@@ -278,14 +278,7 @@ public class update_accountActivity extends AppCompatActivity implements View.On
                             progressDialog.dismiss();
                             Toast.makeText(update_accountActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
-                                    .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
-                        }
+
                     });
         }
     }
