@@ -323,7 +323,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     private void prepareForRelaxTraining(){
 
         mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.next_bt));
-        mDesciption.setText("Now,  you will be training the second one is Relax in order to pull the car.");
+        mDesciption.setText("Now, you will be calibrating on the second one is Relax in order to pull the car.");
 
     }
 
@@ -334,7 +334,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mTraining_layout.setVisibility(View.VISIBLE);
         mTryAgain_bt.setVisibility(View.GONE);
         mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.start_bt));
-        mDesciption.setText("Wear your headset, you will be training on two modes the first one will be focus on pushing the car");
+        mDesciption.setText("Wear your headset, you will be calibrating on two modes the first one will be focus on pushing the car");
 
     }
 
@@ -344,7 +344,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
         mFinish = true;
         mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.finish_bt));
-        mDesciption.setText("You have completed the training ");
+        mDesciption.setText("You have completed the calibrating ");
         mCurrentTrainingMode_tv.setText("Relaxation Mode");
         moveBackword();
 
@@ -411,10 +411,10 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         NSBTrainingActivity.this);
                 // set title
-                alertDialogBuilder.setTitle("Training Succeeded");
+                alertDialogBuilder.setTitle("Calibrating Succeeded");
                 // set dialog message
                 alertDialogBuilder
-                        .setMessage("Training is successful. Accept this training?")
+                        .setMessage("Calibrating is successful. Accept this Calibrating?")
                         .setCancelable(false)
                         .setPositiveButton("Yes",
                                 new DialogInterface.OnClickListener() {
@@ -454,10 +454,10 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         NSBTrainingActivity.this);
                 // set title
-                alertDialogBuilder.setTitle("Training Failed");
+                alertDialogBuilder.setTitle("Calibrating Failed");
                 // set dialog message
                 alertDialogBuilder
-                        .setMessage("Training is Failed.\nPlease make sure yor are wearing your headset correctly ")
+                        .setMessage("Calibrating is Failed.\nPlease make sure yor are wearing your headset correctly ")
                         .setCancelable(false)
                         .setPositiveButton("Ok",
                                 new DialogInterface.OnClickListener() {
