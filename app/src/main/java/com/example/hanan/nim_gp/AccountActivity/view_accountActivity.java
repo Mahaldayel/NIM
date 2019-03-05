@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,7 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
     private ImageView back;
     private TextView password;
     private TextView deleteAccount;
+    private LinearLayout scrollable;
     ProgressDialog progressDialog;
 
 
@@ -77,6 +80,8 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
          //TO Tondu font
             progressDialog.setMessage("Loading ...");
             progressDialog.show();
+             scrollable=findViewById(R.id.scrollable);
+
             TextView scorelable=(TextView) findViewById(R.id.scoreLabel_tv);
             Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
             scorelable.setTypeface(custom_font);
