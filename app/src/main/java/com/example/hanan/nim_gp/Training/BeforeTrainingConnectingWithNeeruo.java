@@ -1,6 +1,5 @@
 package com.example.hanan.nim_gp.Training;
 
-import com.example.hanan.nim_gp.Game.SelectGameActivity;
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
 
@@ -50,6 +49,8 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
     public static senzeBandDelegates sbDelegate;
     public static connectionCallBack connectionCB ;
 
+    private NSBTrainingActivity nsbTrainingActivity;
+
 
 
     @Override
@@ -82,6 +83,7 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         initAdapter();
         initInterfaces();
+
     }
 
     private void initInterfaces() {
@@ -412,7 +414,8 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
             Log.e(TAG,"Connection succeed!");
             NativeNSBInterface.getInstance().startStopEEG(true);
 
-            }
+
+        }
 
         public void connectionFail(String s, String s1)
         {
@@ -435,40 +438,49 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         private void displayDialog(){
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            nsbTrainingActivity = new NSBTrainingActivity();
+            traniningContext = nsbTrainingActivity.getContext();
 
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                            traniningContext);
-                    // set title
-                    alertDialogBuilder.setTitle("Connection Broken");
-                    // set dialog message
-                    alertDialogBuilder
-                            .setMessage("The Connection with your headset was Broken. \n Please make sure your headset is working and has enough battery ")
-                            .setCancelable(false)
-                            .setPositiveButton("Ok",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(
-                                                DialogInterface dialog, int which) {
-                                            goToScanningActivity();
-                                        }
-                                    });
+            if(traniningContext != null){
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                traniningContext);
+                        // set title
+                        alertDialogBuilder.setTitle("Connection Broken");
+                        // set dialog message
+                        alertDialogBuilder
+                                .setMessage("The Connection with your headset was Broken. \n Please make sure your headset is working and has enough battery ")
+                                .setCancelable(false)
+                                .setPositiveButton("Ok",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(
+                                                    DialogInterface dialog, int which) {
+                                                goToScanningActivity();
+                                            }
+                                        });
 
 
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    try {
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        try {
 
-                        alertDialog.show();
+                            alertDialog.show();
+                        }
+                        catch (WindowManager.BadTokenException e) {
+                            //use a log message
+                            Log.e(TAG,"BadTokenException  " +e.getMessage());
+
+
+                        }
+
+
+
                     }
-                    catch (WindowManager.BadTokenException e) {
-                        //use a log message
-                    }
-
-
-
-                }
-            });
+                });
+            }
 
         }
 
@@ -480,9 +492,6 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
             startActivity(intent);
         }
 
-        public void setTraniningContext(Context context){
-            traniningContext = context;
-        }
     }
 
 

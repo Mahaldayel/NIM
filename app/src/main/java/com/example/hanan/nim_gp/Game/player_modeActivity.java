@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import com.example.hanan.nim_gp.R;
 
 public class player_modeActivity extends AppCompatActivity implements View.OnClickListener  {
+
     private Button single;
     private Button multi;
     private ImageView back;
@@ -58,6 +59,6 @@ public class player_modeActivity extends AppCompatActivity implements View.OnCli
             intent.putExtra(CONTROL_GAME_INTENT, "MultiPlayer");
             startActivity(intent);
         }
-        if(view==back){   startActivity(new Intent(player_modeActivity.this, SelectGameActivity.class));}
+        if(view==back){   startActivity(new Intent(player_modeActivity.this, SelectGameLevelActivity.class));}
     }}
 

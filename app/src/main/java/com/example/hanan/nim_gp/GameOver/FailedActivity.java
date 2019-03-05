@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.hanan.nim_gp.Game.SelectGameActivity;
+import com.example.hanan.nim_gp.Game.SelectGameLevelActivity;
 import com.example.hanan.nim_gp.R;
 
 
@@ -60,7 +60,7 @@ public class FailedActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
 
         if (v == LevelsBtn) {
-            startActivity(new Intent(this, SelectGameActivity.class));
+            startActivity(new Intent(this, SelectGameLevelActivity.class));
 
         }
 

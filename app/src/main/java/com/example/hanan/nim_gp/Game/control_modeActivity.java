@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
 import com.example.hanan.nim_gp.Training.BeforeTrainingConnectingWithNeeruo;
-import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class control_modeActivity extends AppCompatActivity implements View.OnClickListener  {
+
     private Button relax;
     private Button focus;
     private ImageView back;
@@ -137,17 +137,17 @@ if(view==relax || view==focus){
         if(view ==relax){
 
 
-            Intent intent = new Intent(control_modeActivity.this,SelectGameActivity.class);
+            Intent intent = new Intent(control_modeActivity.this,SelectGameLevelActivity.class);
             intent.putExtra(CONTROL_MODE_GAME_INTENT, "Relax");
 
             startActivity(intent);
 
         }
         if (view==focus){
-            Intent intent = new Intent(control_modeActivity.this, SelectGameActivity.class);
+            Intent intent = new Intent(control_modeActivity.this, SelectGameLevelActivity.class);
             intent.putExtra(CONTROL_MODE_GAME_INTENT, "Focus");
             startActivity(intent);
 
         }
-        if(view==back){   startActivity(new Intent(control_modeActivity.this, SelectGameActivity.class));}
+        if(view==back){   startActivity(new Intent(control_modeActivity.this, SelectGameLevelActivity.class));}
 }}}

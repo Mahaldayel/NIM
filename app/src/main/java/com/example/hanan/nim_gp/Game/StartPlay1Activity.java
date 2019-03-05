@@ -14,6 +14,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.neeuro.NativeNSBPlugin.NativeNSBInterface;
 
@@ -27,71 +28,11 @@ import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.DeviceCallback;
 
 import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.CONNECTED_DEVICE_INTENT;
-import static com.example.hanan.nim_gp.Game.SelectGameActivity.SELECTED_GAME_LEVEL_INTENT;
+import static com.example.hanan.nim_gp.Game.SelectGameLevelActivity.SELECTED_GAME_LEVEL_INTENT;
 import static com.example.hanan.nim_gp.Game.control_modeActivity.CONTROL_MODE_GAME_INTENT;
 
 
 public class StartPlay1Activity extends AppCompatActivity {
-
-
-
-
-
-
-
-
-
-
-
-//
-//  ConnectionWithHeadset.senzeBandDelegates sbDelegate ;
-//ConnectionWithHeadset.scanCallBack scanCB ;
-//   ConnectionWithHeadset.connectionCallBack connectionCB ;
-//    ConnectionWithHeadset.NSBFunctionsCallBack nsbFunctionsCB ;
-//
-//
-//    private void initElements(){
-//
-//
-//
-//
-//        setPlayCallBack();
-//
-//    }
-//
-//
-//
-//
-//
-//    private void setPlayCallBack(){
-//
-//        sbDelegate = ConnectionWithHeadset.sbDelegate;
-//        scanCB = ConnectionWithHeadset.scanCB ;
-//        connectionCB = ConnectionWithHeadset.connectionCB;
-//        nsbFunctionsCB = ConnectionWithHeadset.nsbFunctionsCB;
-//
-//    }
-//
-//    public void initializeSenzeBandBasic()
-//    {
-//        NativeNSBInterface.getInstance().initializeNSB(getApplicationContext(),this,nsbFunctionsCB,scanCB,connectionCB,sbDelegate);
-//    }
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState)
-//    {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_start_play1);
-//
-//
-//        initElements();
-//        initializeSenzeBandBasic();
-//
-//
-//
-//
-//    }
-//
 
 
     public static final int RELAX_NUMBER = 1;
@@ -109,9 +50,11 @@ public class StartPlay1Activity extends AppCompatActivity {
     ConnectionWithHeadset.NSBFunctionsCallBack nsbFunctionsCB ;
 
 
+
     private int mSelectedGameLevel;
     private int mCcontrolModeNumber;
 
+    private TextView mMsg_tv;
     /*Robot**/
     private int mConnectedDeviceIndex;
     private BluetoothDevice mConnectedDevice ;
@@ -119,8 +62,8 @@ public class StartPlay1Activity extends AppCompatActivity {
     private TimerTask timerTask;
     private ProgressDialog progressDialog;
     private int mPlayCounter;
-    private float SignalsAvreg;
 
+    private long GAME_TIME = 100000;
 
     private void initElements(){
 
@@ -128,11 +71,10 @@ public class StartPlay1Activity extends AppCompatActivity {
 
         setPlayCallBack();
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Connect To Robot");
-        progressDialog.show();
 
         mConnectedDeviceIndex = -1;
+
+        mMsg_tv = findViewById(R.id.msg);
 
 
     }
@@ -167,11 +109,11 @@ public class StartPlay1Activity extends AppCompatActivity {
 
         initElements();
         getFormIntent();
-//        initializeSenzeBandBasic();
-
         initBluetoothForRobot();
-        ConnectToRobot();
-        checkOfConnectionToRobotTimer();
+        initializeSenzeBandBasic();
+        sbDelegate.setTextView(mMsg_tv);
+        sbDelegate.setControlRobotBluetooth(bluetooth);
+        checkOfEndPlayTimer();
 
 
     }
@@ -212,11 +154,13 @@ public class StartPlay1Activity extends AppCompatActivity {
 
     /**Robot Car**/
 
-    private void checkOfConnectionToRobotTimer(){
+    private void checkOfEndPlayTimer(){
+
+        sbDelegate.setEnded(false);
 
         timer = new Timer();
         initTask();
-        timer.schedule(timerTask,10,50);
+        timer.schedule(timerTask,GAME_TIME);
 
     }
 
@@ -225,112 +169,34 @@ public class StartPlay1Activity extends AppCompatActivity {
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                checkOfConnectToRobot();
+                endPlay();
 
             }
         };
     }
 
-    private void checkOfConnectToRobot(){
 
 
+    public Bluetooth getBluetooth(){
 
-        if(bluetooth.getBluetoothAdapter() != null && !bluetooth.isConnected())
-            ConnectToRobot();
-
-        bluetooth.setDeviceCallback(new DeviceCallback() {
-            @Override public void onDeviceConnected(BluetoothDevice device) {
-                timer.cancel();
-                hander.sendEmptyMessage(1);
-
-            }
-            @Override public void onDeviceDisconnected(BluetoothDevice device, String message) {}
-            @Override public void onMessage(final String message) {
-                //TODO get score from robot
-                hander.sendEmptyMessage(0);
-
-            }
-            @Override public void onError(String message) {}
-            @Override public void onConnectError(BluetoothDevice device, String message) {
-
-            }
-        });
-
-        Log.e("hanan", "out : startPlay  " + SignalsAvreg);
-
-
-        if(bluetooth.isConnected()){
-            Log.e("hanan", "in : startPlay  " + SignalsAvreg);
-//            final Context context = this;
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Log.e("hanan", "in : initializeSenzeBandBasic  " + SignalsAvreg);
-//                    initializeSenzeBandBasic();
-//                    sbDelegate.setControlRobotBluetooth(bluetooth,context);
-//
-//                }
-//            });
-//            sbDelegate.startPlay();
-//            startPlay();
-
-        }
-        Log.e("hanan", "out after : startPlay  " + SignalsAvreg);
-
-
+        return bluetooth;
     }
 
-    private void startPlay() {
 
-        Log.e("hanan", "in : startPlay  " + SignalsAvreg);
+    public TextView getmMsg_tv(){
 
-        mPlayCounter = 0;
-        SignalsAvreg = 0.445f;
-
-        timer = new Timer();
-        initPlayTask();
-        timer.schedule(timerTask,0,10);
-
-
+        return mMsg_tv;
     }
 
-    private void initPlayTask() {
 
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-
-                checkOFPlayerSignle();
-
-                if( mPlayCounter == END_GAME_TIME){
-                    // TODO end game
-                    endPlay();
-                    timer.cancel();
-                    timerTask.cancel();
-                }
-
-                Log.e("hanan", "in : initPlayTask  " + mPlayCounter);
-                mPlayCounter ++;
-            }
-        };
-
-
-    }
-
-    private void checkOFPlayerSignle() {
-
-        float temp = sbDelegate.getRelax();
-        Log.e("hanan", "in : checkOFPlayerSignle  " + temp);
-
-        if(temp > SignalsAvreg)
-            sbDelegate.sendToRobot(String.valueOf((int)Math.ceil(temp/SignalsAvreg)));
-    }
 
     private void endPlay() {
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
+                sbDelegate.setEnded(true);
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         StartPlay1Activity.this);
@@ -363,52 +229,6 @@ public class StartPlay1Activity extends AppCompatActivity {
             }
         });
     }
-
-
-    private void ConnectToRobot() {
-
-
-        if(bluetooth.getBluetoothAdapter() != null){
-            List<BluetoothDevice> device = bluetooth.getPairedDevices();
-
-
-            if(mConnectedDeviceIndex < 0)
-                getFormIntent();
-            else
-                mConnectedDevice = device.get(mConnectedDeviceIndex);
-
-            if(!bluetooth.isConnected() && mConnectedDevice != null)
-                bluetooth.connectToDevice(mConnectedDevice);
-
-        }
-    }
-
-
-    private Context context = this;
-
-    Handler hander = new Handler() {
-        public void handleMessage(Message msg) {
-
-            switch (msg.what) {
-                case 0:
-                    //TODO display score
-                    break;
-                case 1:
-                    progressDialog.dismiss();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            sbDelegate.setControlRobotBluetooth(bluetooth,context);
-                        }
-                    });
-
-
-                    break;
-
-            }
-        }};
-
-
 
 
 

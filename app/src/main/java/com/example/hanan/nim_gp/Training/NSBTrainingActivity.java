@@ -17,14 +17,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.hanan.nim_gp.Game.SelectGameActivity;
 import com.example.hanan.nim_gp.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.neeuro.NativeNSBPlugin.NativeNSBInterface;
 
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -73,11 +71,15 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
     private TrainingInformation mTainingInformation;
 
+    private static Context mContext;
+
     /** training callback **/
     BeforeTrainingConnectingWithNeeruo.senzeBandDelegates sbDelegate ;
     BeforeTrainingConnectingWithNeeruo.scanCallBack scanCB ;
     BeforeTrainingConnectingWithNeeruo.connectionCallBack connectionCB ;
     BeforeTrainingConnectingWithNeeruo.NSBFunctionsCallBack nsbFunctionsCB ;
+
+
 
 
     private void initElements(){
@@ -109,6 +111,8 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mDesciption = findViewById(R.id.training_deception);
         mDesciption.setTypeface(font);
         mDesciption.setText("Wear your headset, you will be training on two modes the first one will be Focus on pushing the car");
+
+        mContext = NSBTrainingActivity.this;
 
         initTrainingInformation();
         setTrainingCallBack();
@@ -164,7 +168,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         initializeSenzeBandBasic();
         mCurrentTrainingMode = TRAINING_MODE_FOCUS;
         setTextView();
-        setContext();
+//        setContext();
 
         /***/
         prepareForFocusTraining();
@@ -173,9 +177,17 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    private void setContext() {
+//    public void setContext() {
+//
+//        setTrainingCallBack();
+//        connectionCB =  BeforeTrainingConnectingWithNeeruo.connectionCB;
+//
+//        connectionCB.setTraniningContext(NSBTrainingActivity.this);
+//    }
 
-        connectionCB.setTraniningContext(NSBTrainingActivity.this);
+    public Context getContext(){
+
+        return mContext;
     }
 
 
@@ -209,8 +221,6 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.try_again_bt:
                 initTrainingInformation();
-//              mFinish = false;
-//              startTraining();
                 prepareForFocusTraining();
                 break;
             case R.id.back_bt:
@@ -352,9 +362,6 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
     private void startFocusTraining() {
 
-//        mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.next_bt));
-//        mDesciption.setText("Now,  you will be training the second one is Relax in order to pull the car.");
-
         mCurrentTrainingMode_tv.setText("Focus \n Mode");
         moveForward();
         prepareForRelaxTraining();
@@ -375,7 +382,6 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
             public void run() {
 
                 if(sbDelegate.count == TRAINING_TIME){
-//                    databaseList();
                     Log.e("hanan", "in : initTask  " +sbDelegate.getCounter());
 
                     trainSucceed();
@@ -483,4 +489,52 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
             }
         });
     }
+
+//    public void displayBrokenConnectionDialog(){
+
+//            nsbTrainingActivity.setContext();
+
+//        traniningContext =  nsbTrainingActivity.getApplicationContext();
+
+//        if(traniningContext != null){
+//        final Context context = mContext;
+//
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+//                            context );
+//                    // set title
+//                    alertDialogBuilder.setTitle("Connection Broken");
+//                    // set dialog message
+//                    alertDialogBuilder
+//                            .setMessage("The Connection with your headset was Broken. \n Please make sure your headset is working and has enough battery ")
+//                            .setCancelable(false)
+//                            .setPositiveButton("Ok",
+//                                    new DialogInterface.OnClickListener() {
+//                                        public void onClick(
+//                                                DialogInterface dialog, int which) {
+//                                            goTo(BeforeTrainingConnectingWithNeeruo.class);
+//                                        }
+//                                    });
+//
+//
+//                    AlertDialog alertDialog = alertDialogBuilder.create();
+//                    try {
+//
+//                        alertDialog.show();
+//                    }
+//                    catch (WindowManager.BadTokenException e) {
+//                        //use a log message
+//                    }
+//
+//
+//
+//                }
+//            });
+//        }
+
+//    }
+
 }

@@ -20,7 +20,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_start_play1" />
+    <include
+        layout="@layout/content_start_play1"
+        android:layout_height="851dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -30,4 +32,13 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
+
+    <TextView
+        android:id="@+id/msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="msg"
+        android:layout_margin="160dp"
+        android:textSize="36sp"
+         />
 </android.support.design.widget.CoordinatorLayout>
