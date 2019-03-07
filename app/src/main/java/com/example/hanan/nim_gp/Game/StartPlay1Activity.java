@@ -65,18 +65,27 @@ public class StartPlay1Activity extends AppCompatActivity {
 
     private long GAME_TIME = 100000;
 
+
+    /*test data*/
+    private TextView relax_tv;
+    private TextView focus_tv;
+
+
     private void initElements(){
 
-
-
         setPlayCallBack();
-
-
         mConnectedDeviceIndex = -1;
-
         mMsg_tv = findViewById(R.id.msg);
 
+        initTastData();
 
+
+    }
+
+    private void initTastData() {
+
+        relax_tv = findViewById(R.id.relax);
+        focus_tv = findViewById(R.id.focus);
     }
 
     private void initBluetoothForRobot() {
@@ -99,6 +108,7 @@ public class StartPlay1Activity extends AppCompatActivity {
     public void initializeSenzeBandBasic()
     {
         NativeNSBInterface.getInstance().initializeNSB(getApplicationContext(),this,nsbFunctionsCB,scanCB,connectionCB,sbDelegate);
+
     }
 
     @Override
@@ -113,9 +123,16 @@ public class StartPlay1Activity extends AppCompatActivity {
         initializeSenzeBandBasic();
         sbDelegate.setTextView(mMsg_tv);
         sbDelegate.setControlRobotBluetooth(bluetooth);
+        setTestDataTextView();
         checkOfEndPlayTimer();
 
 
+    }
+
+    private void setTestDataTextView() {
+
+        sbDelegate.setRelaxTextView(relax_tv);
+        sbDelegate.setFocusTextView(focus_tv);
     }
 
     private void getFormIntent(){

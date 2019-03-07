@@ -325,12 +325,17 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         private TextView msg;
         private Boolean isEnded;
 
+        private TextView relaxTextView;
+        private TextView focusTextView;
+
         public void EEG_GetAttention(float result) {
 
 
             if(controlModeNumber == 2 && !isEnded)
                 if(result>SignalsAvreg)
-                    sendToRobot(String.valueOf((int) Math.ceil(result/SignalsAvreg)));
+                    sendToRobot(String.valueOf((int) Math.floor(result/SignalsAvreg)));
+
+            focusTextView.setText(String.valueOf(result));
 
         }
 
@@ -339,9 +344,10 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
             if(controlModeNumber == 1 && !isEnded)
                 if(result>SignalsAvreg)
-                    sendToRobot(String.valueOf((int) Math.ceil(result/SignalsAvreg)));
+                    sendToRobot(String.valueOf((int) Math.floor(result/SignalsAvreg)));
 
 
+            relaxTextView.setText(String.valueOf(result));
             receiveMessageFromRobot();
 
         }
@@ -459,6 +465,13 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         }
 
+        public void setRelaxTextView(TextView relaxTextView) {
+            this.relaxTextView = relaxTextView;
+        }
+
+        public void setFocusTextView(TextView focusTextView) {
+            this.focusTextView = focusTextView;
+        }
     }
 
 
