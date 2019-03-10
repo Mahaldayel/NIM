@@ -47,6 +47,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private Button buttonSignup;
     private EditText editTextEmail;
     private EditText editTextPassword;
+    private EditText editTextConfirmPassword;
     private EditText editTextUserName;
     private TextView textViewLocation;
     private FirebaseAuth firebaseAuth;
@@ -85,6 +86,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         buttonSignup = (Button) findViewById(R.id.buttonSignup);
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
+        editTextConfirmPassword = (EditText) findViewById(R.id.editTextConfirmPassword);
         backbtn = (ImageView) findViewById(R.id.backbtn);
         buttonSignup.setOnClickListener(this);
         backbtn.setOnClickListener(this);
@@ -172,6 +174,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
+        String confirmPassword = editTextConfirmPassword.getText().toString().trim();
         String username= editTextUserName.getText().toString().trim();
 
 
@@ -185,6 +188,18 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         if(TextUtils.isEmpty(password)){
             //password is empty
             Toast.makeText(SignUpActivity.this,"Please enter password",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(TextUtils.isEmpty(confirmPassword)){
+            //password is empty
+            Toast.makeText(SignUpActivity.this,"Please confirm your password",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(!confirmPassword.equals(password)){
+            //password is empty
+            Toast.makeText(SignUpActivity.this,"Your password and confirmation doesn't match",Toast.LENGTH_LONG).show();
             return;
         }
 

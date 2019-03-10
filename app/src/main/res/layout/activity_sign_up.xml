@@ -21,15 +21,15 @@
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.494"
-        app:srcCompat="@drawable/signuppage" />
+        app:layout_constraintVertical_bias="0.694"
+        app:srcCompat="@drawable/signupwithconfirmpass" />
 
     <EditText
         android:id="@+id/editTextEmail"
-        android:layout_width="200dp"
-        android:layout_height="48dp"
+        android:layout_width="210dp"
+        android:layout_height="37dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="168dp"
+        android:layout_marginTop="156dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/textfield"
         android:ems="10"
@@ -42,10 +42,10 @@
 
     <EditText
         android:id="@+id/editTextPassword"
-        android:layout_width="200dp"
-        android:layout_height="48dp"
+        android:layout_width="210dp"
+        android:layout_height="37dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/textfield"
         android:ems="10"
@@ -57,11 +57,27 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
 
     <EditText
-        android:id="@+id/editTextUserName"
-        android:layout_width="200dp"
-        android:layout_height="48dp"
+        android:id="@+id/editTextConfirmPassword"
+        android:layout_width="210dp"
+        android:layout_height="37dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/textfield"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:paddingLeft="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+
+    <EditText
+        android:id="@+id/editTextUserName"
+        android:layout_width="210dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/textfield"
         android:ems="10"
@@ -70,21 +86,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword" />
 
     <TextView
         android:id="@+id/tvDate"
-        android:layout_width="200dp"
-        android:layout_height="48dp"
+        android:layout_width="210dp"
+        android:layout_height="37dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/textfield"
         android:paddingLeft="30dp"
         android:paddingTop="10dp"
         android:text="select your Birth date"
-        android:textSize="15dp"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -105,15 +121,15 @@
 
     <Button
         android:id="@+id/setCountry"
-        android:layout_width="200dp"
-        android:layout_height="48dp"
+        android:layout_width="210dp"
+        android:layout_height="37dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/textfield"
         android:onClick="openPicker"
-        android:textSize="15dp"
         android:text="select your country"
+        android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
