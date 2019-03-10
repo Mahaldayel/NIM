@@ -1,6 +1,7 @@
 package com.example.hanan.nim_gp.ManageDevices;
 
 import android.app.ProgressDialog;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hanan.nim_gp.R;
@@ -39,6 +41,7 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
     private Button mQuitScore_bt;
     private Button mEdit_bt;
     private Button mEditDone;
+    private TextView mLayoutTitle;
 
     private EditText mName_et;
 
@@ -48,7 +51,7 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
     private String playerId;
     private ProgressDialog progressDialog;
 
-    private int mSelectedDeviceIndex;
+    private int mSelectedRobotDeviceIndex;
 
 
     @Override
@@ -97,14 +100,21 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
     private void initDevicLayoutElements() {
 
 
+        Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
+
         mQuitScore_bt = findViewById(R.id.score_quit_bt);
         mQuitScore_bt.setOnClickListener(this);
 
         mSelect_bt = findViewById(R.id.select_bt);
         mSelect_bt.setOnClickListener(this);
+        mSelect_bt.setTypeface(font);
 
         mEdit_bt = findViewById(R.id.edit_bt);
         mEdit_bt.setOnClickListener(this);
+        mEdit_bt.setTypeface(font);
+
+        mLayoutTitle = findViewById(R.id.layout_title);
+        mLayoutTitle.setTypeface(font);
 
         mLayout = findViewById(R.id.layout);
         mScoreFullScreen = findViewById(R.id.score_full_screen);
@@ -113,6 +123,8 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
 
         mEditDone = findViewById(R.id.edit_done_bt);
         mEditDone.setOnClickListener(this);
+        mEditDone.setTypeface(font);
+
 
     }
 
@@ -120,10 +132,9 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-
-        displayLayout();
-        Toast.makeText(this,"hanan",Toast.LENGTH_LONG).show();
         mClickedDeviceIndex = i;
+        displayLayout();
+
 
     }
 
@@ -136,14 +147,12 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
             case R.id.select_bt:
                 makeSelectedDeviceUnselect();
                 makeCurrentDeviceSelect();
-                Toast.makeText(this,String.valueOf(deviceArrayList.get(mClickedDeviceIndex).getSelected()),Toast.LENGTH_LONG).show();
                 break;
             case R.id.edit_bt:
                 changeLayoutToEditLayout();
                 return;
             case R.id.edit_done_bt:
                 editName();
-                Toast.makeText(this,String.valueOf(deviceArrayList.get(mClickedDeviceIndex).getName()),Toast.LENGTH_LONG).show();
                 changeLayoutToSelectLayout();
                 break;
 
@@ -188,6 +197,8 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
     }
 
     private void displayLayout(){
+
+        mName_et.setText(deviceArrayList.get(mClickedDeviceIndex).getName());
 
         mScoreFullScreen.setVisibility(View.VISIBLE);
         mLayout.setVisibility(View.VISIBLE);
@@ -241,21 +252,21 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
 
     private void initAdapter() {
 
-        setmSelectedDeviceIndex();
-        deviceListAdapter = new DeviceListAdapter(this,R.layout.device_adapter_view,deviceArrayList,mSelectedDeviceIndex);
+        setSelectedRobotDeviceIndex();
+        deviceListAdapter = new DeviceListAdapter(this,R.layout.device_adapter_view,deviceArrayList, mSelectedRobotDeviceIndex);
         deviceListview.setAdapter(deviceListAdapter);
         deviceListview.setOnItemClickListener(this);
     }
 
     private void makeSelectedDeviceUnselect(){
 
-        deviceArrayList.get(mSelectedDeviceIndex).setSelected(false);
+        deviceArrayList.get(mSelectedRobotDeviceIndex).setSelected(false);
         mDatabase.child("DeviceInformation").child(playerId).setValue(deviceArrayList);
         initAdapter();
 
     }
 
-    private void setmSelectedDeviceIndex(){
+    private void setSelectedRobotDeviceIndex(){
 
         if(deviceArrayList == null)
             return ;
@@ -263,8 +274,8 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
         int count = 0;
         for(Object device: deviceArrayList){
 
-            if(((Device)device).getSelected().equals(true)){
-                mSelectedDeviceIndex = count;
+            if(((Device)device).getSelected().equals(true) && ((Device)device).getType().equals(DeviceType.RobotCar) ){
+                mSelectedRobotDeviceIndex = count;
 
                 return;
             }

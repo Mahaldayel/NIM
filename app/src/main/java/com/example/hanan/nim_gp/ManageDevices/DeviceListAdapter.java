@@ -2,6 +2,7 @@ package com.example.hanan.nim_gp.ManageDevices;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +21,16 @@ public class DeviceListAdapter extends ArrayAdapter {
     private ArrayList<Device> mDevices;
     private int  mViewResourceId;
     private int mSelectedDeviceIndex;
+    private TextView deviceName;
+    private TextView deviceAdress;
+    private TextView deviceType;
+    private TextView selectedDeviceBackground;
+
+    private Context mContext;
 
     public DeviceListAdapter(Context context, int tvResourceId, ArrayList<Device> devices,int selectedDeviceIndex){
         super(context, tvResourceId,devices);
+        mContext = context;
         this.mDevices = devices;
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mViewResourceId = tvResourceId;
@@ -35,10 +43,8 @@ public class DeviceListAdapter extends ArrayAdapter {
         Device device = mDevices.get(position);
 
         if (device != null) {
-            TextView deviceName = convertView.findViewById(R.id.tvDeviceName);
-            TextView deviceAdress =  convertView.findViewById(R.id.tvDeviceAddress);
-            TextView deviceType = convertView.findViewById(R.id.tvDeviceType);
-            ImageView selectedDeviceBackground = convertView.findViewById(R.id.select_device_background);
+
+            initElements(convertView);
 
             if (deviceName != null)
                 deviceName.setText(device.getName());
@@ -49,11 +55,26 @@ public class DeviceListAdapter extends ArrayAdapter {
             if(deviceType != null)
                 deviceType.setText(device.getType().name());
 
-            if(mSelectedDeviceIndex == position)
+            if(mSelectedDeviceIndex == position){
+//                deviceName.append("\t Selected");
                 selectedDeviceBackground.setVisibility(View.VISIBLE);
+            }
         }
 
         return convertView;
     }
 
+
+    private void initElements(View convertView){
+
+        deviceName = convertView.findViewById(R.id.tvDeviceName);
+        deviceAdress =  convertView.findViewById(R.id.tvDeviceAddress);
+        deviceType = convertView.findViewById(R.id.tvDeviceType);
+
+        selectedDeviceBackground = convertView.findViewById(R.id.select_device_background);
+        Typeface font = Typeface.createFromAsset(mContext.getAssets(),  "fonts/Tondu_Beta.ttf");
+        selectedDeviceBackground.setTypeface(font);
+
+
+    }
 }

@@ -75,7 +75,7 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.select_level);
+        setContentView(R.layout.activity_select_game_level);
 
 
         getFormIntent();
