@@ -8,14 +8,27 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.example.hanan.nim_gp.ManageDevices.Device;
+import com.example.hanan.nim_gp.ManageDevices.DeviceType;
 import com.example.hanan.nim_gp.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,11 +77,22 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
     private int mSelectedGameLevel;
 
+    private Button mQuitLayout_bt;
+    private Button mSave_bt;
+    private ConstraintLayout mSaveCarLayout;
+    private EditText mName_et;
+    private ImageView mSaveCarFullScreen;
+    private DatabaseReference mDatabase;
+    private FirebaseAuth firebaseAuth;
+    private String playerId;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_device_list);
+        setContentView(R.layout.activity_cars_list);
 
 
         initElements();
@@ -117,9 +141,35 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
         progressDialog = new ProgressDialog(this);
 
+        initSaveCarLayoutElements();
+        initElementToSaveCars();
+
 
     }
 
+    private void initElementToSaveCars() {
+
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Players");
+        firebaseAuth = FirebaseAuth.getInstance();
+        playerId = firebaseAuth.getCurrentUser().getUid();
+    }
+
+    private void initSaveCarLayoutElements() {
+
+
+        mQuitLayout_bt = findViewById(R.id.layout_quit_bt);
+        mQuitLayout_bt.setOnClickListener(this);
+
+        mSave_bt = findViewById(R.id.save_bt);
+        mSave_bt.setOnClickListener(this);
+
+        mSaveCarLayout = findViewById(R.id.save_car_layout);
+        mSaveCarFullScreen = findViewById(R.id.full_screen);
+
+        mName_et = findViewById(R.id.new_name_et);
+
+    }
 
     @Override
     protected void onStart() {
@@ -164,7 +214,9 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
             @Override public void onDeviceFound(BluetoothDevice device) {
                 progressDialog.dismiss();
 
-                if ( (!mNewDevices.contains(device)) && device.getType() == ROBOT_TYPER )
+                if ( (!mNewDevices.contains(device))
+//                        && device.getType() == ROBOT_TYPER
+                        )
                     addNewDeviceToListView(device);
 
 
@@ -200,7 +252,10 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         if (adapterView == mLvNewDevices){
 
 
-            pairedAndConnectClickedDevice(i);
+            displaySaveRobotCar();
+            mConnectedDevice = mNewDevices.get(i);
+
+//            pairedAndConnectClickedDevice(i);
 
 
         }
@@ -229,7 +284,9 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         bluetooth.setDeviceCallback(new DeviceCallback() {
             @Override public void onDeviceConnected(BluetoothDevice device) {
                 timerTask.cancel();
-                goToNextActivity();
+//                goToNextActivity();
+
+                displaySaveRobotCar();
 
 
             }
@@ -278,14 +335,28 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
     @Override
     public void onClick(View view) {
 
-        if(view == mScan_bt)
-            scan();
-
-        else if(view == mBack_bt){
-
-            goTo(player_modeActivity.class);
-
+        switch (view.getId()){
+            case R.id.button_scan:
+                scan();
+                break;
+            case R.id.back_bt:
+                goTo(player_modeActivity.class);
+                break;
+            case R.id.save_bt:
+                saveRobotCar();
+                break;
+            case R.id.layout_quit_bt:
+                hideSaveRobotCar();
+                break;
         }
+//        if(view == mScan_bt)
+//            scan();
+//
+//        else if(view == mBack_bt){
+//
+//            goTo(player_modeActivity.class);
+//
+//        }
 
 
     }
@@ -304,7 +375,6 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
         progressDialog.dismiss();
 
-//        bluetooth.unpair(mConnectedDevice);
         Context context = ConnectionWithRobotCarActivity.this;
         Class nextClass = ConnectionWithHeadset.class;
 
@@ -339,6 +409,98 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         };
     }
 
+
+    private void displaySaveRobotCar(){
+
+        mSaveCarLayout.setVisibility(View.VISIBLE);
+        mSaveCarFullScreen.setVisibility(View.VISIBLE);
+
+
+    }
+
+    private void hideSaveRobotCar(){
+
+        mSaveCarLayout.setVisibility(View.GONE);
+        mSaveCarFullScreen.setVisibility(View.GONE);
+
+
+    }
+
+    private void saveRobotCar(){
+
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        final String playerId = firebaseAuth.getCurrentUser().getUid();
+        DatabaseReference refrence = FirebaseDatabase.getInstance().getReference().child("DeviceInformation");
+
+        refrence.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists() ){
+                    for (DataSnapshot child : snapshot.getChildren()) {
+
+
+                        if (child.getKey().equals(playerId)){
+
+                            GenericTypeIndicator<ArrayList<Device>> t = new GenericTypeIndicator<ArrayList<Device>>() {};
+                            ArrayList<Device> value = child.getValue(t);
+                            setData(value);
+
+                        }
+                    }
+                }else {
+
+                    mDatabase.child("DeviceInformation").child(playerId).setValue(creatDeviceListObject());
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void setData(ArrayList<Device> devices) {
+
+        if(notAvailable(devices)){
+            devices.add((Device) creatDeviceObject());
+            mDatabase.child("DeviceInformation").child(playerId).setValue(devices);
+
+        }
+    }
+
+    private boolean notAvailable(ArrayList<Device> devices) {
+
+
+        if(devices == null)
+            return true;
+
+        for(Object device: devices){
+
+            if(((Device)device).getAddress().equals(mConnectedDevice.getAddress().toString())){
+                return false;
+
+            }
+        }
+
+
+
+        return true;
+    }
+
+    private Object creatDeviceObject() {
+
+        return new Device(mConnectedDevice.getAddress(), DeviceType.RobotCar,mName_et.getText().toString());
+    }
+
+    private ArrayList<Device> creatDeviceListObject() {
+
+        ArrayList<Device> devices = new ArrayList<>();
+        Device device = new Device(mConnectedDevice.getAddress(), DeviceType.RobotCar,mName_et.getText().toString());
+         devices.add(device);
+
+        return devices;
+    }
 
 
 }
