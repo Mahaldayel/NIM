@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.hanan.nim_gp.ManageDevices.Device;
 import com.example.hanan.nim_gp.ManageDevices.DeviceType;
@@ -86,6 +88,12 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
     private FirebaseAuth firebaseAuth;
     private String playerId;
 
+    private Button mContinue_bt;
+    private Button mGoToScan_bt;
+    private TextView mBeforeScanningDeception_tv;
+    private ConstraintLayout mBeforeTraining_layout;
+
+
 
 
     @Override
@@ -143,14 +151,36 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
         initSaveCarLayoutElements();
         initElementToSaveCars();
+        initBeforeTrainingLayoutElements();
 
+
+    }
+
+    private void initBeforeTrainingLayoutElements() {
+
+        Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
+
+
+        mContinue_bt = findViewById(R.id.continue_bt);
+        mContinue_bt.setOnClickListener(this);
+        mContinue_bt.setTypeface(font);
+
+        mGoToScan_bt = findViewById(R.id.go_to_scan_bt);
+        mGoToScan_bt.setOnClickListener(this);
+        mGoToScan_bt.setTypeface(font);
+
+        mBeforeScanningDeception_tv = findViewById(R.id.before_scanning_deception);
+        mBeforeScanningDeception_tv.setOnClickListener(this);
+        mBeforeScanningDeception_tv.setTypeface(font);
+
+        mBeforeTraining_layout = findViewById(R.id.before_scanning_layout);
 
     }
 
     private void initElementToSaveCars() {
 
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Players");
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         firebaseAuth = FirebaseAuth.getInstance();
         playerId = firebaseAuth.getCurrentUser().getUid();
     }
@@ -215,7 +245,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
                 progressDialog.dismiss();
 
                 if ( (!mNewDevices.contains(device))
-//                        && device.getType() == ROBOT_TYPER
+                        && device.getType() == ROBOT_TYPER
                         )
                     addNewDeviceToListView(device);
 
@@ -255,7 +285,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
             displaySaveRobotCar();
             mConnectedDevice = mNewDevices.get(i);
 
-//            pairedAndConnectClickedDevice(i);
+            pairedAndConnectClickedDevice(i);
 
 
         }
@@ -348,6 +378,12 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
             case R.id.layout_quit_bt:
                 hideSaveRobotCar();
                 break;
+            case R.id.go_to_scan_bt:
+                hideBeforeTrainingLayout();
+                break;
+            case R.id.continue_bt:
+                goTo(ConnectionWithHeadset.class);
+                break;
         }
 //        if(view == mScan_bt)
 //            scan();
@@ -359,6 +395,11 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 //        }
 
 
+    }
+
+    private void hideBeforeTrainingLayout() {
+
+        mBeforeTraining_layout.setVisibility(View.GONE);
     }
 
     private void goTo(Class nextClass) {
@@ -450,7 +491,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
                     }
                 }else {
 
-                    mDatabase.child("DeviceInformation").child(playerId).setValue(creatDeviceListObject());
+                    mDatabase.child("DeviceInformation").child(playerId).setValue(createDeviceListObject());
                 }
             }
             @Override
@@ -463,10 +504,13 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
     private void setData(ArrayList<Device> devices) {
 
         if(notAvailable(devices)){
-            devices.add((Device) creatDeviceObject());
+            devices.add((Device) createDeviceObject());
             mDatabase.child("DeviceInformation").child(playerId).setValue(devices);
 
         }
+
+        goToNextActivity();
+
     }
 
     private boolean notAvailable(ArrayList<Device> devices) {
@@ -488,12 +532,12 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         return true;
     }
 
-    private Object creatDeviceObject() {
+    private Object createDeviceObject() {
 
         return new Device(mConnectedDevice.getAddress(), DeviceType.RobotCar,mName_et.getText().toString());
     }
 
-    private ArrayList<Device> creatDeviceListObject() {
+    private ArrayList<Device> createDeviceListObject() {
 
         ArrayList<Device> devices = new ArrayList<>();
         Device device = new Device(mConnectedDevice.getAddress(), DeviceType.RobotCar,mName_et.getText().toString());

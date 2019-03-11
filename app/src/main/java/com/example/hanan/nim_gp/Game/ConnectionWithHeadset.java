@@ -1,6 +1,8 @@
 package com.example.hanan.nim_gp.Game;
 
 
+import com.example.hanan.nim_gp.ManageDevices.Device;
+import com.example.hanan.nim_gp.ManageDevices.DeviceType;
 import com.example.hanan.nim_gp.R;
 
 import android.app.ProgressDialog;
@@ -23,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.neeuro.NativeNSBPlugin.NativeNSBInterface;
 import com.google.firebase.auth.FirebaseAuth;
@@ -80,8 +83,11 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     private BluetoothDevice mConnectedDevice ;
 
     private StartPlay1Activity startPlay1Activity;
+    private DatabaseReference mDatabase;
+    private FirebaseAuth firebaseAuth;
+    private String playerId;
 
-
+    private String mSelectedRobotDeviceAddress;
 
 
     @Override
@@ -111,6 +117,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         if(intent.hasExtra(CONNECTED_DEVICE_INTENT)){
             mConnectedDeviceIndex = intent.getIntExtra(CONNECTED_DEVICE_INTENT,-1);
             setRobotAddress(mConnectedDeviceIndex);
+        }else {
+            getDevicesFromFirebase();
         }
 
 
@@ -131,6 +139,59 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         mConnectedDevice = devices.get(mConnectedDeviceIndex);
         bluetooth.onStop();
 
+
+    }
+
+    private void initElementGetDeviceFromFirebase() {
+
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        firebaseAuth = FirebaseAuth.getInstance();
+        playerId = firebaseAuth.getCurrentUser().getUid();
+    }
+
+
+    private void getDevicesFromFirebase(){
+
+
+        progressDialog.show();
+        DatabaseReference refrence = FirebaseDatabase.getInstance().getReference().child("DeviceInformation");
+
+        refrence.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists() ){
+                    for (DataSnapshot child : snapshot.getChildren()) {
+
+
+                        if (child.getKey().equals(playerId)){
+
+                            GenericTypeIndicator<ArrayList<Device>> t = new GenericTypeIndicator<ArrayList<Device>>() {};
+                            ArrayList<Device> value = child.getValue(t);
+                            setData(value);
+
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void setData(ArrayList<Device> devices) {
+
+        for(Object device: devices){
+
+            if(((Device)device).getSelected().equals(true) && ((Device)device).getType().equals(DeviceType.RobotCar) ){
+                mSelectedRobotDeviceAddress = ((Device) device).getAddress();
+
+                return;
+            }
+        }
+       progressDialog.dismiss();
 
     }
 
@@ -183,6 +244,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         progressDialog = new ProgressDialog(this);
 
+        initElementGetDeviceFromFirebase();
         initAdapter();
         initInterfaces();
 
@@ -190,6 +252,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
 
     private void initInterfaces() {
+
         scanCB = new ConnectionWithHeadset.scanCallBack();
         nsbFunctionsCB = new ConnectionWithHeadset.NSBFunctionsCallBack();
         sbDelegate = new ConnectionWithHeadset.senzeBandDelegates();
@@ -363,7 +426,10 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                 @Override
                 public void run() {
                     if (controlRobotBluetooth != null && !controlRobotBluetooth.isConnected())
-                        controlRobotBluetooth.connectToDevice(mConnectedDevice);
+                        if(mConnectedDevice != null)
+                            controlRobotBluetooth.connectToDevice(mConnectedDevice);
+                        else
+                            controlRobotBluetooth.connectToAddress(mSelectedRobotDeviceAddress);
 
 
                     if (controlRobotBluetooth != null && controlRobotBluetooth.getBluetoothAdapter() != null && controlRobotBluetooth.isConnected()) {
@@ -443,6 +509,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                 @Override public void onError(String message) {}
                 @Override public void onConnectError(BluetoothDevice device, String message) {
 
+                    //TODO error message
                 }
             });
 

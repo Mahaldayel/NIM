@@ -108,7 +108,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
         mTrainingCar_iv = findViewById(R.id.training_car);
 
-        mDesciption = findViewById(R.id.training_deception);
+        mDesciption = findViewById(R.id.before_scanning_deception);
         mDesciption.setTypeface(font);
         mDesciption.setText("Wear your headset, you will be training on two modes the first one will be Focus on pushing the car");
 

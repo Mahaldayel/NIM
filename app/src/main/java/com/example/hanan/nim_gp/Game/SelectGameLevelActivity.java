@@ -188,7 +188,6 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
 
         if(mPlyaerScore >= SCORE_LEVEL_ONE){
             findViewById(R.id.lockLevel1).setVisibility(View.GONE);
-//            mSeletedLevelScore = SCORE_LEVEL_ONE;
         }
 
         else if(mPlyaerScore >= SCORE_LEVEL_TWO){
@@ -302,7 +301,6 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
 
 
     private void setDataOnScoreLayout(){
-
 
         mLevelNumber_tv.setText("Level "+String.valueOf(mSelectdGameLevel));
         mPlayerScore_tv.setText(String.valueOf(mPlyaerScore));
