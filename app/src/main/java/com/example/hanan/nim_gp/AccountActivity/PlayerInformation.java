@@ -4,7 +4,6 @@ public class PlayerInformation {
 
     private  String username,email,birthDate,picURL,countyCode;
     private boolean online;
-    private int score;
 
     public PlayerInformation(){
         this.username="";
@@ -13,7 +12,7 @@ public class PlayerInformation {
         this.picURL="";
         this.countyCode="";
         this.online=true;
-        this.score=0;
+
     }
 
     public void setBirthDate(String birthDate) {
@@ -40,17 +39,10 @@ public class PlayerInformation {
         return online;
     }
 
-    public int getScore() {
-        return score;
-    }
-
     public void setOnline(boolean online) {
         this.online = online;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
 
     public String getBirthDate() {
         return birthDate;
