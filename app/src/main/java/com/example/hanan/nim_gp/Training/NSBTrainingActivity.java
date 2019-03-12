@@ -373,6 +373,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         timer = new Timer();
         initTask();
         timer.schedule(timerTask,0,100);
+//        timer.schedule(timerTask,0,30000);
     }
 
     private void initTask() {
