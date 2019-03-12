@@ -282,7 +282,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         if (adapterView == mLvNewDevices){
 
 
-            displaySaveRobotCar();
+//            displaySaveRobotCar();
             mConnectedDevice = mNewDevices.get(i);
 
             pairedAndConnectClickedDevice(i);
@@ -314,9 +314,9 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         bluetooth.setDeviceCallback(new DeviceCallback() {
             @Override public void onDeviceConnected(BluetoothDevice device) {
                 timerTask.cancel();
-//                goToNextActivity();
+                goToNextActivity();
 
-                displaySaveRobotCar();
+//                displaySaveRobotCar();
 
 
             }

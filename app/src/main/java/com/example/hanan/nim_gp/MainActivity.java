@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
                 for (DataSnapshot child : snapshot.getChildren()) {
 
                     if(child.getKey().equals(CurrentplayeId))
-                        Score=child.child("score").getValue().toString();
+//                        Score=child.child("score").getValue().toString();
                     System.out.println("************************");
                     System.out.println(Score);
                     ScoreView.setText(Score);
