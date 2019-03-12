@@ -33,7 +33,7 @@ import com.example.hanan.nim_gp.R;
 public class NSBTrainingActivity extends AppCompatActivity implements View.OnClickListener
 {
 
-    public static final int TRAINING_TIME = 30;
+    public static final int TRAINING_TIME = 30000;
 
     public static final int TRAINING_MODE_FOCUS = 1;
     public static final int TRAINING_MODE_RELAX = 2;
@@ -281,8 +281,6 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
             mCurrentTrainingMode = TRAINING_MODE_FOCUS;
         }
 
-        sbDelegate.clearCount();
-
 
     }
 
@@ -372,8 +370,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
         timer = new Timer();
         initTask();
-        timer.schedule(timerTask,0,100);
-//        timer.schedule(timerTask,0,30000);
+        timer.schedule(timerTask,TRAINING_TIME);
     }
 
     private void initTask() {
@@ -382,13 +379,11 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void run() {
 
-                if(sbDelegate.count == TRAINING_TIME){
-                    Log.e("hanan", "in : initTask  " +sbDelegate.getCounter());
 
                     trainSucceed();
                     timer.cancel();
                     timerTask.cancel();
-                }
+
             }
         };
 

@@ -227,12 +227,8 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
         public TextView max_focus;
         public TextView avg_relax;
         public TextView max_relax;
-
-        public  int count = -1;
-
         private ArrayList<Double> mRelaxArray;
         private ArrayList<Double> mFocusArray;
-        public static final int TRAINING_TIME = 30;
 
 
 
@@ -241,17 +237,11 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
         public void EEG_GetAttention(float result) {
 
 
-            if(attentionText != null && count >= 0){
-                attentionText.setText("Attention: " + result +" \n Counter :"+count);
+            if(attentionText != null){
+                attentionText.setText("Attention: " + result);
                 mFocusArray.add(new Double(result));
-                count++;
             }
 
-            if(count == TRAINING_TIME){
-                avg_foucs.setText("avg : "+String.valueOf(getAvarage(mFocusArray)));
-                max_focus.setText("max : "+ String.valueOf(Collections.max(mFocusArray)));
-
-            }
 
 
 
@@ -260,15 +250,11 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
         public void EEG_GetRelaxation(float result) {
 
 
-            if (relaxationText != null && count >= 0) {
+            if (relaxationText != null ) {
                 relaxationText.setText("Relaxation: " + result);
                 mRelaxArray.add(new Double(result));
             }
-            if(count == TRAINING_TIME){
-                avg_relax.setText("avg : "+String.valueOf(getAvarage(mRelaxArray)));
-                max_relax.setText("max : "+ String.valueOf(Collections.max(mRelaxArray)));
 
-            }
 
         }
 
@@ -290,21 +276,27 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         public TrainingInformation endTrainFocus(TrainingInformation trainingInformation){
 
-            count = 0;
-
             trainingInformation.setAvgFocus(getAvarage(mFocusArray));
             trainingInformation.setMaxFocus(Collections.max(mFocusArray));
 
+
+            /*test*/
+            avg_foucs.setText("avg : "+String.valueOf(getAvarage(mFocusArray)));
+            max_focus.setText("max : "+ String.valueOf(Collections.max(mFocusArray)));
 
             return trainingInformation;
 
         }
         public TrainingInformation endTrainRelax(TrainingInformation trainingInformation){
 
-            count = 0;
 
             trainingInformation.setAvgRelax(getAvarage(mRelaxArray));
             trainingInformation.setMaxRelax(Collections.max(mRelaxArray));
+
+            /*test*/
+            avg_relax.setText("avg : "+String.valueOf(getAvarage(mRelaxArray)));
+            max_relax.setText("max : "+ String.valueOf(Collections.max(mRelaxArray)));
+
 
             return trainingInformation;
 
@@ -316,8 +308,6 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
-                    count = 0;
 
                     relaxationText.setText("");
                     avg_relax.setText("");
@@ -332,21 +322,6 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         }
 
-        public void setCountToZero(){
-
-            count = 0;
-        }
-
-        public  void clearCount(){
-
-            count = -1;
-        }
-
-
-        public int getCounter(){
-
-            return count;
-        }
         @Override
         public void EEG_ChannelStatus(boolean[] booleen) {
         }
@@ -373,7 +348,6 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         public void pumpRelaxationTextView(TextView tv)
         {
-            count = 0;
             relaxationText = tv;
         }
 
