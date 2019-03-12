@@ -62,6 +62,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private StorageReference mStorage;
     private DatabaseReference mDatabase;
     private PlayerInformation player;
+    private PlayerGameInfo playerGameInfo;
     boolean available ;
 
     @Override
@@ -344,6 +345,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         String playerId=firebaseAuth.getCurrentUser().getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("Players").child(playerId).setValue(player);
+        playerGameInfo = new PlayerGameInfo(0,0);
+        mDatabase.child("PlayersGameInfo").child(playerId).setValue(playerGameInfo);
         Toast.makeText(SignUpActivity.this,"Successfully registered",Toast.LENGTH_LONG).show();
         startActivity(new Intent(getApplicationContext(), UploadProfileImageActivity.class));
         finish();
