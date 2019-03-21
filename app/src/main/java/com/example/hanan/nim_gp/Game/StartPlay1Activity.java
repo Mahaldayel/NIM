@@ -4,15 +4,11 @@ package com.example.hanan.nim_gp.Game;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -20,13 +16,12 @@ import com.neeuro.NativeNSBPlugin.NativeNSBInterface;
 
 import com.example.hanan.nim_gp.R;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import me.aflak.bluetooth.Bluetooth;
-import me.aflak.bluetooth.DeviceCallback;
 
+import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.CONNECTED_DEVICE_INTENT;
 import static com.example.hanan.nim_gp.Game.SelectGameLevelActivity.SELECTED_GAME_LEVEL_INTENT;
 import static com.example.hanan.nim_gp.Game.control_modeActivity.CONTROL_MODE_GAME_INTENT;
@@ -62,6 +57,7 @@ public class StartPlay1Activity extends AppCompatActivity {
     private TimerTask timerTask;
     private ProgressDialog progressDialog;
     private int mPlayCounter;
+    private String mSelectedRobotDeviceAddress;
 
     private long GAME_TIME = 100000;
 
@@ -74,7 +70,7 @@ public class StartPlay1Activity extends AppCompatActivity {
     private void initElements(){
 
         setPlayCallBack();
-        mConnectedDeviceIndex = -1;
+//        mConnectedDeviceIndex = -1;
         mMsg_tv = findViewById(R.id.msg);
 
         initTastData();
@@ -123,6 +119,7 @@ public class StartPlay1Activity extends AppCompatActivity {
         initializeSenzeBandBasic();
         sbDelegate.setTextView(mMsg_tv);
         sbDelegate.setControlRobotBluetooth(bluetooth);
+        sbDelegate.setSelectedRobotAddress(mSelectedRobotDeviceAddress);
         setTestDataTextView();
         checkOfEndPlayTimer();
 
@@ -151,6 +148,8 @@ public class StartPlay1Activity extends AppCompatActivity {
         if(intent.hasExtra(SELECTED_GAME_LEVEL_INTENT))
             mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,0);
 
+        if(intent.hasExtra(ROBOT_ADDRESS_OF_SELECTED_DEVICE))
+            mSelectedRobotDeviceAddress = intent.getStringExtra(ROBOT_ADDRESS_OF_SELECTED_DEVICE);
 
     }
 

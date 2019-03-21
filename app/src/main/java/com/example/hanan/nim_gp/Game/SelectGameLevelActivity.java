@@ -176,7 +176,8 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
 
 
             if(email.equals(mPlayerEmail)) {
-                mPlyaerScore = (Long) postSnapshot.child("score").getValue();
+//                mPlyaerScore = (Long) postSnapshot.child("score").getValue();
+                mPlyaerScore = 100;
                 displayAvailableLevel();
             }
         }

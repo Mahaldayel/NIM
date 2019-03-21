@@ -20,7 +20,6 @@ public class DeviceListAdapter extends ArrayAdapter {
     private LayoutInflater mLayoutInflater;
     private ArrayList<Device> mDevices;
     private int  mViewResourceId;
-    private int mSelectedDeviceIndex;
     private TextView deviceName;
     private TextView deviceAdress;
     private TextView deviceType;
@@ -28,13 +27,12 @@ public class DeviceListAdapter extends ArrayAdapter {
 
     private Context mContext;
 
-    public DeviceListAdapter(Context context, int tvResourceId, ArrayList<Device> devices,int selectedDeviceIndex){
+    public DeviceListAdapter(Context context, int tvResourceId, ArrayList<Device> devices){
         super(context, tvResourceId,devices);
         mContext = context;
         this.mDevices = devices;
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mViewResourceId = tvResourceId;
-        mSelectedDeviceIndex = selectedDeviceIndex;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -55,8 +53,7 @@ public class DeviceListAdapter extends ArrayAdapter {
             if(deviceType != null)
                 deviceType.setText(device.getType().name());
 
-            if(mSelectedDeviceIndex == position){
-//                deviceName.append("\t Selected");
+            if(device.getSelected()) {
                 selectedDeviceBackground.setVisibility(View.VISIBLE);
             }
         }
@@ -77,4 +74,8 @@ public class DeviceListAdapter extends ArrayAdapter {
 
 
     }
+
+
+
+
 }

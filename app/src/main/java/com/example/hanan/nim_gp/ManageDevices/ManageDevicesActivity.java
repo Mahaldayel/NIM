@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.hanan.nim_gp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,6 +51,7 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
     private ProgressDialog progressDialog;
 
     private int mSelectedRobotDeviceIndex;
+    private int mSelectedHeadsetDeviceIndex;
 
 
     @Override
@@ -72,9 +72,11 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
         initDevicLayoutElements();
         initElementGetDeviceFromFirebase();
 
-//        initListForTest();
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading ...");
+
+        mSelectedHeadsetDeviceIndex = -1;
+        mSelectedRobotDeviceIndex = -1;
 
 
 
@@ -89,13 +91,6 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
         playerId = firebaseAuth.getCurrentUser().getUid();
     }
 
-
-//    private void initListForTest(){
-//
-//        for(int i = 0;i < 10 ;i++)
-//            deviceArrayList.add(new Device("AB:12:12:DC:12",DeviceType.Headset,"Hanan's Headset"));
-//
-//    }
 
     private void initDevicLayoutElements() {
 
@@ -145,7 +140,12 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
 
         switch (view.getId()){
             case R.id.select_bt:
-                makeSelectedDeviceUnselect();
+
+                if(deviceArrayList.get(mClickedDeviceIndex).getType().equals(DeviceType.Headset))
+                    makeSelectedHeadsetUnselected();
+                else
+                    makeSelectedRobotUnselected();
+
                 makeCurrentDeviceSelect();
                 break;
             case R.id.edit_bt:
@@ -252,21 +252,31 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
 
     private void initAdapter() {
 
-        setSelectedRobotDeviceIndex();
-        deviceListAdapter = new DeviceListAdapter(this,R.layout.device_adapter_view,deviceArrayList, mSelectedRobotDeviceIndex);
+        setSelectedDeviceIndex();
+        deviceListAdapter = new DeviceListAdapter(this,R.layout.device_adapter_view,deviceArrayList);
         deviceListview.setAdapter(deviceListAdapter);
         deviceListview.setOnItemClickListener(this);
     }
 
-    private void makeSelectedDeviceUnselect(){
-
-        deviceArrayList.get(mSelectedRobotDeviceIndex).setSelected(false);
-        mDatabase.child("DeviceInformation").child(playerId).setValue(deviceArrayList);
-        initAdapter();
+    private void makeSelectedRobotUnselected(){
+        if(mSelectedRobotDeviceIndex != -1) {
+            deviceArrayList.get(mSelectedRobotDeviceIndex).setSelected(false);
+            mDatabase.child("DeviceInformation").child(playerId).setValue(deviceArrayList);
+            initAdapter();
+        }
 
     }
 
-    private void setSelectedRobotDeviceIndex(){
+    private void makeSelectedHeadsetUnselected(){
+
+        if(mSelectedHeadsetDeviceIndex != -1){
+            deviceArrayList.get(mSelectedHeadsetDeviceIndex).setSelected(false);
+            mDatabase.child("DeviceInformation").child(playerId).setValue(deviceArrayList);
+            initAdapter();
+        }
+    }
+
+    private void setSelectedDeviceIndex(){
 
         if(deviceArrayList == null)
             return ;
@@ -277,7 +287,11 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
             if(((Device)device).getSelected().equals(true) && ((Device)device).getType().equals(DeviceType.RobotCar) ){
                 mSelectedRobotDeviceIndex = count;
 
-                return;
+            }
+
+            if(((Device)device).getSelected().equals(true) && ((Device)device).getType().equals(DeviceType.Headset) ){
+                mSelectedHeadsetDeviceIndex = count;
+
             }
 
             count ++;

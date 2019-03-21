@@ -47,11 +47,11 @@ public class Device
             return deviceType;
         }
 
-        public void setAddress(String adreess) {
+    public void setAddress(String adreess) {
             this.adreess = adreess;
         }
 
-        public void setType(DeviceType deviceType) {
+    public void setType(DeviceType deviceType) {
             this.deviceType = deviceType;
         }
     }
