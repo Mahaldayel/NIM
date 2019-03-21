@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -67,9 +69,9 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
     private Button mNext_bt;
 
     private int mSeletedLevelScore;
-
-
-
+    private DatabaseReference refrence;
+    private String CurrentplayeId;
+    private FirebaseUser CurrentPlayer;
 
 
     @Override
@@ -118,6 +120,10 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
 
        mPlayerEmail =  FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
+       refrence = FirebaseDatabase.getInstance().getReference().child("PlayersGameInfo");
+       CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
+       CurrentplayeId = CurrentPlayer.getUid();
+
     }
 
     private void initScoreLayoutElements() {
@@ -146,39 +152,41 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
         progressDialog.setMessage("Loading ...");
         progressDialog.show();
 
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("Players");
-        rootRef.addValueEventListener(new ValueEventListener() {
+
+        refrence.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot child : snapshot.getChildren()) {
+
+                    if(child.getKey().equals(CurrentplayeId)) {
+
+
+                        mPlyaerScore = (Long) child.child("score").getValue();
+                        displayAvailableLevel();
+                    }
+
+                }}
 
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if(dataSnapshot.exists()){
-                    getData(dataSnapshot);
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 progressDialog.dismiss();
                 System.out.println("problem to read value");
-                Toast.makeText(SelectGameLevelActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(SelectGameLevelActivity.this,databaseError.getMessage(),Toast.LENGTH_LONG).show();
             }
 
+
+
         });
+
     }
 
     private void getData(DataSnapshot dataSnapshot) {
 
         for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-            String email = (String) postSnapshot.child("email").getValue();
+//            String email = (String) postSnapshot.child("email").getValue();
 
 
-            if(email.equals(mPlayerEmail)) {
-                mPlyaerScore = (Long) postSnapshot.child("score").getValue();
-                displayAvailableLevel();
-            }
+
         }
     }
 

@@ -1,17 +1,13 @@
 package com.example.hanan.nim_gp.Game;
 
 
-import com.example.hanan.nim_gp.ManageDevices.Device;
-import com.example.hanan.nim_gp.ManageDevices.DeviceType;
-import com.example.hanan.nim_gp.R;
-
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,6 +16,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.hanan.nim_gp.ManageDevices.Device;
+import com.example.hanan.nim_gp.ManageDevices.DeviceType;
+import com.example.hanan.nim_gp.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,7 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.neeuro.NativeNSBPlugin.NativeNSBInterface;
-import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -503,6 +503,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                 @Override public void onMessage(final String message) {
                     //TODO get score from robot
                     displayReceivedMsg(message);
+                    //
 
 
                 }
