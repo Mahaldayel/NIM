@@ -123,7 +123,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
         Intent intent = getIntent();
         if(intent.hasExtra(CONTROL_MODE_GAME_INTENT)){
-           mControlMode = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
+            mControlMode = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
         }
     }
 
@@ -388,7 +388,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
     private void displayErrorMessage(String message) {
 
         if(message.contains("read failed"))
-           message = "the device not available";
+            message = "the device not available";
 
         final String msg = message;
 
@@ -562,10 +562,10 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
     }
 
-        private boolean removeDuplicate() {
+    private boolean removeDuplicate() {
 
-            if(deviceArrayList == null)
-                return true;
+        if(deviceArrayList == null)
+            return true;
 
         for(Object device: deviceArrayList){
 
@@ -667,3 +667,4 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
     }
 }
+

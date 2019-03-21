@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity  implements View.OnClickListener{
     FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
     String CurrentplayeId = CurrentPlayer.getUid();
-    DatabaseReference refrence= FirebaseDatabase.getInstance().getReference().child("Players");
+    DatabaseReference refrence= FirebaseDatabase.getInstance().getReference().child("PlayersGameInfo");
     private Button buttonPlay;
     private Button buttonAccount;
     private Button buttonTraining;

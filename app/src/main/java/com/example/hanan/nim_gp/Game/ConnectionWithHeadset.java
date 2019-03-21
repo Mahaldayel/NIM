@@ -70,7 +70,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
     boolean startScan = true;
 
-     //to find headset
+    //to find headset
     public static scanCallBack scanCB ;
     //to initialized the headshet
     public static NSBFunctionsCallBack nsbFunctionsCB ;
@@ -132,7 +132,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         Intent intent = getIntent();
         if(intent.hasExtra(CONTROL_MODE_GAME_INTENT)){
-           String controlMode = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
+            String controlMode = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
             if(controlMode.equals("Relax"))
                 controlModeNumber = 1;
             if(controlMode.equals("Focus"))
@@ -232,32 +232,32 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
     private void connectWithDataBase(final int finalControlModeNumber){
 
-            refrence.addValueEventListener(new ValueEventListener() {
+        refrence.addValueEventListener(new ValueEventListener() {
 
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                           public void onDataChange(DataSnapshot dataSnapshot) {
+                                               for (DataSnapshot child : dataSnapshot.getChildren()) {
 
-                    if(child.getKey().equals(CurrentplayeId))
+                                                   if(child.getKey().equals(CurrentplayeId))
 
-                    if(finalControlModeNumber == 1) {
-                        SignalsAvreg = Float.parseFloat(child.child("avgRelax").getValue().toString());
-                        SignalsMax =Float.parseFloat(child.child("maxRelax").getValue().toString());
-                    }
+                                                       if(finalControlModeNumber == 1) {
+                                                           SignalsAvreg = Float.parseFloat(child.child("avgRelax").getValue().toString());
+                                                           SignalsMax =Float.parseFloat(child.child("maxRelax").getValue().toString());
+                                                       }
 
-                    if(finalControlModeNumber == 2 ){
-                        SignalsAvreg = Float.parseFloat(child.child("avgFocus").getValue().toString());
-                        SignalsMax =Float.parseFloat(child.child("maxFocus").getValue().toString());
-                    }
+                                                   if(finalControlModeNumber == 2 ){
+                                                       SignalsAvreg = Float.parseFloat(child.child("avgFocus").getValue().toString());
+                                                       SignalsMax =Float.parseFloat(child.child("maxFocus").getValue().toString());
+                                                   }
 
-                }}
+                                               }}
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                           @Override
+                                           public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                }
-            }
+                                           }
+                                       }
         );
-        }
+    }
 
     private void initElements() {
 
@@ -519,28 +519,28 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             Log.i(TAG,"One NEEURO device found! " +result);
 
             dismissPrograss();
-              if(!mNewDevices.contains(result)){
+            if(!mNewDevices.contains(result)){
 
-                  mNewDevices.add(new Device(result,DeviceType.Headset,""));
-                  headsetsListView.setAdapter(mNewDeviceListAdapter);
+                mNewDevices.add(new Device(result,DeviceType.Headset,""));
+                headsetsListView.setAdapter(mNewDeviceListAdapter);
 
-                  if(result.equals(mSelectedHeadsetDeviceAddress))
-                      mSelectedHeadsetOn = true;
+                if(result.equals(mSelectedHeadsetDeviceAddress))
+                    mSelectedHeadsetOn = true;
 
-                  if(!mConnectToHeadset){
-                      if(mIsContinueHeadset && mSelectedHeadsetOn)
-                          play(mSelectedHeadsetDeviceAddress);
-                      else if(mIsContinueHeadset && !mSelectedHeadsetOn)
-                          //TODO display dialog set your car ON
-                          runOnUiThread(new Runnable() {
-                              @Override
-                              public void run() {
-                                  Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
-                              }
-                          });
-                  }
+                if(!mConnectToHeadset){
+                    if(mIsContinueHeadset && mSelectedHeadsetOn)
+                        play(mSelectedHeadsetDeviceAddress);
+                    else if(mIsContinueHeadset && !mSelectedHeadsetOn)
+                        //TODO display dialog set your car ON
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
+                            }
+                        });
+                }
 
-              }
+            }
 
 
 
@@ -567,7 +567,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         }
     }
 
-//to initialized the headshet
+    //to initialized the headshet
     public class NSBFunctionsCallBack implements NativeNSBInterface.NSBFunctionsCallBackInterface
     {
         public void initializedFinished()

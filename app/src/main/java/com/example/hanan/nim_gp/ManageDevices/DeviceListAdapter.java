@@ -74,8 +74,4 @@ public class DeviceListAdapter extends ArrayAdapter {
 
 
     }
-
-
-
-
 }

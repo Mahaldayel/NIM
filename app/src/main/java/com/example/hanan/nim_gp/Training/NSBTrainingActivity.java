@@ -80,6 +80,8 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     BeforeTrainingConnectingWithNeeruo.NSBFunctionsCallBack nsbFunctionsCB ;
 
 
+
+
     private void initElements(){
 
         initTestElements();
@@ -110,7 +112,6 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mDesciption.setTypeface(font);
         mDesciption.setText("Wear your headset, you will be training on two modes the first one will be Focus on pushing the car");
 
-
         mContext = NSBTrainingActivity.this;
 
         initTrainingInformation();
@@ -137,7 +138,6 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         relaxation = findViewById(R.id.relax);
         avg_relax = findViewById(R.id.avg_relax);
         max_relax = findViewById(R.id.max_relax);
-
 
 
 

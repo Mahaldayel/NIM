@@ -37,7 +37,7 @@ public class DeviceListAdapter extends ArrayAdapter<BluetoothDevice> {
 
             initElements(convertView);
 
-           BluetoothDevice device = (BluetoothDevice) mDevices.get(position);
+            BluetoothDevice device = (BluetoothDevice) mDevices.get(position);
 
             if (deviceName != null) {
                 deviceName.setText(device.getName());
@@ -49,28 +49,28 @@ public class DeviceListAdapter extends ArrayAdapter<BluetoothDevice> {
             displayNameForExitsDevice(device);
         }
         else {
-           Device device = (Device) mDevices.get(position);
+            Device device = (Device) mDevices.get(position);
 
-        if (device != null) {
-            initElements(convertView);
+            if (device != null) {
+                initElements(convertView);
 
-            if (deviceName != null) {
-                deviceName.setText(device.getName());
+                if (deviceName != null) {
+                    deviceName.setText(device.getName());
+                }
+                if (deviceAdress != null) {
+                    deviceAdress.setText(device.getAddress());
+                }
+
+                displayNameForExitsDevice(device);
             }
-            if (deviceAdress != null) {
-                deviceAdress.setText(device.getAddress());
-            }
-
-            displayNameForExitsDevice(device);
-        }
         }
 
         return convertView;
     }
 
     private void initElements(View convertView){
-         deviceName = convertView.findViewById(R.id.tvDeviceName);
-         deviceAdress =  convertView.findViewById(R.id.tvDeviceAddress);
+        deviceName = convertView.findViewById(R.id.tvDeviceName);
+        deviceAdress =  convertView.findViewById(R.id.tvDeviceAddress);
 
     }
 
@@ -107,3 +107,5 @@ public class DeviceListAdapter extends ArrayAdapter<BluetoothDevice> {
         mSevedDeviceList = devices;
     }
 }
+
+

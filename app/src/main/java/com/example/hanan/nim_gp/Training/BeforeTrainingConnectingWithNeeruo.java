@@ -8,7 +8,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,7 +50,7 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
     public static connectionCallBack connectionCB ;
 
     private NSBTrainingActivity nsbTrainingActivity;
-    private ConstraintLayout mBeforeTraining_layout;
+
 
 
     @Override
@@ -81,9 +80,6 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
         mQuit_bt.setOnClickListener(this);
 
         progressDialog = new ProgressDialog(this);
-
-        mBeforeTraining_layout = findViewById(R.id.before_scanning_layout);
-        mBeforeTraining_layout.setVisibility(View.GONE);
 
         initAdapter();
         initInterfaces();

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".PullAndPushActivity">
+    android:layout_height="match_parent">
 
 
     <EditText
@@ -45,7 +44,6 @@
         android:layout_marginStart="100dp"
         android:layout_marginTop="81dp"
         android:text="test"
-        app:layout_constraintBottom_toTopOf="@+id/bull"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.74"
         app:layout_constraintStart_toStartOf="parent"

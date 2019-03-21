@@ -253,7 +253,7 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
     private void initAdapter() {
 
         setSelectedDeviceIndex();
-        deviceListAdapter = new DeviceListAdapter(this,R.layout.device_adapter_view,deviceArrayList);
+        deviceListAdapter = new DeviceListAdapter(this,R.layout.device_adapter_view,(ArrayList) deviceArrayList);
         deviceListview.setAdapter(deviceListAdapter);
         deviceListview.setOnItemClickListener(this);
     }
