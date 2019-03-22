@@ -95,23 +95,26 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     private Button mQuitLayout_bt;
     private Button mSave_bt;
     private ConstraintLayout mSaveHeadsetLayout;
-    private ImageView mSaveHeadsetFullScreen;
+    private ImageView mFullScreen;
     private EditText mName_et;
     private int mSelectedHeadsetDeviceIndex;
     private String mSelectedHeadsetDeviceAddress;
     private int selectedDeviceIndex;
     private ArrayList<Device> mNewDevices;
+    private ArrayList<String> mNewDevicesString;
     private DeviceListAdapter mNewDeviceListAdapter;
 
     private Button mContinue_bt;
     private Button mGoToScan_bt;
     private TextView mBeforeScanningDeception_tv;
-    private ConstraintLayout mBeforeTraining_layout;
+    private ConstraintLayout mSkip_layout;
     private boolean mIsContinueHeadset;
 
     private boolean mSelectedHeadsetOn;
     private boolean mConnectToHeadset ;
     private Context mContext;
+    private Button mQuitSkipLayout_bt;
+    private TextView mSaveHeadsetTitle_tv;
 
 
     @Override
@@ -209,9 +212,18 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         setSelectedDevicesAddress();
         initAdapter();
+        if(devices != null)
+            displaySkipLayout();
 
     }
 
+    private void displaySkipLayout() {
+
+        mSkip_layout.setVisibility(View.VISIBLE);
+        mFullScreen.setVisibility(View.VISIBLE);
+
+
+    }
     private void setSelectedDevicesAddress() {
 
         for(Object device: deviceArrayList){
@@ -234,28 +246,28 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         refrence.addValueEventListener(new ValueEventListener() {
 
-                                           public void onDataChange(DataSnapshot dataSnapshot) {
-                                               for (DataSnapshot child : dataSnapshot.getChildren()) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
 
-                                                   if(child.getKey().equals(CurrentplayeId))
+                    if(child.getKey().equals(CurrentplayeId))
 
-                                                       if(finalControlModeNumber == 1) {
-                                                           SignalsAvreg = Float.parseFloat(child.child("avgRelax").getValue().toString());
-                                                           SignalsMax =Float.parseFloat(child.child("maxRelax").getValue().toString());
-                                                       }
+                        if(finalControlModeNumber == 1) {
+                        SignalsAvreg = Float.parseFloat(child.child("avgRelax").getValue().toString());
+                        SignalsMax =Float.parseFloat(child.child("maxRelax").getValue().toString());
+                        }
 
-                                                   if(finalControlModeNumber == 2 ){
-                                                       SignalsAvreg = Float.parseFloat(child.child("avgFocus").getValue().toString());
-                                                       SignalsMax =Float.parseFloat(child.child("maxFocus").getValue().toString());
-                                                   }
+                        if(finalControlModeNumber == 2 ){
+                        SignalsAvreg = Float.parseFloat(child.child("avgFocus").getValue().toString());
+                        SignalsMax =Float.parseFloat(child.child("maxFocus").getValue().toString());
+                        }
 
-                                               }}
+                        }}
 
-                                           @Override
-                                           public void onCancelled(@NonNull DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                           }
-                                       }
+                }
+                }
         );
     }
 
@@ -266,6 +278,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         headsetsListView.setOnItemClickListener(this);
 
         mNewDevices = new ArrayList<>();
+        mNewDevicesString = new ArrayList<>();
 
         mStart_bt = findViewById(R.id.start);
         mStart_bt.setOnClickListener(this);
@@ -276,19 +289,24 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         progressDialog = new ProgressDialog(this);
 
         mContext = this;
+        mSelectedHeadsetDeviceIndex = -1;
+
 
         initElementGetDeviceFromFirebase();
         initAdapter();
         initInterfaces();
-        initBeforeTrainingLayoutElements();
+        initSkipLayoutElements();
         initSaveHeadsetLayoutElements();
 
     }
 
-    private void initBeforeTrainingLayoutElements() {
+    private void initSkipLayoutElements() {
 
         Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
 
+
+        mQuitSkipLayout_bt = findViewById(R.id.skip_quit_bt);
+        mQuitSkipLayout_bt.setOnClickListener(this);
 
         mContinue_bt = findViewById(R.id.continue_bt);
         mContinue_bt.setOnClickListener(this);
@@ -303,11 +321,16 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         mBeforeScanningDeception_tv.setOnClickListener(this);
         mBeforeScanningDeception_tv.setTypeface(font);
 
-        mBeforeTraining_layout = findViewById(R.id.before_scanning_layout);
+        mSkip_layout = findViewById(R.id.before_scanning_layout);
 
     }
 
     private void initSaveHeadsetLayoutElements() {
+
+        Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
+
+        mSaveHeadsetTitle_tv = findViewById(R.id.layout_title);
+        mSaveHeadsetTitle_tv.setTypeface(font);
 
         mQuitLayout_bt = findViewById(R.id.layout_quit_bt);
         mQuitLayout_bt.setOnClickListener(this);
@@ -315,8 +338,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         mSave_bt = findViewById(R.id.save_bt);
         mSave_bt.setOnClickListener(this);
 
-        mSaveHeadsetLayout = findViewById(R.id.headset_layout);
-        mSaveHeadsetFullScreen = findViewById(R.id.full_screen);
+        mSaveHeadsetLayout = findViewById(R.id.save_device_layout);
+        mFullScreen = findViewById(R.id.full_screen);
 
         mName_et = findViewById(R.id.new_name_et);
 
@@ -398,23 +421,27 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                 hideSaveHeadset();
                 break;
             case R.id.go_to_scan_bt:
-                hideBeforeTrainingLayout();
+                hideSkipLayout();
+                break;
+            case R.id.skip_quit_bt:
+                hideSkipLayout();
                 break;
             case R.id.continue_bt:
                 mIsContinueHeadset = true;
                 progressDialog.setMessage("Searching ...");
                 progressDialog.show();
-                NativeNSBInterface.getInstance().startStopScanning(startScan);
-                startScan = !startScan;
+                NativeNSBInterface.getInstance().startStopScanning(true);
                 break;
         }
 
     }
 
 
-    private void hideBeforeTrainingLayout() {
+    private void hideSkipLayout() {
 
-        mBeforeTraining_layout.setVisibility(View.GONE);
+        mSkip_layout.setVisibility(View.GONE);
+        mFullScreen.setVisibility(View.GONE);
+
     }
 
     private void goTo(Class nextClass) {
@@ -432,17 +459,31 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     private void displaySaveHeadset(){
 
         mSaveHeadsetLayout.setVisibility(View.VISIBLE);
-        mSaveHeadsetFullScreen.setVisibility(View.VISIBLE);
+        mFullScreen.setVisibility(View.VISIBLE);
+        displayNameForExitsDevice(mNewDevices.get(selectedDeviceIndex).getAddress());
+
 
     }
 
 
+    private void displayNameForExitsDevice(String selectDeviceAddress) {
 
+        if(deviceArrayList == null)
+            return;
+
+        for(Object device: deviceArrayList){
+
+            if(((Device)device).getAddress().equals(selectDeviceAddress)){
+                mName_et.setText(((Device) device).getName());
+            }
+
+        }
+    }
 
     private void hideSaveHeadset() {
 
         mSaveHeadsetLayout.setVisibility(View.GONE);
-        mSaveHeadsetFullScreen.setVisibility(View.GONE);
+        mFullScreen.setVisibility(View.GONE);
 
     }
 
@@ -450,11 +491,11 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
 
         if(removeDuplicate()){
+            setSelectedHeadsetDeviceIndex();
             makeSelectedHeadsetUnselected();
             deviceArrayList.add((Device) createDeviceObject());
             mDatabase.child("DeviceInformation").child(playerId).setValue(deviceArrayList);
 
-            setSelectedHeadsetDeviceIndex();
         }
 
         hideSaveHeadset();
@@ -470,7 +511,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         for(Object device: deviceArrayList){
 
-            if(((Device)device).getAddress().equals(mNewDevices.get(mConnectedDeviceIndex).getAddress())){
+            if(((Device)device).getAddress().equals(mNewDevices.get(selectedDeviceIndex).getAddress())){
                 deviceArrayList.remove(device);
                 return true;
 
@@ -505,8 +546,11 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
     private void makeSelectedHeadsetUnselected(){
 
-        deviceArrayList.get(mSelectedHeadsetDeviceIndex).setSelected(false);
-        mDatabase.child("DeviceInformation").child(playerId).setValue(deviceArrayList);
+        if(mSelectedHeadsetDeviceIndex != -1){
+            deviceArrayList.get(mSelectedHeadsetDeviceIndex).setSelected(false);
+            mDatabase.child("DeviceInformation").child(playerId).setValue(deviceArrayList);
+
+        }
 
     }
 
@@ -519,31 +563,40 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             Log.i(TAG,"One NEEURO device found! " +result);
 
             dismissPrograss();
-            if(!mNewDevices.contains(result)){
+            if(!mNewDevicesString.contains(result)){
 
+
+                mNewDevicesString.add(result);
                 mNewDevices.add(new Device(result,DeviceType.Headset,""));
                 headsetsListView.setAdapter(mNewDeviceListAdapter);
 
                 if(result.equals(mSelectedHeadsetDeviceAddress))
                     mSelectedHeadsetOn = true;
 
-                if(!mConnectToHeadset){
-                    if(mIsContinueHeadset && mSelectedHeadsetOn)
-                        play(mSelectedHeadsetDeviceAddress);
-                    else if(mIsContinueHeadset && !mSelectedHeadsetOn)
-                        //TODO display dialog set your car ON
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
-                            }
-                        });
-                }
+                checkIfheadsetOn();
 
             }
+        }
 
 
+        private void checkIfheadsetOn(){
 
+            if(!mConnectToHeadset){
+                if(mIsContinueHeadset && mSelectedHeadsetOn)
+                    play(mSelectedHeadsetDeviceAddress);
+                else if(mIsContinueHeadset && !mSelectedHeadsetOn){
+                    //TODO display dialog set your car ON
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
+                            NativeNSBInterface.getInstance().startStopScanning(false);
+
+                        }
+                    });
+            }
+            }
         }
 
         private void dismissPrograss(){
@@ -559,6 +612,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         public void scanReset()
         {
             Log.i(TAG,"Scan reset " );
+            checkIfheadsetOn();
         }
 
 
@@ -595,7 +649,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         private Bluetooth controlRobotBluetooth;
         private TextView msg;
-        private Boolean isEnded;
+        private Boolean isEnded = false;
 
         private TextView relaxTextView;
         private TextView focusTextView;

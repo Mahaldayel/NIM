@@ -81,25 +81,29 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
     private int mSelectedGameLevel;
 
-    private Button mQuitLayout_bt;
+    private Button mQuitSaveLayout_bt;
     private Button mSave_bt;
     private ConstraintLayout mSaveCarLayout;
     private EditText mName_et;
-    private ImageView mSaveCarFullScreen;
+    private ImageView mFullScreen;
     private DatabaseReference mDatabase;
     private FirebaseAuth firebaseAuth;
     private String playerId;
 
     private Button mContinue_bt;
     private Button mGoToScan_bt;
+    private Button mQuitSkipLayout_bt;
     private TextView mBeforeScanningDeception_tv;
-    private ConstraintLayout mBeforeTraining_layout;
+    private ConstraintLayout mSkip_layout;
+
     private ArrayList<Device> deviceArrayList;
     private int mSelectedRobotDeviceIndex;
 
     private boolean mIsContinueCar;
     private boolean mSelectedCarOn;
     private String mSelectedRobotDeviceAddress;
+    private TextView mSaveCarTitle_tv;
+    private Button mQuit_bt;
 
 
     @Override
@@ -153,6 +157,9 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         mBack_bt = findViewById(R.id.button_back);
         mBack_bt.setOnClickListener(this);
 
+        mQuit_bt = findViewById(R.id.quit_bt);
+        mQuit_bt.setOnClickListener(this);
+
         mContext = ConnectionWithRobotCarActivity.this;
 
         progressDialog = new ProgressDialog(this);
@@ -160,17 +167,21 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         mIsContinueCar = false;
         mSelectedCarOn = false;
 
+        mSelectedRobotDeviceIndex = -1;
+
         initSaveCarLayoutElements();
         initElementToSaveCars();
-        initBeforeTrainingLayoutElements();
+        initSkipLayoutElements();
 
 
     }
 
-    private void initBeforeTrainingLayoutElements() {
+    private void initSkipLayoutElements() {
 
         Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
 
+        mQuitSkipLayout_bt = findViewById(R.id.skip_quit_bt);
+        mQuitSkipLayout_bt.setOnClickListener(this);
 
         mContinue_bt = findViewById(R.id.continue_bt);
         mContinue_bt.setOnClickListener(this);
@@ -184,7 +195,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         mBeforeScanningDeception_tv.setOnClickListener(this);
         mBeforeScanningDeception_tv.setTypeface(font);
 
-        mBeforeTraining_layout = findViewById(R.id.before_scanning_layout);
+        mSkip_layout = findViewById(R.id.before_scanning_layout);
 
     }
 
@@ -198,15 +209,21 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
     private void initSaveCarLayoutElements() {
 
+        Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
 
-        mQuitLayout_bt = findViewById(R.id.layout_quit_bt);
-        mQuitLayout_bt.setOnClickListener(this);
+        mSaveCarTitle_tv = findViewById(R.id.layout_title);
+        mSaveCarTitle_tv.setTypeface(font);
+        mSaveCarTitle_tv.setText("Save Car");
+
+
+        mQuitSaveLayout_bt = findViewById(R.id.layout_quit_bt);
+        mQuitSaveLayout_bt.setOnClickListener(this);
 
         mSave_bt = findViewById(R.id.save_bt);
         mSave_bt.setOnClickListener(this);
 
-        mSaveCarLayout = findViewById(R.id.save_car_layout);
-        mSaveCarFullScreen = findViewById(R.id.full_screen);
+        mSaveCarLayout = findViewById(R.id.save_device_layout);
+        mFullScreen = findViewById(R.id.full_screen);
 
         mName_et = findViewById(R.id.new_name_et);
 
@@ -256,24 +273,23 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
                 if ( (!mNewDevices.contains(device)) && device.getType() == ROBOT_TYPER){
                     addNewDeviceToListView(device);
-                    checkIfSelectedCarOn();
 
-                    if(mIsContinueCar && mSelectedCarOn) {
-                        timer.cancel();
-                        timerTask.cancel();
-                        goToNextActivity();
-                    }else //TODO display dialog set your car ON
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
-
-                            }
-                        });
                 }
 
+                checkIfSelectedCarOn();
+                if(mIsContinueCar && mSelectedCarOn) {
+                    timer.cancel();
+                    timerTask.cancel();
+                    goToNextActivity();
+                }else if(mIsContinueCar && !mSelectedCarOn)
+                    //TODO display dialog set your car ON
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
 
-
+                        }
+                    });
 
             }
             @Override public void onDevicePaired(BluetoothDevice device) {
@@ -306,6 +322,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
     }
 
     private void addNewDeviceToListView(BluetoothDevice device) {
+
         mNewDevices.add(device);
         mNewDeviceListAdapter = new DeviceListAdapter(ConnectionWithRobotCarActivity.this, R.layout.device_adapter_view,(ArrayList<BluetoothDevice>) mNewDevices);
         mLvNewDevices.setAdapter(mNewDeviceListAdapter);
@@ -319,7 +336,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
 
         if (adapterView == mLvNewDevices){
-//            displaySaveRobotCar();
+            mSelectedRobotDeviceAddress = mNewDevices.get(i).getAddress();
             mConnectedDevice = mNewDevices.get(i);
             pairedAndConnectClickedDevice(i);
         }
@@ -426,6 +443,9 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
             case R.id.back_bt:
                 goTo(player_modeActivity.class);
                 break;
+            case R.id.quit_bt:
+                goTo(MainActivity.class);
+                break;
             case R.id.save_bt:
                 saveRobotCar();
                 break;
@@ -433,7 +453,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
                 hideSaveRobotCar();
                 break;
             case R.id.go_to_scan_bt:
-                hideBeforeTrainingLayout();
+                hideSkipLayout();
                 break;
             case R.id.continue_bt:
                 progressDialogShow("Searching ...");
@@ -443,9 +463,13 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         }
     }
 
-    private void hideBeforeTrainingLayout() {
+    private void hideSkipLayout() {
 
-        mBeforeTraining_layout.setVisibility(View.GONE);
+        mSkip_layout.setVisibility(View.GONE);
+        mFullScreen.setVisibility(View.GONE);
+        mQuit_bt.setVisibility(View.VISIBLE);
+
+
     }
 
     private void goTo(Class nextClass) {
@@ -458,6 +482,8 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
     }
 
     private void goToNextActivity(){
+
+//        bluetooth.stopScanning();
 
         Context context = ConnectionWithRobotCarActivity.this;
         Class nextClass = ConnectionWithHeadset.class;
@@ -499,7 +525,9 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
     private void displaySaveRobotCar(){
 
         mSaveCarLayout.setVisibility(View.VISIBLE);
-        mSaveCarFullScreen.setVisibility(View.VISIBLE);
+        mFullScreen.setVisibility(View.VISIBLE);
+        mQuit_bt.setVisibility(View.GONE);
+
 
     }
 
@@ -507,36 +535,42 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
     private void hideSaveRobotCar(){
 
         mSaveCarLayout.setVisibility(View.GONE);
-        mSaveCarFullScreen.setVisibility(View.GONE);
+        mFullScreen.setVisibility(View.GONE);
+        mQuit_bt.setVisibility(View.VISIBLE);
 
     }
 
 
     private void saveRobotCar(){
 
+        progressDialog.setMessage("saving ...");
+        progressDialog.show();
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
         final String playerId = firebaseAuth.getCurrentUser().getUid();
-        DatabaseReference refrence = FirebaseDatabase.getInstance().getReference().child("DeviceInformation");
+        DatabaseReference refrence = FirebaseDatabase.getInstance().getReference().child("DeviceInformation").child(playerId);
 
         refrence.addListenerForSingleValueEvent(new ValueEventListener() {
 
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists() ){
-                    for (DataSnapshot child : snapshot.getChildren()) {
 
+                    GenericTypeIndicator<ArrayList<Device>> t = new GenericTypeIndicator<ArrayList<Device>>() {};
+                    ArrayList<Device> value = snapshot.getValue(t);
 
-                        if (child.getKey().equals(playerId)){
+                    setDevices(value);
+                    save();
 
-                            GenericTypeIndicator<ArrayList<Device>> t = new GenericTypeIndicator<ArrayList<Device>>() {};
-                            ArrayList<Device> value = child.getValue(t);
-                            setDevices(value);
-                            save();
-
-                        }
-                    }
-                }else {
+                }
+                else
+                    {
 
                     mDatabase.child("DeviceInformation").child(playerId).setValue(createDeviceListObject());
+                    progressDialog.dismiss();
+                    setSelectedRobotDeviceIndex();
+                    hideSaveRobotCar();
+                    goToNextActivity();
+
                 }
             }
             @Override
@@ -549,13 +583,14 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
     private void save() {
 
         if(removeDuplicate()){
+            setSelectedRobotDeviceIndex();
             makeSelectedRobotUnselected();
             deviceArrayList.add((Device) createDeviceObject());
             mDatabase.child("DeviceInformation").child(playerId).setValue(deviceArrayList);
 
-            setSelectedRobotDeviceIndex();
         }
 
+        progressDialog.dismiss();
         hideSaveRobotCar();
         goToNextActivity();
 
@@ -588,7 +623,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
     private ArrayList<Device> createDeviceListObject() {
 
         ArrayList<Device> devices = new ArrayList<>();
-        Device device = new Device(mConnectedDevice.getAddress(), DeviceType.RobotCar,mName_et.getText().toString());
+        Device device = new Device(mSelectedRobotDeviceAddress, DeviceType.RobotCar,mName_et.getText().toString());
         devices.add(device);
 
         return devices;
@@ -628,6 +663,18 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         this.deviceArrayList = devices;
         setSelectedDevicesAddress();
 
+        if(devices != null)
+            displaySkipLayout();
+
+    }
+
+    private void displaySkipLayout() {
+
+        mSkip_layout.setVisibility(View.VISIBLE);
+        mFullScreen.setVisibility(View.VISIBLE);
+        mQuit_bt.setVisibility(View.GONE);
+
+
     }
 
     private void setSelectedDevicesAddress() {
@@ -662,8 +709,10 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
     private void makeSelectedRobotUnselected(){
 
-        deviceArrayList.get(mSelectedRobotDeviceIndex).setSelected(false);
-        mDatabase.child("DeviceInformation").child(playerId).setValue(deviceArrayList);
+        if(mSelectedRobotDeviceIndex != -1){
+            deviceArrayList.get(mSelectedRobotDeviceIndex).setSelected(false);
+            mDatabase.child("DeviceInformation").child(playerId).setValue(deviceArrayList);
+        }
 
     }
 }

@@ -8,9 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.hanan.nim_gp.AccountActivity.FirstPage;
 import com.example.hanan.nim_gp.AccountActivity.view_accountActivity;
+import com.example.hanan.nim_gp.Game.SelectGameLevelActivity;
 import com.example.hanan.nim_gp.Game.control_modeActivity;
 import com.example.hanan.nim_gp.Training.BeforeTrainingConnectingWithNeeruo;
 import com.example.hanan.nim_gp.leaders.LeadersActivity;
@@ -45,24 +47,26 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
     }
 
     private void getScore(){
+
         refrence.addListenerForSingleValueEvent(new ValueEventListener() {
 
             public void onDataChange(DataSnapshot snapshot) {
                 for (DataSnapshot child : snapshot.getChildren()) {
 
-                    if(child.getKey().equals(CurrentplayeId))
-//                        Score=child.child("score").getValue().toString();
-                    System.out.println("************************");
-                    System.out.println(Score);
-                    ScoreView.setText(Score);
+                    if(child.getKey().equals(CurrentplayeId)) {
 
+                        Score = child.child("score").getValue().toString();
+                            System.out.println("************************");
+                        System.out.println(Score);
+                        ScoreView.setText(Score);
+
+                    }
 
                 }}
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+                   }
 
 
 
