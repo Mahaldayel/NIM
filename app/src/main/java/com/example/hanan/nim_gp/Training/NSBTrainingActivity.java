@@ -8,7 +8,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -110,7 +109,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
         mDesciption = findViewById(R.id.before_scanning_deception);
         mDesciption.setTypeface(font);
-        mDesciption.setText("Wear your headset, you will be training on two modes the first one will be Focus on pushing the car");
+        mDesciption.setText("Wear your headset, you will be training on two modes the first one will be focus on pushing the car");
 
         mContext = NSBTrainingActivity.this;
 
@@ -331,7 +330,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     private void prepareForRelaxTraining(){
 
         mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.next_bt));
-        mDesciption.setText("Now, you will be calibrating on the second one is Relax in order to pull the car.");
+        mDesciption.setText("Now, you will be calibrating on the second one is relax in order to pull the car.");
 
     }
 

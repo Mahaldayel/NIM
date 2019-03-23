@@ -286,7 +286,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
+//                            Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
 
                         }
                     });
@@ -440,7 +440,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
                 progressDialogShow("Scanning ...");
                 scan();
                 break;
-            case R.id.back_bt:
+            case R.id.button_back:
                 goTo(player_modeActivity.class);
                 break;
             case R.id.quit_bt:
@@ -453,6 +453,9 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
                 hideSaveRobotCar();
                 break;
             case R.id.go_to_scan_bt:
+                hideSkipLayout();
+                break;
+            case R.id.skip_quit_bt:
                 hideSkipLayout();
                 break;
             case R.id.continue_bt:

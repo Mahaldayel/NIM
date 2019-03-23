@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
 
 public class player_modeActivity extends AppCompatActivity implements View.OnClickListener  {
@@ -19,7 +20,7 @@ public class player_modeActivity extends AppCompatActivity implements View.OnCli
     public static final String SELECTED_GAME_LEVEL_INTENT = "SELECTED_GAME_LEVEL_INTENT" ;
     public static final String CONTROL_MODE_GAME_INTENT ="controlMode";
     public static final String CONTROL_GAME_INTENT ="gameMode";
-
+    private Button mQuit_bt;
 
 
     @Override
@@ -42,6 +43,9 @@ public class player_modeActivity extends AppCompatActivity implements View.OnCli
         back=findViewById(R.id.back);
         back.setOnClickListener(this);
 
+        mQuit_bt = findViewById(R.id.quit_bt);
+        mQuit_bt.setOnClickListener(this);
+
     }
     @Override
     public void onClick(View view) {
@@ -60,5 +64,10 @@ public class player_modeActivity extends AppCompatActivity implements View.OnCli
             startActivity(intent);
         }
         if(view==back){   startActivity(new Intent(player_modeActivity.this, SelectGameLevelActivity.class));}
-    }}
+
+        if(view == mQuit_bt){
+            startActivity(new Intent( player_modeActivity.this, MainActivity.class));
+        }
+
+        }}
 

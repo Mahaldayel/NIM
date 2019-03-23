@@ -115,6 +115,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     private Context mContext;
     private Button mQuitSkipLayout_bt;
     private TextView mSaveHeadsetTitle_tv;
+    private Button mQuit_bt;
 
 
     @Override
@@ -221,6 +222,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         mSkip_layout.setVisibility(View.VISIBLE);
         mFullScreen.setVisibility(View.VISIBLE);
+        mQuit_bt.setVisibility(View.GONE);
+
 
 
     }
@@ -279,6 +282,9 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         mNewDevices = new ArrayList<>();
         mNewDevicesString = new ArrayList<>();
+
+        mQuit_bt = findViewById(R.id.quit_bt);
+        mQuit_bt.setOnClickListener(this);
 
         mStart_bt = findViewById(R.id.start);
         mStart_bt.setOnClickListener(this);
@@ -441,6 +447,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         mSkip_layout.setVisibility(View.GONE);
         mFullScreen.setVisibility(View.GONE);
+        mQuit_bt.setVisibility(View.VISIBLE);
 
     }
 
@@ -461,6 +468,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         mSaveHeadsetLayout.setVisibility(View.VISIBLE);
         mFullScreen.setVisibility(View.VISIBLE);
         displayNameForExitsDevice(mNewDevices.get(selectedDeviceIndex).getAddress());
+        mQuit_bt.setVisibility(View.GONE);
+
 
 
     }
@@ -484,6 +493,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         mSaveHeadsetLayout.setVisibility(View.GONE);
         mFullScreen.setVisibility(View.GONE);
+        mQuit_bt.setVisibility(View.VISIBLE);
+
 
     }
 
@@ -589,7 +600,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
+//                            Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
                             progressDialog.dismiss();
                             NativeNSBInterface.getInstance().startStopScanning(false);
 
