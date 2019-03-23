@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hanan.nim_gp.MainActivity;
+import com.example.hanan.nim_gp.ManageDevices.ManageDevicesActivity;
 import com.example.hanan.nim_gp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,6 +46,8 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
     FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
     DatabaseReference refrence= FirebaseDatabase.getInstance().getReference().child("PlayersGameInfo");
     String CurrentplayeId = CurrentPlayer.getUid();
+
+    private Button mManageDevice_bt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +134,9 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
             back.setOnClickListener(this);
 
 
+            mManageDevice_bt = findViewById(R.id.manage_device_bt);
+            mManageDevice_bt.setOnClickListener(this);
+
 
         }
     @Override
@@ -143,7 +149,14 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
             if(view==deleteAccount){
                 startActivity(new Intent(view_accountActivity.this,DeleteAccount.class));
                  }
-        if(view==back){   startActivity(new Intent(view_accountActivity.this, MainActivity.class));}}
+        if(view==back){   startActivity(new Intent(view_accountActivity.this, MainActivity.class));}
+
+
+        if(view == mManageDevice_bt){
+
+            startActivity(new Intent(view_accountActivity.this, ManageDevicesActivity.class));
+        }
+    }
 
     private void getData(DataSnapshot dataSnapshot) {
 
