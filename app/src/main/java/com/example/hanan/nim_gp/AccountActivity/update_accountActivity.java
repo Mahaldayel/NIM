@@ -31,10 +31,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.haipq.android.flagkit.FlagImageView;
 import com.squareup.picasso.Picasso;
 import com.ybs.countrypicker.CountryPicker;
 import com.ybs.countrypicker.CountryPickerListener;
@@ -212,7 +210,7 @@ public class update_accountActivity extends AppCompatActivity implements View.On
 
         }}
     if(view==back){
-        startActivity(new Intent(update_accountActivity.this, view_accountActivity.class));}
+        startActivity(new Intent(update_accountActivity.this, ViewAccountActivity.class));}
     if(view==mTextViewPic){
         //selectImage();
     }
@@ -226,7 +224,7 @@ public class update_accountActivity extends AppCompatActivity implements View.On
     }
     private void updateSuccessfully() {
         Toast.makeText(update_accountActivity.this, "The Information was Updated", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(update_accountActivity.this, view_accountActivity.class));}
+        startActivity(new Intent(update_accountActivity.this, ViewAccountActivity.class));}
 
     private void getData(DataSnapshot dataSnapshot) {
 

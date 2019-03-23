@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -111,7 +110,7 @@ public class DeleteAccount extends AppCompatActivity implements View.OnClickList
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent LB2= new Intent(DeleteAccount.this, view_accountActivity.class);
+                Intent LB2= new Intent(DeleteAccount.this, ViewAccountActivity.class);
                 startActivity(LB2);
                 progressDialog.dismiss();
                 return;
