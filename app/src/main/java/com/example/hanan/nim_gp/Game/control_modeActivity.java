@@ -95,8 +95,8 @@ public class control_modeActivity extends AppCompatActivity implements View.OnCl
         builder.setCancelable(true);
         builder.setTitle("Confirmation message");
         builder.setMessage(
-                "You didn't train, train to start the fun");
-        builder.setPositiveButton("Go to training",
+                "You didn't calibrate, calibrate to start the fun");
+        builder.setPositiveButton("Go to calibration",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

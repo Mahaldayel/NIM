@@ -3,6 +3,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -40,7 +41,10 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
     private TextView deleteAccount;
     private LinearLayout scrollable;
     ProgressDialog progressDialog;
-
+    private String Score;
+    FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
+    DatabaseReference refrence= FirebaseDatabase.getInstance().getReference().child("PlayersGameInfo");
+    String CurrentplayeId = CurrentPlayer.getUid();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,19 +150,40 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
                         countryCode = (String) dataSnapshot.child("countyCode").getValue();
                         Bdate=(String) dataSnapshot.child("birthDate").getValue();
                         email = (String) dataSnapshot.child("email").getValue();
-                         score = (Long) dataSnapshot.child("score").getValue();
+                        // score = (Long) dataSnapshot.child("score").getValue();
                         Uname = (String) dataSnapshot.child("username").getValue();
                         picUri=(String)dataSnapshot.child("picURL").getValue();
 
 
             displayFlag();
             mTextViewEmail.setText(email);
-            mTextViewScore.setText(String.valueOf(score));
+           // mTextViewScore.setText(String.valueOf(score));
             mTextViewName.setText(Uname);
             date.setText(Bdate);
            Picasso.get().load(picUri).into(mImageViewPic);
+        getScore();
         progressDialog.dismiss();
 
+    }
+    private void getScore() {
+        refrence.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot child : snapshot.getChildren()) {
+
+                    if (child.getKey().equals(CurrentplayeId))
+                        Score = child.child("score").getValue().toString();
+                    mTextViewScore.setText(Score);
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void displayFlag() {
