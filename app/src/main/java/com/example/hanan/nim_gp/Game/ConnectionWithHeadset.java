@@ -1,19 +1,15 @@
 package com.example.hanan.nim_gp.Game;
 
 
-import com.example.hanan.nim_gp.ManageDevices.Device;
-import com.example.hanan.nim_gp.ManageDevices.DeviceType;
-import com.example.hanan.nim_gp.R;
-
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,8 +19,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.hanan.nim_gp.ManageDevices.Device;
+import com.example.hanan.nim_gp.ManageDevices.DeviceType;
+import com.example.hanan.nim_gp.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,7 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.neeuro.NativeNSBPlugin.NativeNSBInterface;
-import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +42,6 @@ import me.aflak.bluetooth.DeviceCallback;
 import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.CONNECTED_DEVICE_INTENT;
 import static com.example.hanan.nim_gp.Game.SelectGameLevelActivity.SELECTED_GAME_LEVEL_INTENT;
 import static com.example.hanan.nim_gp.Game.control_modeActivity.CONTROL_MODE_GAME_INTENT;
-
 
 public class ConnectionWithHeadset extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
@@ -62,6 +60,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     private ProgressDialog progressDialog;
     float SignalsAvreg=0;
     float SignalsMax=0;
+    private double distance = 0.0;
 
     boolean mIsContinueCar;
 
@@ -568,8 +567,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     }
 
     /***scan***/
-    public class scanCallBack implements NativeNSBInterface.scanCallBackInterface
-    {
+    public class scanCallBack implements NativeNSBInterface.scanCallBackInterface {
         public void deviceFoundCB(String result)
         {
 
@@ -784,7 +782,9 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                 @Override public void onMessage(final String message) {
                     //TODO get score from robot
                     displayReceivedMsg(message);
-
+                    double tempDistance = Double.valueOf(message);
+                    distance += tempDistance;
+                    calculateScore(distance);
 
                 }
                 @Override public void onError(String message) {}
@@ -851,6 +851,11 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     }
 
 
+    public void calculateScore(double distance){
+        //update player's score
+        //update player's level
+        //display the end of the game
+    }
 
 
 }

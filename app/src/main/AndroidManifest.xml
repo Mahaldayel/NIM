@@ -23,7 +23,8 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".Game.LevelsOfTheGame">
         <activity
             android:name=".Game.StartPlay1Activity"
             android:label="@string/title_activity_start_play1"
