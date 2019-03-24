@@ -195,6 +195,8 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         mBeforeScanningDeception_tv.setOnClickListener(this);
         mBeforeScanningDeception_tv.setTypeface(font);
 
+        mBeforeScanningDeception_tv.setText("Click continue if you want play with selected car that you played with before, \nelse click scan ");
+
         mSkip_layout = findViewById(R.id.before_scanning_layout);
 
     }

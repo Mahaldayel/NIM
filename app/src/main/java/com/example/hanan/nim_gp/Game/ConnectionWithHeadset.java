@@ -326,6 +326,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         mBeforeScanningDeception_tv = findViewById(R.id.before_scanning_deception);
         mBeforeScanningDeception_tv.setOnClickListener(this);
         mBeforeScanningDeception_tv.setTypeface(font);
+        mBeforeScanningDeception_tv.setText("Click continue if you want play with selected headset that you played with before, \nelse click scan ");
+
 
         mSkip_layout = findViewById(R.id.before_scanning_layout);
 
