@@ -2,6 +2,7 @@ package com.example.hanan.nim_gp.leaders;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,10 +27,11 @@ import com.squareup.picasso.Picasso;
 public class LeadersActivity extends AppCompatActivity {
 
     DatabaseReference refrence= FirebaseDatabase.getInstance().getReference().child("Players");;
+    DatabaseReference refrence2= FirebaseDatabase.getInstance().getReference().child("PlayersGameInfo");;
    ArrayList<PlayersDB> players=new ArrayList<PlayersDB>();
    ArrayList<PlayersLB> Fplayers =new ArrayList<PlayersLB>();
    RecyclerView recyclerView ;
-
+//    int score =Integer.parseInt(child.child("score").getValue().toString()) ;
 String CurrentPlayerUserName;
 ImageView Player1Pic,Player2Pic,Player3Pic,CurrentPlayerPic,secondpic,thirdpic;
 TextView Player1Name,Player2Name,Player3Name,CurrentPlayerName,Player1Score,Player2Score,Player3Score,CurrentPlayerScore,CurrentPlayerOrder;
@@ -107,17 +109,18 @@ FlagImageView Player1Country,Player2Country,Player3Country,CurrentPlayerCountry;
         refrence.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-players.clear();
+
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
 
-                    int score =Integer.parseInt(child.child("score").getValue().toString()) ;
+
 if(child.getKey().equals(CurrentplayeId))
     CurrentPlayerUserName=child.child("username").getValue().toString();
 
+String id=child.getKey();
                     String Uname = child.child("username").getValue().toString();
                     String pic= child.child("picURL").getValue().toString();
                     String Country=child.child("countyCode").getValue().toString();
-                    PlayersDB p = new PlayersDB(score,Uname,pic,Country);
+                    PlayersDB p = new PlayersDB(0,Uname,pic,Country);
                     if(p!=null)
 players.add(p);
 
@@ -148,8 +151,7 @@ players.add(p);
                     Player3Country.setVisibility(View.INVISIBLE);
                     thirdpic.setVisibility(View.INVISIBLE);
                 }
-              arrange();
-                ininatadapter();
+
 
 
             }
@@ -159,8 +161,32 @@ players.add(p);
 
             }
         });
+        refrence2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    String id=child.getKey();
+                 for(int i=0;i<players.size();i++){
+                     if(id.equalsIgnoreCase(players.get(i).getID())){
+                         players.get(i).setScore(Integer.parseInt(child.child("score").getValue().toString()));
+                     }
+                 }
 
-    }
+
+
+                }
+
+           arrange();
+                ininatadapter();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        }
+
 
     private void ininatadapter() {
       recyclerView.setLayoutManager(new LinearLayoutManager(this));
