@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-
 import android.os.CountDownTimer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -21,23 +20,19 @@ import android.widget.TextView;
 
 import com.example.hanan.nim_gp.GameOver.CompletedActivity;
 import com.example.hanan.nim_gp.MainActivity;
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
-import com.neeuro.NativeNSBPlugin.NativeNSBInterface;
-
 import com.example.hanan.nim_gp.R;
+import com.neeuro.NativeNSBPlugin.NativeNSBInterface;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import me.aflak.bluetooth.Bluetooth;
 
-//import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
-import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.HEADSET_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.NEEURO_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.CONNECTED_DEVICE_INTENT;
-import static com.example.hanan.nim_gp.Game.SelectGameLevelActivity.SELECTED_GAME_LEVEL_INTENT;
-import static com.example.hanan.nim_gp.Game.control_modeActivity.CONTROL_MODE_GAME_INTENT;
+
+//import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
 
 
 public class StartPlay1Activity extends AppCompatActivity implements View.OnClickListener {
@@ -105,7 +100,7 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
     /**/
     private TextView mScore_tv;
     private ConstraintLayout mCompleted_l;
-
+    private ConstraintLayout mFailed_l;
 
     private void initElements(){
 
@@ -127,6 +122,7 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         message = findViewById(R.id.controlMode);
 
         mCompleted_l = findViewById(R.id.completed_layout);
+        mFailed_l = findViewById(R.id.failed_layout);
         mScore_tv = findViewById(R.id.textViewScore);
 
         mContext = StartPlay1Activity.this;
@@ -192,6 +188,7 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         sbDelegate.setControlRobotBluetooth(bluetooth);
         sbDelegate.setSelectedRobotAddress(mSelectedRobotDeviceAddress);
         sbDelegate.setComplatedLayout(mCompleted_l);
+        sbDelegate.setFaildLayout(mFailed_l);
         sbDelegate.setScoreTextView(mScore_tv);
         sbDelegate.setStarted(false);
         sbDelegate.setEnded(false);
