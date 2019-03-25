@@ -206,6 +206,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.845" />
+
+    <TextView
+        android:id="@+id/training_counter"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="28"
+        android:paddingTop="4dp"
+        android:paddingEnd="24dp"
+        android:textAlignment="textEnd"
+        android:textColor="@color/white"
+        android:background="@drawable/counter_layout"
+        app:layout_constraintBottom_toTopOf="@+id/training_mode_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.055"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.049" />
+
     <!--this layout will delete later it just for test and see the data-->
     <LinearLayout
         android:id="@+id/test_layout"
