@@ -27,6 +27,7 @@ import java.util.TimerTask;
 
 import com.example.hanan.nim_gp.R;
 
+import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.NEEURO_ADDRESS_OF_SELECTED_DEVICE;
 
 
 public class NSBTrainingActivity extends AppCompatActivity implements View.OnClickListener
@@ -77,8 +78,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     BeforeTrainingConnectingWithNeeruo.scanCallBack scanCB ;
     BeforeTrainingConnectingWithNeeruo.connectionCallBack connectionCB ;
     BeforeTrainingConnectingWithNeeruo.NSBFunctionsCallBack nsbFunctionsCB ;
-
-
+    private String mHeadsetAddress;
 
 
     private void initElements(){
@@ -165,24 +165,23 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
         initElements();
         initializeSenzeBandBasic();
+        getNureeAddressFormIntent();
         mCurrentTrainingMode = TRAINING_MODE_FOCUS;
         setTextView();
-//        setContext();
-
-        /***/
         prepareForFocusTraining();
 
 
 
     }
 
-//    public void setContext() {
-//
-//        setTrainingCallBack();
-//        connectionCB =  BeforeTrainingConnectingWithNeeruo.connectionCB;
-//
-//        connectionCB.setTraniningContext(NSBTrainingActivity.this);
-//    }
+    private void getNureeAddressFormIntent() {
+
+        Intent intent = getIntent();
+
+        if(intent.hasExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE))
+            mHeadsetAddress = intent.getStringExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE);
+    }
+
 
     public Context getContext(){
 
@@ -254,6 +253,8 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void goTo(Class nextClass) {
+
+        NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
 
         Context context = NSBTrainingActivity.this;
 

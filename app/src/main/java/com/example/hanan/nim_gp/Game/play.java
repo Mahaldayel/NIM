@@ -97,6 +97,7 @@ public class play extends AppCompatActivity implements View.OnClickListener{
         }
 
     }
+
     private void DeleteMessage(){
 
 
@@ -122,6 +123,7 @@ public class play extends AppCompatActivity implements View.OnClickListener{
         AlertDialog dialog = builder.create();
         dialog.show();
 
-    }}
+    }
+}
 
 

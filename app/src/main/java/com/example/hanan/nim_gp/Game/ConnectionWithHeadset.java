@@ -1,6 +1,8 @@
 package com.example.hanan.nim_gp.Game;
 
 
+import com.example.hanan.nim_gp.GameOver.CompletedActivity;
+import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.ManageDevices.Device;
 import com.example.hanan.nim_gp.ManageDevices.DeviceType;
 import com.example.hanan.nim_gp.R;
@@ -117,6 +119,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     private TextView mSaveHeadsetTitle_tv;
     private Button mQuit_bt;
 
+    private int mScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,8 +216,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         setSelectedDevicesAddress();
         initAdapter();
-        if(devices != null)
-            displaySkipLayout();
+//        if(devices != null)
+//            displaySkipLayout();
 
     }
 
@@ -297,6 +300,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         mContext = this;
         mSelectedHeadsetDeviceIndex = -1;
 
+        mScore = 0;
 
         initElementGetDeviceFromFirebase();
         initAdapter();
@@ -376,7 +380,9 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         if(adapterView == headsetsListView){
             selectedDeviceIndex = i;
-            displaySaveHeadset();
+//            displaySaveHeadset();
+            play(mNewDevices.get(selectedDeviceIndex).getAddress());
+
 
         }
     }
@@ -392,14 +398,14 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         Intent intent = new Intent(context,nextClass);
 
         //TODO send device address to next activity
-        if(mIsContinueCar)
-            intent.putExtra(ROBOT_ADDRESS_OF_SELECTED_DEVICE,mSelectedRobotDeviceAddress);
-        else
+//        if(mIsContinueCar)
+//            intent.putExtra(ROBOT_ADDRESS_OF_SELECTED_DEVICE,mSelectedRobotDeviceAddress);
+//        else
             intent.putExtra(CONNECTED_DEVICE_INTENT,mConnectedDeviceIndex);
 
-        if(mIsContinueHeadset)
-            intent.putExtra(HEADSET_ADDRESS_OF_SELECTED_DEVICE,mSelectedHeadsetDeviceAddress);
-        else
+//        if(mIsContinueHeadset)
+//            intent.putExtra(HEADSET_ADDRESS_OF_SELECTED_DEVICE,mSelectedHeadsetDeviceAddress);
+//        else
             intent.putExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE,neeuroAddress);
 
         intent.putExtra(SELECTED_GAME_LEVEL_INTENT, mSelectedGameLevel);
@@ -421,6 +427,9 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                 break;
             case R.id.button_back:
                 goTo(ConnectionWithRobotCarActivity.class);
+                break;
+            case R.id.quit_bt:
+                goTo(MainActivity.class);
                 break;
             case R.id.save_bt:
                 save();
@@ -662,7 +671,9 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         private Bluetooth controlRobotBluetooth;
         private TextView msg;
-        private Boolean isEnded = false;
+        private Boolean isEnded;
+        private Boolean isStarted;
+
 
         private TextView relaxTextView;
         private TextView focusTextView;
@@ -670,9 +681,10 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         public void EEG_GetAttention(float result) {
 
 
-            if(controlModeNumber == 2 && !isEnded)
+            if(controlModeNumber == 2 && !isEnded  && isStarted)
                 if(result > SignalsAvreg)
-                    sendToRobot(String.valueOf((int) Math.floor(result/SignalsAvreg)));
+                    sendToRobot(String.valueOf((int) Math.floor(2)));
+//                    sendToRobot(String.valueOf((int) Math.floor(result/SignalsAvreg)));
 
             focusTextView.setText(String.valueOf(result));
 
@@ -681,9 +693,10 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         public void EEG_GetRelaxation(float result) {
 
-            if(controlModeNumber == 1 && !isEnded)
+            if(controlModeNumber == 1 && !isEnded && isStarted)
                 if(result > SignalsAvreg)
-                    sendToRobot(String.valueOf((int) Math.floor(result/SignalsAvreg)));
+                    sendToRobot(String.valueOf((int) Math.floor(2)));
+//                    sendToRobot(String.valueOf((int) Math.floor(result/SignalsAvreg)));
 
 
             relaxTextView.setText(String.valueOf(result));
@@ -725,6 +738,10 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         public void setEnded(Boolean ended) {
             isEnded = ended;
+        }
+
+        public void setStarted(Boolean started) {
+            isStarted = started;
         }
 
         private void setBluetooth(){
@@ -804,8 +821,35 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                 public void run() {
                     startPlay1Activity = new StartPlay1Activity();
 
-                    if(msg != null)
-                        msg.setText(message);
+                    if(msg != null){
+
+
+                        if(Integer.parseInt(message) ==Integer.parseInt(String.valueOf("2")))
+                        {
+                            msg.setText(message+"\nScore :"+mScore);
+                            mScore += Integer.parseInt(message);
+
+                            if(startPlay1Activity.getContext() != null)
+                                startPlay1Activity.getContext().startActivity(new Intent(startPlay1Activity.getContext(), CompletedActivity.class));
+
+                        }else{
+
+
+                            if(mScore > 130){
+                                msg.setText(message+"\nScore :"+mScore+"\n Win ");
+                                isEnded = true;
+
+//                                startPlay1Activity.getApplicationContext().startActivity(new Intent(startPlay1Activity.getApplicationContext(), CompletedActivity.class));
+                            }
+
+
+                            // face obstacle
+//                            msg.setText(message + "\nScore :" + mScore + "\n");
+
+
+                        }
+
+                    }
                     else
                         msg = startPlay1Activity.getmMsg_tv();
                 }

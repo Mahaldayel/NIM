@@ -4,14 +4,23 @@ package com.example.hanan.nim_gp.Game;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.hanan.nim_gp.GameOver.CompletedActivity;
+import com.example.hanan.nim_gp.MainActivity;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.neeuro.NativeNSBPlugin.NativeNSBInterface;
 
 import com.example.hanan.nim_gp.R;
@@ -22,13 +31,20 @@ import java.util.TimerTask;
 import me.aflak.bluetooth.Bluetooth;
 
 //import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
+import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.HEADSET_ADDRESS_OF_SELECTED_DEVICE;
+import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.NEEURO_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.CONNECTED_DEVICE_INTENT;
 import static com.example.hanan.nim_gp.Game.SelectGameLevelActivity.SELECTED_GAME_LEVEL_INTENT;
 import static com.example.hanan.nim_gp.Game.control_modeActivity.CONTROL_MODE_GAME_INTENT;
 
 
-public class StartPlay1Activity extends AppCompatActivity {
+public class StartPlay1Activity extends AppCompatActivity implements View.OnClickListener {
+
+
+    public static final String SELECTED_GAME_LEVEL_INTENT = "SELECTED_GAME_LEVEL_INTENT" ;
+    public static final String CONTROL_MODE_GAME_INTENT ="controlMode";
+    public static final String CONTROL_GAME_INTENT ="gameMode";
 
 
     public static final int RELAX_NUMBER = 1;
@@ -60,20 +76,53 @@ public class StartPlay1Activity extends AppCompatActivity {
     private int mPlayCounter;
     private String mSelectedRobotDeviceAddress;
 
-    private long GAME_TIME = 100000;
+    private long GAME_TIME = 200000;
+//    private long GAME_TIME = 100000;
 
 
+
+    private Button mStart_bt;
+    private TextView mGameStartCounter;
+    private ImageView mFullScreen;
     /*test data*/
     private TextView relax_tv;
     private TextView focus_tv;
 
+    private TextView message;
+    private Button quit;
+    String controlType;
+
+
+    private TextView mTextFeild;
+    private CountDownTimer countDownTimer;
+    private final long startTime = 5000;
+    private final long interval = 1 * 1000;
+    private boolean timerHasStarted = false;
+    private String mHeadsetAddress;
+
 
     private void initElements(){
 
-        setPlayCallBack();
 //        mConnectedDeviceIndex = -1;
         mMsg_tv = findViewById(R.id.msg);
 
+        mStart_bt = findViewById(R.id.start_bt);
+        mStart_bt.setOnClickListener(this);
+
+        mGameStartCounter = findViewById(R.id.count);
+        mFullScreen = findViewById(R.id.full_screen);
+
+        mTextFeild = findViewById(R.id.count);
+        countDownTimer = new StartPlay1Activity.MyCountDownTimer(startTime, interval);
+
+        quit = findViewById(R.id.quit);
+        quit.setOnClickListener(this);
+
+        message = findViewById(R.id.controlMode);
+
+
+        setPlayCallBack();
+        setMessage();
         initTastData();
 
 
@@ -112,17 +161,28 @@ public class StartPlay1Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_play1);
+        setContentView(R.layout.activity_play_game);
 
         initElements();
         getFormIntent();
         initBluetoothForRobot();
         initializeSenzeBandBasic();
+        setDataToSbDelegate();
+        setTestDataTextView();
+//        checkOfEndPlayTimer();
+
+
+
+
+    }
+
+    private void setDataToSbDelegate() {
+
         sbDelegate.setTextView(mMsg_tv);
         sbDelegate.setControlRobotBluetooth(bluetooth);
         sbDelegate.setSelectedRobotAddress(mSelectedRobotDeviceAddress);
-        setTestDataTextView();
-        checkOfEndPlayTimer();
+        sbDelegate.setStarted(false);
+        sbDelegate.setEnded(false);
 
 
     }
@@ -151,6 +211,9 @@ public class StartPlay1Activity extends AppCompatActivity {
 
         if(intent.hasExtra(ROBOT_ADDRESS_OF_SELECTED_DEVICE))
             mSelectedRobotDeviceAddress = intent.getStringExtra(ROBOT_ADDRESS_OF_SELECTED_DEVICE);
+
+        if(intent.hasExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE))
+            mHeadsetAddress = intent.getStringExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE);
 
     }
 
@@ -228,6 +291,8 @@ public class StartPlay1Activity extends AppCompatActivity {
                                     public void onClick(
                                             DialogInterface dialog, int which) {
 
+                                        NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
+
                                     }
                                 });
 
@@ -247,8 +312,119 @@ public class StartPlay1Activity extends AppCompatActivity {
         });
     }
 
+    private void startGame() {
+
+        mStart_bt.setVisibility(View.GONE);
+        mFullScreen.setVisibility(View.GONE);
+        mGameStartCounter.setVisibility(View.VISIBLE);
+        countDownStart();
+    }
 
 
 
+    private void setMessage() {
 
+        Typeface message_font = Typeface.createFromAsset(getAssets(),  "fonts/Lalezar-Regular.ttf");
+        message.setTypeface(message_font);
+
+
+        if (mCcontrolModeNumber == FOCUS_NUMBER){
+            message.setText("Focus To Win");
+        }
+        if (mCcontrolModeNumber == RELAX_NUMBER){
+            message.setText("Relax To Win");}
+
+    }
+
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()){
+            case R.id.start_bt:
+                startGame();
+                break;
+            case R.id.quit:
+                DeleteMessage();
+                break;
+        }
+
+    }
+
+
+    private void countDownStart() {
+        countDownTimer.start();
+        timerHasStarted = true;
+        mTextFeild.setText("GO!");
+
+    }
+
+    public class MyCountDownTimer extends CountDownTimer {
+        public MyCountDownTimer(long startTime, long interval) {
+            super(startTime, interval);
+        }
+
+        @Override
+        public void onFinish() {
+            mTextFeild.setText("GO!");
+            if(mTextFeild.getText().equals("GO!")){
+                message.setVisibility(View.VISIBLE);
+                quit.setVisibility(View.VISIBLE);
+                mTextFeild.setVisibility(View.GONE);
+
+                sbDelegate.setStarted(true);
+                checkOfEndPlayTimer();
+
+            }
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            mTextFeild.setText("  "+millisUntilFinished / 1000);
+
+        }
+
+    }
+
+    private void DeleteMessage(){
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle("QUIT");
+        builder.setMessage("Do You Want to Quit Current Game?");
+        builder.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
+                        startActivity(new Intent(StartPlay1Activity.this, MainActivity.class));
+
+                    }
+                });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                return;
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+    public void goToComplatedGame(){
+
+        Context context = this;
+        Class complatedClass = CompletedActivity.class;
+
+        Intent intent = new Intent(getApplicationContext(),complatedClass);
+        startActivity(intent);
+    }
+
+    public Context getContext(){
+
+        return StartPlay1Activity.this;
+    }
 }

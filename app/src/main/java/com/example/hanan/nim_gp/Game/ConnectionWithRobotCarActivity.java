@@ -374,7 +374,9 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
                     public void run() {
                         progressDialog.dismiss();
                         displayNameForExitsDevice(device);
-                        displaySaveRobotCar();
+//                        displaySaveRobotCar();
+                        goToNextActivity();
+
 
                     }
                 });
@@ -668,8 +670,8 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         this.deviceArrayList = devices;
         setSelectedDevicesAddress();
 
-        if(devices != null)
-            displaySkipLayout();
+//        if(devices != null)
+//            displaySkipLayout();
 
     }
 
