@@ -150,7 +150,6 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-
         mScan_bt = findViewById(R.id.button_scan);
         mScan_bt.setOnClickListener(this);
 
@@ -169,9 +168,9 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
         mSelectedRobotDeviceIndex = -1;
 
-        initSaveCarLayoutElements();
-        initElementToSaveCars();
-        initSkipLayoutElements();
+//        initSaveCarLayoutElements();
+//        initElementToSaveCars();
+//        initSkipLayoutElements();
 
 
     }
@@ -194,6 +193,8 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         mBeforeScanningDeception_tv = findViewById(R.id.before_scanning_deception);
         mBeforeScanningDeception_tv.setOnClickListener(this);
         mBeforeScanningDeception_tv.setTypeface(font);
+
+        mBeforeScanningDeception_tv.setText("Click continue if you want play with selected car that you played with before, \nelse click scan ");
 
         mSkip_layout = findViewById(R.id.before_scanning_layout);
 
@@ -286,7 +287,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
+//                            Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
 
                         }
                     });
@@ -372,7 +373,9 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
                     public void run() {
                         progressDialog.dismiss();
                         displayNameForExitsDevice(device);
-                        displaySaveRobotCar();
+//                        displaySaveRobotCar();
+                        goToNextActivity();
+
 
                     }
                 });
@@ -440,7 +443,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
                 progressDialogShow("Scanning ...");
                 scan();
                 break;
-            case R.id.back_bt:
+            case R.id.button_back:
                 goTo(player_modeActivity.class);
                 break;
             case R.id.quit_bt:
@@ -453,6 +456,9 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
                 hideSaveRobotCar();
                 break;
             case R.id.go_to_scan_bt:
+                hideSkipLayout();
+                break;
+            case R.id.skip_quit_bt:
                 hideSkipLayout();
                 break;
             case R.id.continue_bt:
@@ -663,8 +669,8 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         this.deviceArrayList = devices;
         setSelectedDevicesAddress();
 
-        if(devices != null)
-            displaySkipLayout();
+//        if(devices != null)
+//            displaySkipLayout();
 
     }
 

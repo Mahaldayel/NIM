@@ -6,9 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -28,6 +28,7 @@ import java.util.TimerTask;
 
 import com.example.hanan.nim_gp.R;
 
+import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.NEEURO_ADDRESS_OF_SELECTED_DEVICE;
 
 
 public class NSBTrainingActivity extends AppCompatActivity implements View.OnClickListener
@@ -78,8 +79,8 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     BeforeTrainingConnectingWithNeeruo.scanCallBack scanCB ;
     BeforeTrainingConnectingWithNeeruo.connectionCallBack connectionCB ;
     BeforeTrainingConnectingWithNeeruo.NSBFunctionsCallBack nsbFunctionsCB ;
-
-
+    private String mHeadsetAddress;
+    private TextView mTrainingCounter;
 
 
     private void initElements(){
@@ -110,7 +111,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
         mDesciption = findViewById(R.id.before_scanning_deception);
         mDesciption.setTypeface(font);
-        mDesciption.setText("Wear your headset, you will be training on two modes the first one will be Focus on pushing the car");
+        mDesciption.setText("Wear your headset, you will be training on two modes the first one will be focus on pushing the car");
 
         mContext = NSBTrainingActivity.this;
 
@@ -166,24 +167,23 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
         initElements();
         initializeSenzeBandBasic();
+        getNureeAddressFormIntent();
         mCurrentTrainingMode = TRAINING_MODE_FOCUS;
         setTextView();
-//        setContext();
-
-        /***/
         prepareForFocusTraining();
 
 
 
     }
 
-//    public void setContext() {
-//
-//        setTrainingCallBack();
-//        connectionCB =  BeforeTrainingConnectingWithNeeruo.connectionCB;
-//
-//        connectionCB.setTraniningContext(NSBTrainingActivity.this);
-//    }
+    private void getNureeAddressFormIntent() {
+
+        Intent intent = getIntent();
+
+        if(intent.hasExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE))
+            mHeadsetAddress = intent.getStringExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE);
+    }
+
 
     public Context getContext(){
 
@@ -255,6 +255,8 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void goTo(Class nextClass) {
+
+        NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
 
         Context context = NSBTrainingActivity.this;
 
@@ -331,7 +333,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     private void prepareForRelaxTraining(){
 
         mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.next_bt));
-        mDesciption.setText("Now, you will be calibrating on the second one is Relax in order to pull the car.");
+        mDesciption.setText("Now, you will be calibrating on the second one is relax in order to pull the car.");
 
     }
 
@@ -485,52 +487,28 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
             }
         });
     }
+    /****/
 
-//    public void displayBrokenConnectionDialog(){
+    private void displayCounter(){
 
-//            nsbTrainingActivity.setContext();
+        final int[] i = {30};
+        CountDownTimer timer = new CountDownTimer(30000,1000) {
 
-//        traniningContext =  nsbTrainingActivity.getApplicationContext();
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // this method will be executed every second ( 1000 ms : the second parameter in the CountDownTimer constructor)
 
-//        if(traniningContext != null){
-//        final Context context = mContext;
-//
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//
-//                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-//                            context );
-//                    // set title
-//                    alertDialogBuilder.setTitle("Connection Broken");
-//                    // set dialog message
-//                    alertDialogBuilder
-//                            .setMessage("The Connection with your headset was Broken. \n Please make sure your headset is working and has enough battery ")
-//                            .setCancelable(false)
-//                            .setPositiveButton("Ok",
-//                                    new DialogInterface.OnClickListener() {
-//                                        public void onClick(
-//                                                DialogInterface dialog, int which) {
-//                                            goTo(BeforeTrainingConnectingWithNeeruo.class);
-//                                        }
-//                                    });
-//
-//
-//                    AlertDialog alertDialog = alertDialogBuilder.create();
-//                    try {
-//
-//                        alertDialog.show();
-//                    }
-//                    catch (WindowManager.BadTokenException e) {
-//                        //use a log message
-//                    }
-//
-//
-//
-//                }
-//            });
-//        }
+                mTrainingCounter.setText(String.valueOf(i[0]));
+                i[0]--;
 
-//    }
+            }
 
+            @Override
+            public void onFinish() {
+                // TODO Auto-generated method stub
+
+            }
+        };
+        timer.start();
+    }
 }

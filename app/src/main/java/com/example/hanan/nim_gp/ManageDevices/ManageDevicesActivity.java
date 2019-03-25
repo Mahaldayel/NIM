@@ -1,6 +1,8 @@
 package com.example.hanan.nim_gp.ManageDevices;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -14,6 +16,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.hanan.nim_gp.AccountActivity.ViewAccountActivity;
+import com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity;
+import com.example.hanan.nim_gp.Game.player_modeActivity;
+import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -53,6 +59,9 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
     private int mSelectedRobotDeviceIndex;
     private int mSelectedHeadsetDeviceIndex;
 
+    private Button mQuit_bt;
+    private Button mBack_bt;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +86,13 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
 
         mSelectedHeadsetDeviceIndex = -1;
         mSelectedRobotDeviceIndex = -1;
+
+        mQuit_bt = findViewById(R.id.quit_bt);
+        mQuit_bt.setOnClickListener(this);
+
+        mBack_bt = findViewById(R.id.button_back);
+        mBack_bt.setOnClickListener(this);
+
 
 
 
@@ -155,10 +171,26 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
                 editName();
                 changeLayoutToSelectLayout();
                 break;
+            case R.id.button_back:
+                goTo(ViewAccountActivity.class);
+                break;
+            case R.id.quit_bt:
+                goTo(MainActivity.class);
+                break;
 
         }
 
         hideLayout();
+    }
+
+
+    private void goTo(Class nextClass) {
+
+        Context context = ManageDevicesActivity.this;
+
+        Intent intent = new Intent(context,nextClass);
+        startActivity(intent);
+
     }
 
     private void makeCurrentDeviceSelect() {

@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hanan.nim_gp.MainActivity;
+import com.example.hanan.nim_gp.ManageDevices.ManageDevicesActivity;
 import com.example.hanan.nim_gp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.haipq.android.flagkit.FlagImageView;
 import com.squareup.picasso.Picasso;
 
-public class view_accountActivity extends AppCompatActivity implements View.OnClickListener {
+public class ViewAccountActivity extends AppCompatActivity implements View.OnClickListener {
     String email,Uname,countryCode,picUri,Bdate;
     Long score;
     private TextView mTextViewName;
@@ -45,6 +45,8 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
     FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
     DatabaseReference refrence= FirebaseDatabase.getInstance().getReference().child("PlayersGameInfo");
     String CurrentplayeId = CurrentPlayer.getUid();
+
+    private Button mManageDevice_bt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +76,7 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
                 System.out.println("problem to read value");
-                Toast.makeText(view_accountActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(ViewAccountActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
             }
 
         });}
@@ -131,19 +133,29 @@ public class view_accountActivity extends AppCompatActivity implements View.OnCl
             back.setOnClickListener(this);
 
 
+            mManageDevice_bt = findViewById(R.id.manage_device_bt);
+            mManageDevice_bt.setOnClickListener(this);
+
 
         }
     @Override
     public void onClick(View view) {
         if(view == mUpdateButton){
-            startActivity(new Intent(view_accountActivity.this,update_accountActivity.class));
+            startActivity(new Intent(ViewAccountActivity.this,update_accountActivity.class));
             }
-            if(view==password){  startActivity(new Intent(view_accountActivity.this, changeUserPassword.class));
+            if(view==password){  startActivity(new Intent(ViewAccountActivity.this, changeUserPassword.class));
             }
             if(view==deleteAccount){
-                startActivity(new Intent(view_accountActivity.this,DeleteAccount.class));
+                startActivity(new Intent(ViewAccountActivity.this,DeleteAccount.class));
                  }
-        if(view==back){   startActivity(new Intent(view_accountActivity.this, MainActivity.class));}}
+        if(view==back){   startActivity(new Intent(ViewAccountActivity.this, MainActivity.class));}
+
+
+        if(view == mManageDevice_bt){
+
+            startActivity(new Intent(ViewAccountActivity.this, ManageDevicesActivity.class));
+        }
+    }
 
     private void getData(DataSnapshot dataSnapshot) {
 

@@ -1,6 +1,8 @@
 package com.example.hanan.nim_gp.Game;
 
 
+import com.example.hanan.nim_gp.GameOver.CompletedActivity;
+import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.ManageDevices.Device;
 import com.example.hanan.nim_gp.ManageDevices.DeviceType;
 import com.example.hanan.nim_gp.R;
@@ -25,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hanan.nim_gp.Training.NSBTrainingActivity;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -115,7 +118,9 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     private Context mContext;
     private Button mQuitSkipLayout_bt;
     private TextView mSaveHeadsetTitle_tv;
+    private Button mQuit_bt;
 
+    private int mScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,8 +217,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         setSelectedDevicesAddress();
         initAdapter();
-        if(devices != null)
-            displaySkipLayout();
+//        if(devices != null)
+//            displaySkipLayout();
 
     }
 
@@ -221,6 +226,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         mSkip_layout.setVisibility(View.VISIBLE);
         mFullScreen.setVisibility(View.VISIBLE);
+        mQuit_bt.setVisibility(View.GONE);
+
 
 
     }
@@ -280,6 +287,9 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         mNewDevices = new ArrayList<>();
         mNewDevicesString = new ArrayList<>();
 
+        mQuit_bt = findViewById(R.id.quit_bt);
+        mQuit_bt.setOnClickListener(this);
+
         mStart_bt = findViewById(R.id.start);
         mStart_bt.setOnClickListener(this);
 
@@ -291,6 +301,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         mContext = this;
         mSelectedHeadsetDeviceIndex = -1;
 
+        mScore = 0;
 
         initElementGetDeviceFromFirebase();
         initAdapter();
@@ -320,6 +331,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         mBeforeScanningDeception_tv = findViewById(R.id.before_scanning_deception);
         mBeforeScanningDeception_tv.setOnClickListener(this);
         mBeforeScanningDeception_tv.setTypeface(font);
+        mBeforeScanningDeception_tv.setText("Click continue if you want play with selected headset that you played with before, \nelse click scan ");
+
 
         mSkip_layout = findViewById(R.id.before_scanning_layout);
 
@@ -368,7 +381,9 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         if(adapterView == headsetsListView){
             selectedDeviceIndex = i;
-            displaySaveHeadset();
+//            displaySaveHeadset();
+            play(mNewDevices.get(selectedDeviceIndex).getAddress());
+
 
         }
     }
@@ -384,14 +399,14 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         Intent intent = new Intent(context,nextClass);
 
         //TODO send device address to next activity
-        if(mIsContinueCar)
-            intent.putExtra(ROBOT_ADDRESS_OF_SELECTED_DEVICE,mSelectedRobotDeviceAddress);
-        else
+//        if(mIsContinueCar)
+//            intent.putExtra(ROBOT_ADDRESS_OF_SELECTED_DEVICE,mSelectedRobotDeviceAddress);
+//        else
             intent.putExtra(CONNECTED_DEVICE_INTENT,mConnectedDeviceIndex);
 
-        if(mIsContinueHeadset)
-            intent.putExtra(HEADSET_ADDRESS_OF_SELECTED_DEVICE,mSelectedHeadsetDeviceAddress);
-        else
+//        if(mIsContinueHeadset)
+//            intent.putExtra(HEADSET_ADDRESS_OF_SELECTED_DEVICE,mSelectedHeadsetDeviceAddress);
+//        else
             intent.putExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE,neeuroAddress);
 
         intent.putExtra(SELECTED_GAME_LEVEL_INTENT, mSelectedGameLevel);
@@ -413,6 +428,9 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                 break;
             case R.id.button_back:
                 goTo(ConnectionWithRobotCarActivity.class);
+                break;
+            case R.id.quit_bt:
+                goTo(MainActivity.class);
                 break;
             case R.id.save_bt:
                 save();
@@ -441,6 +459,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         mSkip_layout.setVisibility(View.GONE);
         mFullScreen.setVisibility(View.GONE);
+        mQuit_bt.setVisibility(View.VISIBLE);
 
     }
 
@@ -461,6 +480,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         mSaveHeadsetLayout.setVisibility(View.VISIBLE);
         mFullScreen.setVisibility(View.VISIBLE);
         displayNameForExitsDevice(mNewDevices.get(selectedDeviceIndex).getAddress());
+        mQuit_bt.setVisibility(View.GONE);
+
 
 
     }
@@ -484,6 +505,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         mSaveHeadsetLayout.setVisibility(View.GONE);
         mFullScreen.setVisibility(View.GONE);
+        mQuit_bt.setVisibility(View.VISIBLE);
+
 
     }
 
@@ -589,7 +612,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
+//                            Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
                             progressDialog.dismiss();
                             NativeNSBInterface.getInstance().startStopScanning(false);
 
@@ -649,17 +672,26 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         private Bluetooth controlRobotBluetooth;
         private TextView msg;
-        private Boolean isEnded = false;
+        private Boolean isEnded;
+        private Boolean isStarted;
+
 
         private TextView relaxTextView;
         private TextView focusTextView;
 
+        private ConstraintLayout mCompleted_l;
+        private TextView mScore_tv;
+
+        private Context playContext;
+
+
         public void EEG_GetAttention(float result) {
 
 
-            if(controlModeNumber == 2 && !isEnded)
+            if(controlModeNumber == 2 && !isEnded  && isStarted)
                 if(result > SignalsAvreg)
-                    sendToRobot(String.valueOf((int) Math.floor(result/SignalsAvreg)));
+                    sendToRobot(String.valueOf((int) Math.floor(2)));
+//                    sendToRobot(String.valueOf((int) Math.floor(result/SignalsAvreg)));
 
             focusTextView.setText(String.valueOf(result));
 
@@ -668,9 +700,10 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         public void EEG_GetRelaxation(float result) {
 
-            if(controlModeNumber == 1 && !isEnded)
+            if(controlModeNumber == 1 && !isEnded && isStarted)
                 if(result > SignalsAvreg)
-                    sendToRobot(String.valueOf((int) Math.floor(result/SignalsAvreg)));
+                    sendToRobot(String.valueOf((int) Math.floor(2)));
+//                    sendToRobot(String.valueOf((int) Math.floor(result/SignalsAvreg)));
 
 
             relaxTextView.setText(String.valueOf(result));
@@ -684,6 +717,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             if(controlRobotBluetooth == null){
                 setBluetooth();
             }
+
+
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -712,6 +747,10 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         public void setEnded(Boolean ended) {
             isEnded = ended;
+        }
+
+        public void setStarted(Boolean started) {
+            isStarted = started;
         }
 
         private void setBluetooth(){
@@ -789,10 +828,36 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    startPlay1Activity = new StartPlay1Activity();
 
-                    if(msg != null)
-                        msg.setText(message);
+
+                    if(msg != null){
+
+                        startPlay1Activity = new StartPlay1Activity();
+                        playContext = startPlay1Activity.getContext();
+
+                        if(Integer.parseInt(message) == Integer.parseInt(String.valueOf("2")))
+                        {
+                            msg.setText(message+"\nScore :"+mScore);
+                            mScore += Integer.parseInt(message);
+
+
+//                            if(playContext != null)
+//                                startActivity(new Intent(playContext, CompletedActivity.class));
+
+                        }else{
+
+
+                            if(mScore > 130){
+                                msg.setText(message+"\nScore :"+mScore+"\n Win ");
+                                isEnded = true;
+
+                            }
+
+                            mScore_tv.setText(String.valueOf(mScore));
+                            mCompleted_l.setVisibility(View.VISIBLE);
+                        }
+
+                    }
                     else
                         msg = startPlay1Activity.getmMsg_tv();
                 }
@@ -809,6 +874,15 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         }
 
 
+        public void setComplatedLayout(ConstraintLayout mCompleted_l) {
+
+            this.mCompleted_l = mCompleted_l;
+        }
+
+        public void setScoreTextView(TextView mScore_tv) {
+
+            this.mScore_tv = mScore_tv;
+        }
     }
 
 

@@ -23,13 +23,16 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".Game.LevelsOfTheGame">
         <activity
             android:name=".Game.StartPlay1Activity"
             android:label="@string/title_activity_start_play1"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".GameOver.FailedActivity" />
-        <activity android:name=".GameOver.CompletedActivity" />
+        <activity android:name=".GameOver.CompletedActivity" >
+
+        </activity>
         <activity android:name=".AccountActivity.CropView" />
         <activity android:name=".AccountActivity.FirstPage">
             <intent-filter>
@@ -46,7 +49,7 @@
         <activity android:name=".AccountActivity.ResetPasswordActivity" />
         <activity android:name=".AccountActivity.changeUserPassword" />
         <activity android:name=".AccountActivity.update_accountActivity" />
-        <activity android:name=".AccountActivity.view_accountActivity" />
+        <activity android:name=".AccountActivity.ViewAccountActivity" />
         <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo"></activity>
         <activity android:name=".Training.NSBTrainingActivity"></activity>
         <activity android:name=".Game.SelectGameLevelActivity"></activity>
@@ -58,9 +61,7 @@
         <activity android:name=".Game.ConnectionWithHeadset" />
         <activity android:name=".Game.ControlRobotCarActivity" />
         <activity android:name=".Game.ConnectionWithRobotCarActivity" />
-        <activity android:name=".ManageDevices.ManageDevicesActivity">
-
-        </activity>
+        <activity android:name=".ManageDevices.ManageDevicesActivity"/>
     </application>
 
 </manifest>

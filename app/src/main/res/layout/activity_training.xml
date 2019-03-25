@@ -122,6 +122,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:visibility="gone"
         android:background="@drawable/calibrating_title"
         android:gravity="center"
         android:orientation="vertical"
@@ -143,6 +144,7 @@
             android:layout_marginTop="116dp"
             android:text="Deception"
             android:textSize="16dp"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

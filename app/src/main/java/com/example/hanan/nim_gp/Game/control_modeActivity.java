@@ -37,6 +37,8 @@ public class control_modeActivity extends AppCompatActivity implements View.OnCl
 
 
     boolean shaz=true;
+    private Button mQuit_bt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,12 +51,16 @@ public class control_modeActivity extends AppCompatActivity implements View.OnCl
 
 
     private void initElements(){
+
         relax=findViewById(R.id.relax);
         relax.setOnClickListener(this);
         focus=findViewById(R.id.focus);
         focus.setOnClickListener(this);
         back=findViewById(R.id.back);
         back.setOnClickListener(this);
+
+        mQuit_bt = findViewById(R.id.quit_bt);
+        mQuit_bt.setOnClickListener(this);
 
     }
 
@@ -128,26 +134,32 @@ public class control_modeActivity extends AppCompatActivity implements View.OnCl
 
     public void onClick(View view) {
 
-if(view==relax || view==focus){
+        if(view==relax || view==focus){
 
 
-   if(shaz==false){
-        CreateMessage();
-        return;}
-        if(view ==relax){
+           if(shaz==false){
+                CreateMessage();
+                return;
+           }
+           if(view ==relax){
+               Intent intent = new Intent(control_modeActivity.this,SelectGameLevelActivity.class);
+               intent.putExtra(CONTROL_MODE_GAME_INTENT, "Relax");
+               startActivity(intent);
+           }
+
+           if (view==focus){
+               Intent intent = new Intent(control_modeActivity.this, SelectGameLevelActivity.class);
+               intent.putExtra(CONTROL_MODE_GAME_INTENT, "Focus");
+               startActivity(intent);
+           }
 
 
-            Intent intent = new Intent(control_modeActivity.this,SelectGameLevelActivity.class);
-            intent.putExtra(CONTROL_MODE_GAME_INTENT, "Relax");
-
-            startActivity(intent);
 
         }
-        if (view==focus){
-            Intent intent = new Intent(control_modeActivity.this, SelectGameLevelActivity.class);
-            intent.putExtra(CONTROL_MODE_GAME_INTENT, "Focus");
-            startActivity(intent);
 
+        if(view == mQuit_bt || view == back ){
+            startActivity(new Intent(control_modeActivity.this, MainActivity.class));
         }
-        if(view==back){   startActivity(new Intent(control_modeActivity.this, SelectGameLevelActivity.class));}
-}}}
+
+
+    }}

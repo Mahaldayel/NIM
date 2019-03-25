@@ -7,7 +7,7 @@
     android:background="@drawable/back"
     tools:context=".ManageDevices.ManageDevicesActivity">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="320dp"
         android:layout_height="500dp"
         android:layout_marginBottom="8dp"
@@ -23,13 +23,35 @@
 
         <ListView
             android:id="@+id/devices_lv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="100dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="122dp" />
-    </LinearLayout>
+            android:layout_width="220dp"
+            android:layout_height="330dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.597" />
+
+        <Button
+            android:id="@+id/button_back"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="8dp"
+            android:background="#00890303"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.039"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </android.support.constraint.ConstraintLayout>
 
 
     <ImageView
@@ -57,7 +79,7 @@
         android:background="@drawable/save_device_layout"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
@@ -88,15 +110,14 @@
             android:id="@+id/new_name_et"
             android:layout_width="160dp"
             android:layout_height="50dp"
-            android:text="hanan"
             android:background="#c8ffffff"
+            android:text="hanan"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.401"
-            />
+            app:layout_constraintVertical_bias="0.401" />
 
         <Button
             android:id="@+id/edit_done_bt"
@@ -106,16 +127,15 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:visibility="gone"
+            android:background="@drawable/button_board"
             android:text="Done"
             android:textColor="@android:color/white"
-            android:background="@drawable/button_board"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.709"
-            />
+            app:layout_constraintVertical_bias="0.709" />
 
         <Button
             android:id="@+id/select_bt"
@@ -125,10 +145,10 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:visibility="visible"
+            android:background="@drawable/button_board"
             android:text="Select"
             android:textColor="@android:color/white"
-            android:background="@drawable/button_board"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -144,10 +164,10 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:visibility="visible"
+            android:background="@drawable/button_board"
             android:text="Edit"
             android:textColor="@android:color/white"
-            android:background="@drawable/button_board"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -169,6 +189,23 @@
             app:layout_constraintVertical_bias="0.95" />
 
     </android.support.constraint.ConstraintLayout>
+
+    <Button
+        android:id="@+id/quit_bt"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/quit_bt"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.958"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.185" />
 
 
 

@@ -68,7 +68,7 @@ public class changeUserPassword extends AppCompatActivity implements View.OnClic
             change(v);
 
         }
-        if(v==back){   startActivity(new Intent(changeUserPassword.this, view_accountActivity.class));}
+        if(v==back){   startActivity(new Intent(changeUserPassword.this, ViewAccountActivity.class));}
     }
 
 

@@ -8,12 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.hanan.nim_gp.AccountActivity.FirstPage;
-import com.example.hanan.nim_gp.AccountActivity.view_accountActivity;
-import com.example.hanan.nim_gp.Game.SelectGameLevelActivity;
+import com.example.hanan.nim_gp.AccountActivity.ViewAccountActivity;
 import com.example.hanan.nim_gp.Game.control_modeActivity;
+import com.example.hanan.nim_gp.GameOver.CompletedActivity;
 import com.example.hanan.nim_gp.Training.BeforeTrainingConnectingWithNeeruo;
 import com.example.hanan.nim_gp.leaders.LeadersActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
                 goTo(control_modeActivity.class);
                 break;
             case R.id.buttonAccount:
-                goTo(view_accountActivity.class);
+                goTo(ViewAccountActivity.class);
                 break;
             case R.id.buttonTraining:
                 goTo(BeforeTrainingConnectingWithNeeruo.class);
