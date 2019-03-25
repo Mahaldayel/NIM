@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,9 +96,9 @@ public class DeleteAccount extends AppCompatActivity implements View.OnClickList
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
-        builder.setTitle("Confirmation message");
+        builder.setTitle(" ");
         builder.setMessage(
-                "Are you sure you want to delete your account?");
+                "");
         builder.setPositiveButton("YES, i'm sure",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -108,6 +109,7 @@ public class DeleteAccount extends AppCompatActivity implements View.OnClickList
 
                     }
                 });
+
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -120,7 +122,9 @@ public class DeleteAccount extends AppCompatActivity implements View.OnClickList
 
         AlertDialog dialog = builder.create();
         dialog.show();
-
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.pop_up_one);
+        //Button YesButton=dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        //YesButton.setBackgroundResource(R.drawable.button_yes);
     }
 
     @Override
