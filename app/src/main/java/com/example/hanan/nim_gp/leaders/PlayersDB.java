@@ -25,11 +25,12 @@ public class PlayersDB extends AppCompatActivity {
         Country = country;
     }
 
-    public PlayersDB(int Score, String PUname , String PPic, String C) {
+    public PlayersDB(int Score, String PUname , String PPic, String C,String id) {
         this.pic = PPic;
         this.Score = Score;
         this.Uname = PUname;
         Country= C ;
+        ID=id;
 
 
     }

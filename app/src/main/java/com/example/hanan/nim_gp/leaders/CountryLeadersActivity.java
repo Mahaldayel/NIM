@@ -2,6 +2,7 @@ package com.example.hanan.nim_gp.leaders;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,8 +28,10 @@ public class CountryLeadersActivity extends AppCompatActivity {
 
 
     DatabaseReference refrence= FirebaseDatabase.getInstance().getReference().child("Players");;
+    DatabaseReference refrence2= FirebaseDatabase.getInstance().getReference().child("PlayersGameInfo");;
     ArrayList<PlayersDB> players=new ArrayList<PlayersDB>();
     ArrayList<PlayersLB> Fplayers =new ArrayList<PlayersLB>();
+    ArrayList<Score> Scores=new ArrayList<Score>();
     RecyclerView recyclerView ;
     TextView world;
     TextView country;
@@ -40,13 +43,17 @@ public class CountryLeadersActivity extends AppCompatActivity {
     String CurrentplayeId = CurrentPlayer.getUid();
 String CurrentPlayerCountryCode;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_country_leaders);
-        Button Wbutton=(Button) findViewById(R.id.CWbuttonof);
+        ininatItems();
+        retrivePlayerInfo();
 
+    }
 
+    private void ininatItems(){
         recyclerView = (RecyclerView) findViewById(R.id.reciclerView2);
 
         Player1Name= (TextView) findViewById(R.id.CPlayer1Name);
@@ -66,8 +73,9 @@ String CurrentPlayerCountryCode;
         CurrentPlayerPic=(ImageView)findViewById(R.id.CCurrentPlayerPic);
         CurrentPlayerCountry=(FlagImageView) findViewById(R.id.CCurrentPlayerCountry);
         CurrentPlayerOrder=(TextView) findViewById(R.id.CCurrentPlayerOrder);
-       secondpic=(ImageView)findViewById(R.id.second);
+        secondpic=(ImageView)findViewById(R.id.second);
         thirdpic=(ImageView)findViewById(R.id.third);
+        Button Wbutton=(Button) findViewById(R.id.CWbuttonof);
         Wbutton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 Intent LB2= new Intent(CountryLeadersActivity.this, LeadersActivity.class);
@@ -100,8 +108,11 @@ String CurrentPlayerCountryCode;
         Player3Score.setTypeface(typeface);
         CurrentPlayerName.setTypeface(typeface);
         CurrentPlayerScore.setTypeface(typeface);
-CurrentPlayerOrder.setTypeface(typeface);
+        CurrentPlayerOrder.setTypeface(typeface);
 
+    }
+
+    private void retrivePlayerInfo(){
         refrence.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -109,13 +120,13 @@ CurrentPlayerOrder.setTypeface(typeface);
                     if(child.getKey().equals(CurrentplayeId)){
                         CurrentPlayerUserName=child.child("username").getValue().toString();
                         CurrentPlayerCountryCode=child.child("countyCode").getValue().toString();}
-                    int score =Integer.parseInt(child.child("score").getValue().toString()) ;
 
+                    String id=child.getKey();
                     String Uname = child.child("username").getValue().toString();
                     String pic= child.child("picURL").getValue().toString();
                     String Country=child.child("countyCode").getValue().toString();
-                    PlayersDB p = new PlayersDB(score,Uname,pic,Country);
-                  //  if(p!=null&&Country.equals("AR"))
+                    PlayersDB p = new PlayersDB(10,Uname,pic,Country,id);
+                    //  if(p!=null&&Country.equals("AR"))
                     if(Country.equals(CurrentPlayerCountryCode))
                         players.add(p);
 
@@ -129,12 +140,12 @@ CurrentPlayerOrder.setTypeface(typeface);
 
                     Player2Name.setVisibility(View.INVISIBLE);
                     Player2Score.setVisibility(View.INVISIBLE);
-                            Player2Pic.setVisibility(View.INVISIBLE);
+                    Player2Pic.setVisibility(View.INVISIBLE);
                     Player2Country.setVisibility(View.INVISIBLE);
                     secondpic.setVisibility(View.INVISIBLE);
-                                    Player3Name.setVisibility(View.INVISIBLE);
+                    Player3Name.setVisibility(View.INVISIBLE);
                     Player3Score.setVisibility(View.INVISIBLE);
-                            Player3Pic.setVisibility(View.INVISIBLE);
+                    Player3Pic.setVisibility(View.INVISIBLE);
                     Player3Country.setVisibility(View.INVISIBLE);
                     thirdpic.setVisibility(View.INVISIBLE);
                 }
@@ -148,8 +159,7 @@ CurrentPlayerOrder.setTypeface(typeface);
                     Player3Country.setVisibility(View.INVISIBLE);
                     thirdpic.setVisibility(View.INVISIBLE);
                 }
-                arrange();
-                ininatadapter();
+                retrivePlayerScore();
 
             }
             @Override
@@ -158,16 +168,54 @@ CurrentPlayerOrder.setTypeface(typeface);
 
             }
         });
+    }
 
+    private void retrivePlayerScore(){
+        refrence2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    String id=child.getKey();
+                    int score =Integer.parseInt(child.child("score").getValue().toString()) ;
+                    Score s=new Score(id,score);
+                    Scores.add(s);
+
+                }
+                replasScore();
+                System.out.println("*************************************"+Scores.size());
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
+    private void replasScore(){
+
+
+        for (int i=0;i<players.size();i++) {
+            for(int j=0;j< Scores.size();j++){
+if(players.get(i).getID().equals(Scores.get(j).getID()))
+
+    players.get(i).setScore(Scores.get(j).getScore());
+
+            }
+
+        }
+        arrange();
+        ininatadapter();
+    }
     private void ininatadapter() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         ReciclerViewLBAdapterActivity reciclerViewLBAdapter = new ReciclerViewLBAdapterActivity (this, read());
         recyclerView.setAdapter(reciclerViewLBAdapter);
         recyclerView.setHasFixedSize(true);
     }
+
 
     private void arrange() {
 

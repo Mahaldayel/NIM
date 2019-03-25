@@ -29,9 +29,10 @@ public class LeadersActivity extends AppCompatActivity {
     DatabaseReference refrence= FirebaseDatabase.getInstance().getReference().child("Players");;
     DatabaseReference refrence2= FirebaseDatabase.getInstance().getReference().child("PlayersGameInfo");;
    ArrayList<PlayersDB> players=new ArrayList<PlayersDB>();
+    ArrayList<Score> Scores=new ArrayList<Score>();
    ArrayList<PlayersLB> Fplayers =new ArrayList<PlayersLB>();
    RecyclerView recyclerView ;
-//    int score =Integer.parseInt(child.child("score").getValue().toString()) ;
+
 String CurrentPlayerUserName;
 ImageView Player1Pic,Player2Pic,Player3Pic,CurrentPlayerPic,secondpic,thirdpic;
 TextView Player1Name,Player2Name,Player3Name,CurrentPlayerName,Player1Score,Player2Score,Player3Score,CurrentPlayerScore,CurrentPlayerOrder;
@@ -46,147 +47,171 @@ FlagImageView Player1Country,Player2Country,Player3Country,CurrentPlayerCountry;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaders);
-        recyclerView = (RecyclerView) findViewById(R.id.reciclerView1);
-        Player1Name= (TextView) findViewById(R.id.Player1Name);
-        Player1Score= (TextView)findViewById(R.id.Player1Score);
-        Player1Pic = (ImageView)findViewById(R.id.Player1Pic);
-        Player1Country=(FlagImageView) findViewById(R.id.Player1Country);
-        Player2Name= (TextView)findViewById(R.id.Player2Name);
-        Player2Score= (TextView)findViewById(R.id.Player2Score);
-        Player2Pic = (ImageView)findViewById(R.id.Player2Pic);
-        Player2Country=(FlagImageView) findViewById(R.id.Player2Country);
-        Player3Name= (TextView)findViewById(R.id.Player3Name);
-        Player3Score= (TextView)findViewById(R.id.Player3Score);
-        Player3Pic = (ImageView)findViewById(R.id.Player3Pic);
-        Player3Country=(FlagImageView) findViewById(R.id.Player3Country);
-        CurrentPlayerName= (TextView)findViewById(R.id.CurrentPlayerName);
-        CurrentPlayerScore= (TextView)findViewById(R.id.CurrentPlayerScore);
-        CurrentPlayerPic=(ImageView)findViewById(R.id.CurrentPlayerPic);
-        CurrentPlayerCountry=(FlagImageView) findViewById(R.id.CurrentPlayerCountry);
-        CurrentPlayerOrder=(TextView) findViewById(R.id.CurrentPlayerOrder);
-        secondpic=(ImageView)findViewById(R.id.second);
-        thirdpic=(ImageView)findViewById(R.id.third);
-
-        Button Wbutton=(Button) findViewById(R.id.WbuttonO);
-        Wbutton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent LB2= new Intent(LeadersActivity.this, LeadersActivity.class);
-                startActivity(LB2);
-            }
-        });
-
-        Button Cbutton=(Button) findViewById(R.id.CbuttonOF);
-        Cbutton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent LB2= new Intent(LeadersActivity.this,CountryLeadersActivity.class);
-                startActivity(LB2);
-            }
-        });
-
-        Button Bbutton=(Button) findViewById(R.id.backButton);
-        Bbutton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent LB2= new Intent(LeadersActivity.this, MainActivity.class);
-                startActivity(LB2);
-            }
-        });
-
-
-
-
-        Typeface typeface=Typeface.createFromAsset(getAssets(), "fonts/Lalezar-Regular.ttf");
-        Player1Name.setTypeface(typeface);
-        Player1Score.setTypeface(typeface);
-        Player2Name.setTypeface(typeface);
-                Player2Score.setTypeface(typeface);
-                Player3Name.setTypeface(typeface);
-                Player3Score.setTypeface(typeface);
-                CurrentPlayerName.setTypeface(typeface);
-                CurrentPlayerScore.setTypeface(typeface);
-                CurrentPlayerOrder.setTypeface(typeface);
-
-
-        refrence.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-
-
-if(child.getKey().equals(CurrentplayeId))
-    CurrentPlayerUserName=child.child("username").getValue().toString();
-
-String id=child.getKey();
-                    String Uname = child.child("username").getValue().toString();
-                    String pic= child.child("picURL").getValue().toString();
-                    String Country=child.child("countyCode").getValue().toString();
-                    PlayersDB p = new PlayersDB(0,Uname,pic,Country);
-                    if(p!=null)
-players.add(p);
-
-
-
-
-
-                }
-                System.out.println("*******************"+players.size());
-                if(players.size()==1){
-
-
-                    Player2Name.setVisibility(View.INVISIBLE);
-                    Player2Score.setVisibility(View.INVISIBLE);
-                    Player2Pic.setVisibility(View.INVISIBLE);
-                    Player2Country.setVisibility(View.INVISIBLE);
-                    secondpic.setVisibility(View.INVISIBLE);
-                    Player3Name.setVisibility(View.INVISIBLE);
-                    Player3Score.setVisibility(View.INVISIBLE);
-                    Player3Pic.setVisibility(View.INVISIBLE);
-                    Player3Country.setVisibility(View.INVISIBLE);
-                    thirdpic.setVisibility(View.INVISIBLE);
-                }
-                if(players.size()==2){
-                    Player3Name.setVisibility(View.INVISIBLE);
-                    Player3Score.setVisibility(View.INVISIBLE);
-                    Player3Pic.setVisibility(View.INVISIBLE);
-                    Player3Country.setVisibility(View.INVISIBLE);
-                    thirdpic.setVisibility(View.INVISIBLE);
-                }
-
-
-
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getMessage());
-
-            }
-        });
-        refrence2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    String id=child.getKey();
-                 for(int i=0;i<players.size();i++){
-                     if(id.equalsIgnoreCase(players.get(i).getID())){
-                         players.get(i).setScore(Integer.parseInt(child.child("score").getValue().toString()));
-                     }
-                 }
-
-
-
-                }
-
-           arrange();
-                ininatadapter();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        ininatItems();
+        retrivePlayerInfo();
         }
 
+
+
+        private void ininatItems(){
+            recyclerView = (RecyclerView) findViewById(R.id.reciclerView1);
+            Player1Name= (TextView) findViewById(R.id.Player1Name);
+            Player1Score= (TextView)findViewById(R.id.Player1Score);
+            Player1Pic = (ImageView)findViewById(R.id.Player1Pic);
+            Player1Country=(FlagImageView) findViewById(R.id.Player1Country);
+            Player2Name= (TextView)findViewById(R.id.Player2Name);
+            Player2Score= (TextView)findViewById(R.id.Player2Score);
+            Player2Pic = (ImageView)findViewById(R.id.Player2Pic);
+            Player2Country=(FlagImageView) findViewById(R.id.Player2Country);
+            Player3Name= (TextView)findViewById(R.id.Player3Name);
+            Player3Score= (TextView)findViewById(R.id.Player3Score);
+            Player3Pic = (ImageView)findViewById(R.id.Player3Pic);
+            Player3Country=(FlagImageView) findViewById(R.id.Player3Country);
+            CurrentPlayerName= (TextView)findViewById(R.id.CurrentPlayerName);
+            CurrentPlayerScore= (TextView)findViewById(R.id.CurrentPlayerScore);
+            CurrentPlayerPic=(ImageView)findViewById(R.id.CurrentPlayerPic);
+            CurrentPlayerCountry=(FlagImageView) findViewById(R.id.CurrentPlayerCountry);
+            CurrentPlayerOrder=(TextView) findViewById(R.id.CurrentPlayerOrder);
+            secondpic=(ImageView)findViewById(R.id.second);
+            thirdpic=(ImageView)findViewById(R.id.third);
+
+            Button Wbutton=(Button) findViewById(R.id.WbuttonO);
+            Wbutton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    Intent LB2= new Intent(LeadersActivity.this, LeadersActivity.class);
+                    startActivity(LB2);
+                }
+            });
+
+            Button Cbutton=(Button) findViewById(R.id.CbuttonOF);
+            Cbutton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    Intent LB2= new Intent(LeadersActivity.this,CountryLeadersActivity.class);
+                    startActivity(LB2);
+                }
+            });
+
+            Button Bbutton=(Button) findViewById(R.id.backButton);
+            Bbutton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    Intent LB2= new Intent(LeadersActivity.this, MainActivity.class);
+                    startActivity(LB2);
+                }
+            });
+
+
+
+
+            Typeface typeface=Typeface.createFromAsset(getAssets(), "fonts/Lalezar-Regular.ttf");
+            Player1Name.setTypeface(typeface);
+            Player1Score.setTypeface(typeface);
+            Player2Name.setTypeface(typeface);
+            Player2Score.setTypeface(typeface);
+            Player3Name.setTypeface(typeface);
+            Player3Score.setTypeface(typeface);
+            CurrentPlayerName.setTypeface(typeface);
+            CurrentPlayerScore.setTypeface(typeface);
+            CurrentPlayerOrder.setTypeface(typeface);
+        }
+
+
+        private void retrivePlayerInfo(){
+            refrence.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+
+
+                        if(child.getKey().equals(CurrentplayeId))
+                            CurrentPlayerUserName=child.child("username").getValue().toString();
+
+String id=child.getKey();
+                        String Uname = child.child("username").getValue().toString();
+                        String pic= child.child("picURL").getValue().toString();
+                        String Country=child.child("countyCode").getValue().toString();
+                        PlayersDB p = new PlayersDB(10,Uname,pic,Country,id);
+                        if(p!=null)
+                            players.add(p);
+
+
+
+
+
+                    }
+                    System.out.println("*************************************"+players.size());
+
+                    if(players.size()==1){
+
+
+                        Player2Name.setVisibility(View.INVISIBLE);
+                        Player2Score.setVisibility(View.INVISIBLE);
+                        Player2Pic.setVisibility(View.INVISIBLE);
+                        Player2Country.setVisibility(View.INVISIBLE);
+                        secondpic.setVisibility(View.INVISIBLE);
+                        Player3Name.setVisibility(View.INVISIBLE);
+                        Player3Score.setVisibility(View.INVISIBLE);
+                        Player3Pic.setVisibility(View.INVISIBLE);
+                        Player3Country.setVisibility(View.INVISIBLE);
+                        thirdpic.setVisibility(View.INVISIBLE);
+                    }
+                    if(players.size()==2){
+                        Player3Name.setVisibility(View.INVISIBLE);
+                        Player3Score.setVisibility(View.INVISIBLE);
+                        Player3Pic.setVisibility(View.INVISIBLE);
+                        Player3Country.setVisibility(View.INVISIBLE);
+                        thirdpic.setVisibility(View.INVISIBLE);
+                    }
+
+                    retrivePlayerScore();
+
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getMessage());
+
+                }
+            });
+        }
+
+        private void retrivePlayerScore(){
+            refrence2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        String id=child.getKey();
+                        int score =Integer.parseInt(child.child("score").getValue().toString()) ;
+                        Score s=new Score(id,score);
+                        Scores.add(s);
+
+                    }
+                    replasScore();
+                    System.out.println("*************************************"+Scores.size());
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
+        private void replasScore(){
+
+            for (int i=0;i<players.size();i++) {
+                for(int j=0;j< Scores.size();j++){
+                    if(players.get(i).getID().equals(Scores.get(j).getID()))
+
+                        players.get(i).setScore(Scores.get(j).getScore());
+
+                }
+
+            }
+            arrange();
+            ininatadapter();
+        }
 
     private void ininatadapter() {
       recyclerView.setLayoutManager(new LinearLayoutManager(this));
