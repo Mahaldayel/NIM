@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 
 import android.os.CountDownTimer;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -99,6 +100,11 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
     private final long interval = 1 * 1000;
     private boolean timerHasStarted = false;
     private String mHeadsetAddress;
+    private Context mContext;
+
+    /**/
+    private TextView mScore_tv;
+    private ConstraintLayout mCompleted_l;
 
 
     private void initElements(){
@@ -120,6 +126,10 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
 
         message = findViewById(R.id.controlMode);
 
+        mCompleted_l = findViewById(R.id.completed_layout);
+        mScore_tv = findViewById(R.id.textViewScore);
+
+        mContext = StartPlay1Activity.this;
 
         setPlayCallBack();
         setMessage();
@@ -181,6 +191,8 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         sbDelegate.setTextView(mMsg_tv);
         sbDelegate.setControlRobotBluetooth(bluetooth);
         sbDelegate.setSelectedRobotAddress(mSelectedRobotDeviceAddress);
+        sbDelegate.setComplatedLayout(mCompleted_l);
+        sbDelegate.setScoreTextView(mScore_tv);
         sbDelegate.setStarted(false);
         sbDelegate.setEnded(false);
 
@@ -419,12 +431,18 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         Context context = this;
         Class complatedClass = CompletedActivity.class;
 
-        Intent intent = new Intent(getApplicationContext(),complatedClass);
+        Intent intent = new Intent(context,complatedClass);
         startActivity(intent);
     }
 
+
+
+
+
+
+
     public Context getContext(){
 
-        return StartPlay1Activity.this;
+        return mContext;
     }
 }

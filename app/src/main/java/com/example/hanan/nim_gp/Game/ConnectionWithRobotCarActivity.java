@@ -150,7 +150,6 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-
         mScan_bt = findViewById(R.id.button_scan);
         mScan_bt.setOnClickListener(this);
 
@@ -169,9 +168,9 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
         mSelectedRobotDeviceIndex = -1;
 
-        initSaveCarLayoutElements();
-        initElementToSaveCars();
-        initSkipLayoutElements();
+//        initSaveCarLayoutElements();
+//        initElementToSaveCars();
+//        initSkipLayoutElements();
 
 
     }

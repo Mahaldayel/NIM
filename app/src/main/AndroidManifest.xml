@@ -30,7 +30,9 @@
             android:label="@string/title_activity_start_play1"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".GameOver.FailedActivity" />
-        <activity android:name=".GameOver.CompletedActivity" />
+        <activity android:name=".GameOver.CompletedActivity" >
+
+        </activity>
         <activity android:name=".AccountActivity.CropView" />
         <activity android:name=".AccountActivity.FirstPage">
             <intent-filter>
@@ -59,9 +61,7 @@
         <activity android:name=".Game.ConnectionWithHeadset" />
         <activity android:name=".Game.ControlRobotCarActivity" />
         <activity android:name=".Game.ConnectionWithRobotCarActivity" />
-        <activity android:name=".ManageDevices.ManageDevicesActivity">
-
-        </activity>
+        <activity android:name=".ManageDevices.ManageDevicesActivity"/>
     </application>
 
 </manifest>

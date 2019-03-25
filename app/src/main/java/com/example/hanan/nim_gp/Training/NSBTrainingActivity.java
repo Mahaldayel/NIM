@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -79,6 +80,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     BeforeTrainingConnectingWithNeeruo.connectionCallBack connectionCB ;
     BeforeTrainingConnectingWithNeeruo.NSBFunctionsCallBack nsbFunctionsCB ;
     private String mHeadsetAddress;
+    private TextView mTrainingCounter;
 
 
     private void initElements(){
@@ -485,52 +487,28 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
             }
         });
     }
+    /****/
 
-//    public void displayBrokenConnectionDialog(){
+    private void displayCounter(){
 
-//            nsbTrainingActivity.setContext();
+        final int[] i = {30};
+        CountDownTimer timer = new CountDownTimer(30000,1000) {
 
-//        traniningContext =  nsbTrainingActivity.getApplicationContext();
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // this method will be executed every second ( 1000 ms : the second parameter in the CountDownTimer constructor)
 
-//        if(traniningContext != null){
-//        final Context context = mContext;
-//
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//
-//                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-//                            context );
-//                    // set title
-//                    alertDialogBuilder.setTitle("Connection Broken");
-//                    // set dialog message
-//                    alertDialogBuilder
-//                            .setMessage("The Connection with your headset was Broken. \n Please make sure your headset is working and has enough battery ")
-//                            .setCancelable(false)
-//                            .setPositiveButton("Ok",
-//                                    new DialogInterface.OnClickListener() {
-//                                        public void onClick(
-//                                                DialogInterface dialog, int which) {
-//                                            goTo(BeforeTrainingConnectingWithNeeruo.class);
-//                                        }
-//                                    });
-//
-//
-//                    AlertDialog alertDialog = alertDialogBuilder.create();
-//                    try {
-//
-//                        alertDialog.show();
-//                    }
-//                    catch (WindowManager.BadTokenException e) {
-//                        //use a log message
-//                    }
-//
-//
-//
-//                }
-//            });
-//        }
+                mTrainingCounter.setText(String.valueOf(i[0]));
+                i[0]--;
 
-//    }
+            }
 
+            @Override
+            public void onFinish() {
+                // TODO Auto-generated method stub
+
+            }
+        };
+        timer.start();
+    }
 }

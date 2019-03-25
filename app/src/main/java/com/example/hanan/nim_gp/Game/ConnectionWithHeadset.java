@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hanan.nim_gp.Training.NSBTrainingActivity;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -678,6 +679,12 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         private TextView relaxTextView;
         private TextView focusTextView;
 
+        private ConstraintLayout mCompleted_l;
+        private TextView mScore_tv;
+
+        private Context playContext;
+
+
         public void EEG_GetAttention(float result) {
 
 
@@ -710,6 +717,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             if(controlRobotBluetooth == null){
                 setBluetooth();
             }
+
+
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -819,18 +828,21 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    startPlay1Activity = new StartPlay1Activity();
+
 
                     if(msg != null){
 
+                        startPlay1Activity = new StartPlay1Activity();
+                        playContext = startPlay1Activity.getContext();
 
-                        if(Integer.parseInt(message) ==Integer.parseInt(String.valueOf("2")))
+                        if(Integer.parseInt(message) == Integer.parseInt(String.valueOf("2")))
                         {
                             msg.setText(message+"\nScore :"+mScore);
                             mScore += Integer.parseInt(message);
 
-                            if(startPlay1Activity.getContext() != null)
-                                startPlay1Activity.getContext().startActivity(new Intent(startPlay1Activity.getContext(), CompletedActivity.class));
+
+//                            if(playContext != null)
+//                                startActivity(new Intent(playContext, CompletedActivity.class));
 
                         }else{
 
@@ -839,14 +851,10 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                                 msg.setText(message+"\nScore :"+mScore+"\n Win ");
                                 isEnded = true;
 
-//                                startPlay1Activity.getApplicationContext().startActivity(new Intent(startPlay1Activity.getApplicationContext(), CompletedActivity.class));
                             }
 
-
-                            // face obstacle
-//                            msg.setText(message + "\nScore :" + mScore + "\n");
-
-
+                            mScore_tv.setText(String.valueOf(mScore));
+                            mCompleted_l.setVisibility(View.VISIBLE);
                         }
 
                     }
@@ -866,6 +874,15 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         }
 
 
+        public void setComplatedLayout(ConstraintLayout mCompleted_l) {
+
+            this.mCompleted_l = mCompleted_l;
+        }
+
+        public void setScoreTextView(TextView mScore_tv) {
+
+            this.mScore_tv = mScore_tv;
+        }
     }
 
 

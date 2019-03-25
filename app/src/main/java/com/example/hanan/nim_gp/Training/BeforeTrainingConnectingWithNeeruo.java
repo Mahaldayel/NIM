@@ -1,6 +1,7 @@
 package com.example.hanan.nim_gp.Training;
 
 import com.example.hanan.nim_gp.Game.DeviceListAdapter;
+import com.example.hanan.nim_gp.GameOver.CompletedActivity;
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.ManageDevices.Device;
 import com.example.hanan.nim_gp.ManageDevices.DeviceType;
@@ -105,6 +106,8 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
         setContentView(R.layout.activity_before_trining_connecting_with_neeruo);
 
         initElements();
+
+
 //        getDevicesFromFirebase();
         NativeNSBInterface.getInstance().initializeNSB(getApplicationContext(),this,nsbFunctionsCB,scanCB,connectionCB,sbDelegate);
 
@@ -480,7 +483,6 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 //
 //            }
 
-
             dismissPrograss();
             if(!mNewDevicesString.contains(result)){
 
@@ -626,7 +628,6 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
             trainingInformation.setAvgFocus(getAvarage(mFocusArray));
             trainingInformation.setMaxFocus(Collections.max(mFocusArray));
 
-
             /*test*/
             avg_foucs.setText("avg : "+String.valueOf(getAvarage(mFocusArray)));
             max_focus.setText("max : "+ String.valueOf(Collections.max(mFocusArray)));
@@ -734,7 +735,6 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
         {
             Log.e(TAG,"Connection succeed!");
             NativeNSBInterface.getInstance().startStopEEG(true);
-
 
         }
 

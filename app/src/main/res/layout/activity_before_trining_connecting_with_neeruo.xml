@@ -57,16 +57,15 @@
         android:padding="18dp"
         app:layout_constraintBottom_toTopOf="@+id/start"
         app:layout_constraintEnd_toEndOf="@+id/opacityFullView_iv"
-        app:layout_constraintHorizontal_bias="0.565"
         app:layout_constraintStart_toStartOf="@+id/opacityFullView_iv"
         app:layout_constraintTop_toTopOf="@+id/list_available_devices_image"
-        app:layout_constraintVertical_bias="0.919" />
+        app:layout_constraintVertical_bias="0.866" />
 
     <Button
         android:id="@+id/start"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -74,22 +73,21 @@
         android:padding="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.534"
+        app:layout_constraintHorizontal_bias="0.556"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.856" />
+        app:layout_constraintTop_toBottomOf="@+id/lvNewDevices"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/button_back"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginBottom="64dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="#00658302"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.027"
+        app:layout_constraintHorizontal_bias="0.032"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lvNewDevices"
         app:layout_constraintVertical_bias="0.0" />
@@ -132,8 +130,7 @@
 
 
     <include
-        layout="@layout/before_scanning_layout"
-        />
+        layout="@layout/before_scanning_layout" />
 
 
 
