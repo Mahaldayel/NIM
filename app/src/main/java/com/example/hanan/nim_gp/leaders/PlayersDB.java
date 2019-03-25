@@ -13,7 +13,7 @@ public class PlayersDB extends AppCompatActivity {
 
     private int Score;
     private String Uname;
-    private String pic ,Country;
+    private String pic ,Country,ID;
 
     public PlayersDB(){}
 
@@ -63,4 +63,11 @@ public class PlayersDB extends AppCompatActivity {
         this.pic = pic;
     }
 
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
 }
