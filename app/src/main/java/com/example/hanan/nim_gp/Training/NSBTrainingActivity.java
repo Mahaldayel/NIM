@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -370,6 +371,20 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         timer = new Timer();
         initTask();
         timer.schedule(timerTask,TRAINING_TIME);
+    }
+
+    private void displayTimer(){
+        new CountDownTimer(30000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                //mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+                // mTextField.setText("done!");
+            }
+
+        }.start();
     }
 
     private void initTask() {
