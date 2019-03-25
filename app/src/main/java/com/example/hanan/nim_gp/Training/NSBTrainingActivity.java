@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.hanan.nim_gp.MainActivity;
+import com.example.hanan.nim_gp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -24,8 +25,6 @@ import com.neeuro.NativeNSBPlugin.NativeNSBInterface;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-import com.example.hanan.nim_gp.R;
 
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.NEEURO_ADDRESS_OF_SELECTED_DEVICE;
 
@@ -380,9 +379,9 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
             public void run() {
 
 
-                    trainSucceed();
-                    timer.cancel();
-                    timerTask.cancel();
+                trainSucceed();
+                timer.cancel();
+                timerTask.cancel();
 
             }
         };
@@ -439,7 +438,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
                     alertDialog.show();
                 }
-                    catch (WindowManager.BadTokenException e) {
+                catch (WindowManager.BadTokenException e) {
                     //use a log message
                 }
 
