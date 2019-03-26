@@ -184,9 +184,9 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_game);
 
+        getFormIntent();
         initElements();
         getSavedScore();
-        getFormIntent();
         initBluetoothForRobot();
         initializeSenzeBandBasic();
         setTestDataTextView();
@@ -291,10 +291,10 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         message.setTypeface(message_font);
 
 
-        if (mCcontrolMode == "Focus"){
+        if (mCcontrolMode.equals( "Focus")){
             message.setText("Focus To Win");
         }
-        if (mCcontrolMode == "Relax"){
+        if (mCcontrolMode.equals( "Relax")){
             message.setText("Relax To Win");
         }
 

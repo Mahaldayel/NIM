@@ -53,6 +53,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     public final static String NEEURO_ADDRESS_OF_SELECTED_DEVICE = "NEEURO_ADDRESS_OF_SELECTED_DEVICE";
     public final static String ROBOT_ADDRESS_OF_SELECTED_DEVICE = "ROBOT_ADDRESS_OF_SELECTED_DEVICE";
     public final static String HEADSET_ADDRESS_OF_SELECTED_DEVICE = "HEADSET_ADDRESS_OF_SELECTED_DEVICE";
+    public static final int LEVEL_ONE_TIME = 240000;
 
     FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
     String CurrentplayeId = CurrentPlayer.getUid();
@@ -965,7 +966,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
             timer = new Timer();
             initTask();
-            timer.schedule(timerTask,10000);
+            timer.schedule(timerTask, LEVEL_ONE_TIME);
 
         }
 
