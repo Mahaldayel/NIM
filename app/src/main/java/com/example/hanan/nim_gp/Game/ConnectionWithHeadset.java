@@ -706,11 +706,13 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             if(isStarted == null)
                 setStarted(false);
 
-            if(controlModeNumber == 2 && !isEnded  && isStarted)
+            if(controlModeNumber == 2 && !isEnded  && isStarted){
                 if(result > SignalsAvreg)
                     sendToRobot(String.valueOf((int) Math.floor(2)));
 
             focusTextView.setText(String.valueOf(result));
+
+            }
 
         }
 
@@ -724,12 +726,14 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                 setStarted(false);
 
 
-            if(controlModeNumber == 1 && !isEnded && isStarted)
+            if(controlModeNumber == 1 && !isEnded && isStarted){
                 if(result > SignalsAvreg)
                     sendToRobot(String.valueOf((int) Math.floor(2)));
 
             relaxTextView.setText(String.valueOf(result));
             receiveMessageFromRobot();
+
+            }
 
         }
 

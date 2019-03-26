@@ -111,6 +111,7 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
     private Button mLevelsBtnF;
     private int mSavedScore;
     private TextView mPlayCounter_tv;
+    private CountDownTimer playTimer;
 
     private void initElements(){
 
@@ -445,33 +446,40 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
 
 
         final int[] i = {(LEVEL_ONE_TIME/1000)};
-        CountDownTimer timer = new CountDownTimer(LEVEL_ONE_TIME,1000) {
+        playTimer = new CountDownTimer(LEVEL_ONE_TIME,1000) {
+
 
             @Override
             public void onTick(long millisUntilFinished) {
                 // this method will be executed every second ( 1000 ms : the second parameter in the CountDownTimer constructor)
 
-                if(i[0] == 240 ){
+                if(!sbDelegate.getEnded()){
+                    if(i[0] == 240 ){
 
-                    mPlayCounter_tv.setText(String.valueOf(i[0]/60)+":"+String.valueOf(i[0]-240));
+                        mPlayCounter_tv.setText(String.valueOf(i[0]/60)+":"+String.valueOf(i[0]-240));
 
-                } else if(i[0] < 240 && i[0] >= 180){
+                    } else if(i[0] < 240 && i[0] >= 180){
 
-                    mPlayCounter_tv.setText(String.valueOf(i[0]/60)+":"+String.valueOf(i[0]-180));
+                        mPlayCounter_tv.setText(String.valueOf(i[0]/60)+":"+String.valueOf(i[0]-180));
 
-                } else if(i[0] < 180 && i[0] >= 120){
-                    mPlayCounter_tv.setText(String.valueOf(i[0]/60)+":"+String.valueOf(i[0]-120));
+                    } else if(i[0] < 180 && i[0] >= 120){
+                        mPlayCounter_tv.setText(String.valueOf(i[0]/60)+":"+String.valueOf(i[0]-120));
 
 
-                } else if(i[0] <= 120 && i[0] > 60){
+                    } else if(i[0] <= 120 && i[0] > 60){
 
-                    mPlayCounter_tv.setText(String.valueOf(i[0]/60)+":"+String.valueOf(i[0]-60));
+                        mPlayCounter_tv.setText(String.valueOf(i[0]/60)+":"+String.valueOf(i[0]-60));
 
-                }else if(i[0] <= 60 && i[0] > 0) {
-                    mPlayCounter_tv.setText(String.valueOf(i[0]/60)+":"+String.valueOf(i[0]));
+                    }else if(i[0] <= 60 && i[0] > 0) {
+                        mPlayCounter_tv.setText(String.valueOf(i[0]/60)+":"+String.valueOf(i[0]));
 
+                    }
+                    i[0]--;
                 }
-                i[0]--;
+
+                else {
+                    playTimer.cancel();
+                }
 
             }
 
@@ -481,7 +489,8 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
 
             }
         };
-        timer.start();
+        playTimer.start();
+
     }
 
 }
