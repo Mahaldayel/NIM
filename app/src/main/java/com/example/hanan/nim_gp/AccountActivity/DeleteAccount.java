@@ -95,9 +95,9 @@ public class DeleteAccount extends AppCompatActivity implements View.OnClickList
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
-        builder.setTitle(" ");
+        builder.setTitle("\n");
         builder.setMessage(
-                "");
+                "\n \n");
         builder.setPositiveButton("YES, i'm sure",
                 new DialogInterface.OnClickListener() {
                     @Override
