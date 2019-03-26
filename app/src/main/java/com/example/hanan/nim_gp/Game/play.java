@@ -7,11 +7,13 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
+import com.google.firebase.database.core.Tag;
 
 public class play extends AppCompatActivity implements View.OnClickListener{
 
@@ -35,8 +37,8 @@ public class play extends AppCompatActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_game);
-        Intent intent = getIntent();
-        controlType = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
+        //&&&&&&&&&&&&&&&&Intent intent = getIntent();
+       //&&&&&&&&&&&&&&&&& controlType = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
         //gameLEVEL= intent.getStringExtra(SELECTED_GAME_LEVEL_INTENT);
 
         mTextFeild = findViewById(R.id.count);
@@ -54,12 +56,13 @@ public class play extends AppCompatActivity implements View.OnClickListener{
         message=findViewById(R.id.controlMode);
         Typeface message_font = Typeface.createFromAsset(getAssets(),  "fonts/Lalezar-Regular.ttf");
         message.setTypeface(message_font);
+       /*&&&&&&&&&&&&&&&&&&&&&&&77
         if (controlType.equals("Focus")){
           message.setText("Focus To Win");
         }
         if (controlType.equals("Relax")){
             message.setText("Relax To Win");}
-
+*/
     }
         @Override
         public void onClick(View view) {
@@ -84,11 +87,13 @@ public class play extends AppCompatActivity implements View.OnClickListener{
         @Override
         public void onFinish() {
             mTextFeild.setText("GO!");
-            if(mTextFeild.getText().equals("GO!")){
+         /*&&&&&&&   if(mTextFeild.getText().equals("GO!")){
             message.setVisibility(View.VISIBLE);
             quit.setVisibility(View.VISIBLE);
-            mTextFeild.setVisibility(View.GONE);}
-        }
+            */
+            mTextFeild.setVisibility(View.GONE);
+        //}
+            startTimer();  }
 
         @Override
         public void onTick(long millisUntilFinished) {
@@ -124,6 +129,34 @@ public class play extends AppCompatActivity implements View.OnClickListener{
         dialog.show();
 
     }
+
+    long totalSeconds = 30;
+    long intervalSeconds = 1;
+
+    //Declare timer
+    CountDownTimer cTimer = null;
+
+    //start timer function
+    void startTimer() {
+        cTimer = new CountDownTimer(30000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                mTextFeild.setText("  "+millisUntilFinished);
+
+            }
+            public void onFinish() {
+            }
+        };
+        cTimer.start();
+
+    }
+
+
+    //cancel timer
+    void cancelTimer() {
+        if(cTimer!=null)
+            cTimer.cancel();
+    }
+
 }
 
 
