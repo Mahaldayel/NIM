@@ -1,7 +1,6 @@
 package com.example.hanan.nim_gp.Training;
 
 import com.example.hanan.nim_gp.Game.DeviceListAdapter;
-import com.example.hanan.nim_gp.GameOver.CompletedActivity;
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.ManageDevices.Device;
 import com.example.hanan.nim_gp.ManageDevices.DeviceType;
@@ -185,7 +184,7 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
         mSave_bt.setOnClickListener(this);
 
         mSaveHeadsetLayout = findViewById(R.id.save_device_layout);
-        mFullScreen = findViewById(R.id.full_screen);
+        mFullScreen = findViewById(R.id.full_screen_opacity);
 
         mName_et = findViewById(R.id.new_name_et);
 

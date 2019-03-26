@@ -32,7 +32,7 @@ public class LevelsOfTheGame extends Application {
     private void createArrayListOfLevels() {
 
         //Create first level
-        LevelsOfTheGame level1 = new LevelsOfTheGame(0,100,"RACING",10.0,20.0);
+        LevelsOfTheGame level1 = new LevelsOfTheGame(0,70,"RACING",120,260);
         ArrayListOfLevels.add(level1);
 
         //Create second level

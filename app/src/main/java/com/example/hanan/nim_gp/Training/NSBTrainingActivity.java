@@ -113,6 +113,8 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mDesciption.setTypeface(font);
         mDesciption.setText("Wear your headset, you will be training on two modes the first one will be focus on pushing the car");
 
+        mTrainingCounter = findViewById(R.id.training_counter);
+
         mContext = NSBTrainingActivity.this;
 
         initTrainingInformation();
@@ -373,6 +375,8 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         timer = new Timer();
         initTask();
         timer.schedule(timerTask,TRAINING_TIME);
+        displayCounter();
+
     }
 
     private void initTask() {
@@ -491,8 +495,8 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
     private void displayCounter(){
 
-        final int[] i = {30};
-        CountDownTimer timer = new CountDownTimer(30000,1000) {
+        final int[] i = {(TRAINING_TIME/1000)-2};
+        CountDownTimer timer = new CountDownTimer(TRAINING_TIME,1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -511,4 +515,13 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         };
         timer.start();
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+       NativeNSBInterface.getInstance().UnregisterUnbind();
+    }
+
+
 }

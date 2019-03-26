@@ -1,21 +1,16 @@
 package com.example.hanan.nim_gp.Game;
 
 
-import com.example.hanan.nim_gp.GameOver.CompletedActivity;
-import com.example.hanan.nim_gp.MainActivity;
-import com.example.hanan.nim_gp.ManageDevices.Device;
-import com.example.hanan.nim_gp.ManageDevices.DeviceType;
-import com.example.hanan.nim_gp.R;
-
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,9 +20,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.hanan.nim_gp.Training.NSBTrainingActivity;
+import com.example.hanan.nim_gp.MainActivity;
+import com.example.hanan.nim_gp.ManageDevices.Device;
+import com.example.hanan.nim_gp.ManageDevices.DeviceType;
+import com.example.hanan.nim_gp.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,9 +34,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.neeuro.NativeNSBPlugin.NativeNSBInterface;
-import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.DeviceCallback;
@@ -53,6 +53,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     public final static String NEEURO_ADDRESS_OF_SELECTED_DEVICE = "NEEURO_ADDRESS_OF_SELECTED_DEVICE";
     public final static String ROBOT_ADDRESS_OF_SELECTED_DEVICE = "ROBOT_ADDRESS_OF_SELECTED_DEVICE";
     public final static String HEADSET_ADDRESS_OF_SELECTED_DEVICE = "HEADSET_ADDRESS_OF_SELECTED_DEVICE";
+    public static final int LEVEL_ONE_TIME = 240000;
 
     FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
     String CurrentplayeId = CurrentPlayer.getUid();
@@ -69,6 +70,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     boolean mIsContinueCar;
 
     private String TAG = "BeforeTrainingConnectingWithNeeruo";
+    double millisecondsToMinutes = 0.000016667;
 
 
     boolean startScan = true;
@@ -120,7 +122,6 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     private TextView mSaveHeadsetTitle_tv;
     private Button mQuit_bt;
 
-    private int mScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -301,7 +302,6 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         mContext = this;
         mSelectedHeadsetDeviceIndex = -1;
 
-        mScore = 0;
 
         initElementGetDeviceFromFirebase();
         initAdapter();
@@ -352,7 +352,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         mSave_bt.setOnClickListener(this);
 
         mSaveHeadsetLayout = findViewById(R.id.save_device_layout);
-        mFullScreen = findViewById(R.id.full_screen);
+        mFullScreen = findViewById(R.id.full_screen_opacity);
 
         mName_et = findViewById(R.id.new_name_et);
 
@@ -410,7 +410,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             intent.putExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE,neeuroAddress);
 
         intent.putExtra(SELECTED_GAME_LEVEL_INTENT, mSelectedGameLevel);
-        intent.putExtra(CONTROL_MODE_GAME_INTENT,controlModeNumber);
+        intent.putExtra(CONTROL_MODE_GAME_INTENT,getIntent().getStringExtra(CONTROL_MODE_GAME_INTENT));
         startActivity(intent);
 
 
@@ -680,9 +680,21 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         private TextView focusTextView;
 
         private ConstraintLayout mCompleted_l;
-        private TextView mScore_tv;
+        private ConstraintLayout mFailed_l;
+        private TextView mScore_c_tv;
 
         private Context playContext;
+
+        private long startTime , endTime;
+        private ImageView mFullScreenOpacity;
+        private ImageView starsImageView;
+        private Timer timer;
+        private TimerTask timerTask;
+        private int mScore;
+        private TextView mScore_f_tv;
+        private double numOfStars;
+        private int mSavedScore;
+
 
 
         public void EEG_GetAttention(float result) {
@@ -691,7 +703,6 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             if(controlModeNumber == 2 && !isEnded  && isStarted)
                 if(result > SignalsAvreg)
                     sendToRobot(String.valueOf((int) Math.floor(2)));
-//                    sendToRobot(String.valueOf((int) Math.floor(result/SignalsAvreg)));
 
             focusTextView.setText(String.valueOf(result));
 
@@ -703,7 +714,6 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             if(controlModeNumber == 1 && !isEnded && isStarted)
                 if(result > SignalsAvreg)
                     sendToRobot(String.valueOf((int) Math.floor(2)));
-//                    sendToRobot(String.valueOf((int) Math.floor(result/SignalsAvreg)));
 
 
             relaxTextView.setText(String.valueOf(result));
@@ -747,10 +757,21 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         public void setEnded(Boolean ended) {
             isEnded = ended;
+
+            if(ended){
+                long currentTime =  System.currentTimeMillis();
+                endTime = currentTime - startTime;
+
+            }
         }
 
         public void setStarted(Boolean started) {
             isStarted = started;
+
+            if(started){
+                startTime = System.currentTimeMillis();
+                checkOfEndPlayTimer();
+            }
         }
 
         private void setBluetooth(){
@@ -798,7 +819,6 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         private void receiveMessageFromRobot(){
 
-
             if(controlRobotBluetooth == null){
                 setBluetooth();
             }
@@ -841,23 +861,14 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                             mScore += Integer.parseInt(message);
 
 
-//                            if(playContext != null)
-//                                startActivity(new Intent(playContext, CompletedActivity.class));
-
                         }else{
-
-
-                            if(mScore > 130){
-                                msg.setText(message+"\nScore :"+mScore+"\n Win ");
-                                isEnded = true;
-
+                                setEnded(true);
+                                calculateScore();
                             }
 
-                            mScore_tv.setText(String.valueOf(mScore));
-                            mCompleted_l.setVisibility(View.VISIBLE);
                         }
 
-                    }
+
                     else
                         msg = startPlay1Activity.getmMsg_tv();
                 }
@@ -873,17 +884,124 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             this.focusTextView = focusTextView;
         }
 
+        public void calculateScore(){
+
+            mFullScreenOpacity.setVisibility(View.VISIBLE);
+
+            if(mScore >= 140) { // 140 MUST TO BE CHANGED AFTER DEMO 2
+                mCompleted_l.setVisibility(View.VISIBLE);
+            }
+            else{
+
+                /** Change imageViewStars in failed.xml according to the player score */
+                numOfStars = ((mScore)*(100)/140); // 140 MUST TO BE CHANGED AFTER DEMO 2
+                Drawable new_image = ConnectionWithHeadset.this.getResources().getDrawable(R.drawable.starsunfilled);
+
+
+
+                if (numOfStars >= 25 && numOfStars<50)
+                     new_image= ConnectionWithHeadset.this.getResources().getDrawable(R.drawable.stars25filled);
+                if (numOfStars >= 50 && numOfStars <75)
+                    new_image = ConnectionWithHeadset.this.getResources().getDrawable(R.drawable.stars50filled);
+                if (numOfStars >= 75 && numOfStars <100)
+                    new_image = ConnectionWithHeadset.this.getResources().getDrawable(R.drawable.stars75filled);
+
+                starsImageView.setImageDrawable(new_image);
+                mFailed_l.setVisibility(View.VISIBLE);
+
+            }
+
+            if((endTime*millisecondsToMinutes) > 1)
+                mScore = (int)(mScore / (endTime * millisecondsToMinutes));
+            mScore_c_tv.setText(String.valueOf(mScore));
+            mScore_f_tv.setText(String.valueOf(mScore));
+
+
+
+            //Get player
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String playeId = user.getUid();
+
+            //Update player score
+            DatabaseReference updateData = FirebaseDatabase.getInstance().getReference("PlayersGameInfo").child(playeId);
+            updateData.child("score").setValue(mSavedScore+mScore);
+
+            //Update player level
+            updateData.child("levelNum").setValue(1); //MUST TO BE CHANGED AFTER DEMO 2
+
+        }
 
         public void setComplatedLayout(ConstraintLayout mCompleted_l) {
-
             this.mCompleted_l = mCompleted_l;
         }
 
-        public void setScoreTextView(TextView mScore_tv) {
 
-            this.mScore_tv = mScore_tv;
+        public void setFaildLayout(ConstraintLayout mFailed_l){
+            this.mFailed_l = mFailed_l;
+        }
+
+        public void setScoreCTextView(TextView mScore_tv) {
+            this.mScore_c_tv = mScore_tv;
+        }
+
+        public void setScoreFTextView(TextView mScore_f_tv) {
+
+            this.mScore_f_tv = mScore_f_tv;
+        }
+        public void setFullScreenOpacity(ImageView mFullScreenOpacity) {
+
+            this.mFullScreenOpacity = mFullScreenOpacity;
+        }
+
+
+        public void setStarsImageView(ImageView mStarsImageView) {
+
+            this.starsImageView = mStarsImageView;
+
+        }
+
+        private void checkOfEndPlayTimer(){
+
+            sbDelegate.setEnded(false);
+
+            timer = new Timer();
+            initTask();
+            timer.schedule(timerTask, LEVEL_ONE_TIME);
+
+        }
+
+        private void initTask(){
+
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setEnded(true);
+
+                            calculateScore();
+
+                        }
+                    });
+
+                }
+            };
+        }
+
+
+        public void setSavedScore(int mSavedScore) {
+
+            this.mSavedScore = mSavedScore;
+
+        }
+
+        public boolean getEnded() {
+            return isEnded;
         }
     }
+
 
 
     public class connectionCallBack implements NativeNSBInterface.connectionCallBackInterface

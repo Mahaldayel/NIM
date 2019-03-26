@@ -9,35 +9,36 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.hanan.nim_gp.GameOver.CompletedActivity;
 import com.example.hanan.nim_gp.MainActivity;
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
-import com.neeuro.NativeNSBPlugin.NativeNSBInterface;
-
 import com.example.hanan.nim_gp.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.neeuro.NativeNSBPlugin.NativeNSBInterface;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import me.aflak.bluetooth.Bluetooth;
 
-//import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
-import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.HEADSET_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.NEEURO_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.CONNECTED_DEVICE_INTENT;
-import static com.example.hanan.nim_gp.Game.SelectGameLevelActivity.SELECTED_GAME_LEVEL_INTENT;
-import static com.example.hanan.nim_gp.Game.control_modeActivity.CONTROL_MODE_GAME_INTENT;
+
+//import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
 
 
 public class StartPlay1Activity extends AppCompatActivity implements View.OnClickListener {
@@ -47,11 +48,9 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
     public static final String CONTROL_MODE_GAME_INTENT ="controlMode";
     public static final String CONTROL_GAME_INTENT ="gameMode";
 
-
     public static final int RELAX_NUMBER = 1;
     public static final int FOCUS_NUMBER = 2;
 
-    public static final int END_GAME_TIME = 100;
 
 
     private Bluetooth bluetooth ;
@@ -65,7 +64,7 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
 
 
     private int mSelectedGameLevel;
-    private int mCcontrolModeNumber;
+    private String mCcontrolMode;
 
     private TextView mMsg_tv;
     /*Robot**/
@@ -77,35 +76,39 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
     private int mPlayCounter;
     private String mSelectedRobotDeviceAddress;
 
-    private long GAME_TIME = 200000;
+    private long GAME_TIME = 40000;
 //    private long GAME_TIME = 100000;
 
 
 
     private Button mStart_bt;
     private TextView mGameStartCounter;
-    private ImageView mFullScreen;
+    private ImageView mFullScreenOpacity;
     /*test data*/
     private TextView relax_tv;
     private TextView focus_tv;
 
     private TextView message;
     private Button quit;
-    String controlType;
 
 
     private TextView mTextFeild;
     private CountDownTimer countDownTimer;
-    private final long startTime = 5000;
+    private final long startTime = 4000;
     private final long interval = 1 * 1000;
     private boolean timerHasStarted = false;
     private String mHeadsetAddress;
-    private Context mContext;
+    private Context mContext = StartPlay1Activity.this;
 
     /**/
-    private TextView mScore_tv;
+    private TextView mScore_c_tv;
+    private TextView mScore_f_tv;
     private ConstraintLayout mCompleted_l;
-
+    private ConstraintLayout mFailed_l;
+    private ImageView mStarsImageView;
+    private Button mLevelsBtnC;
+    private Button mLevelsBtnF;
+    private int mSavedScore;
 
     private void initElements(){
 
@@ -116,7 +119,7 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         mStart_bt.setOnClickListener(this);
 
         mGameStartCounter = findViewById(R.id.count);
-        mFullScreen = findViewById(R.id.full_screen);
+        mFullScreenOpacity = findViewById(R.id.full_screen_opacity);
 
         mTextFeild = findViewById(R.id.count);
         countDownTimer = new StartPlay1Activity.MyCountDownTimer(startTime, interval);
@@ -127,7 +130,15 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         message = findViewById(R.id.controlMode);
 
         mCompleted_l = findViewById(R.id.completed_layout);
-        mScore_tv = findViewById(R.id.textViewScore);
+        mFailed_l = findViewById(R.id.failed_layout);
+        mScore_c_tv = findViewById(R.id.textViewScore);
+        mScore_f_tv = findViewById(R.id.textViewScore_f);
+        mStarsImageView =  findViewById(R.id.imageViewStars_f);
+        mLevelsBtnC = findViewById(R.id.LevelsBtn_c);
+        mLevelsBtnC.setOnClickListener(this);
+        mLevelsBtnF = findViewById(R.id.LevelsBtn_f);
+        mLevelsBtnF.setOnClickListener(this);
+
 
         mContext = StartPlay1Activity.this;
 
@@ -173,13 +184,12 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_game);
 
-        initElements();
         getFormIntent();
+        initElements();
+        getSavedScore();
         initBluetoothForRobot();
         initializeSenzeBandBasic();
-        setDataToSbDelegate();
         setTestDataTextView();
-//        checkOfEndPlayTimer();
 
 
 
@@ -192,7 +202,12 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         sbDelegate.setControlRobotBluetooth(bluetooth);
         sbDelegate.setSelectedRobotAddress(mSelectedRobotDeviceAddress);
         sbDelegate.setComplatedLayout(mCompleted_l);
-        sbDelegate.setScoreTextView(mScore_tv);
+        sbDelegate.setFaildLayout(mFailed_l);
+        sbDelegate.setScoreCTextView(mScore_c_tv);
+        sbDelegate.setScoreFTextView(mScore_f_tv);
+        sbDelegate.setFullScreenOpacity(mFullScreenOpacity);
+        sbDelegate.setStarsImageView(mStarsImageView);
+        sbDelegate.setSavedScore(mSavedScore);
         sbDelegate.setStarted(false);
         sbDelegate.setEnded(false);
 
@@ -210,7 +225,7 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         Intent intent = getIntent();
 
         if(intent.hasExtra(CONTROL_MODE_GAME_INTENT)){
-            mCcontrolModeNumber = intent.getIntExtra(CONTROL_MODE_GAME_INTENT,0);
+            mCcontrolMode = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
 
         }
 
@@ -246,29 +261,6 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
 
     /**Robot Car**/
 
-    private void checkOfEndPlayTimer(){
-
-        sbDelegate.setEnded(false);
-
-        timer = new Timer();
-        initTask();
-        timer.schedule(timerTask,GAME_TIME);
-
-    }
-
-    private void initTask(){
-
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                endPlay();
-
-            }
-        };
-    }
-
-
-
     public Bluetooth getBluetooth(){
 
         return bluetooth;
@@ -282,52 +274,11 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
 
 
 
-    private void endPlay() {
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-                sbDelegate.setEnded(true);
-
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        StartPlay1Activity.this);
-                // set title
-                alertDialogBuilder.setTitle("End");
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage("The game is over ")
-                        .setCancelable(false)
-                        .setPositiveButton("Ok",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(
-                                            DialogInterface dialog, int which) {
-
-                                        NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
-
-                                    }
-                                });
-
-
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                try {
-
-                    alertDialog.show();
-                }
-                catch (WindowManager.BadTokenException e) {
-                    //use a log message
-                }
-
-
-
-            }
-        });
-    }
 
     private void startGame() {
 
         mStart_bt.setVisibility(View.GONE);
-        mFullScreen.setVisibility(View.GONE);
+        mFullScreenOpacity.setVisibility(View.GONE);
         mGameStartCounter.setVisibility(View.VISIBLE);
         countDownStart();
     }
@@ -340,11 +291,12 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         message.setTypeface(message_font);
 
 
-        if (mCcontrolModeNumber == FOCUS_NUMBER){
+        if (mCcontrolMode.equals( "Focus")){
             message.setText("Focus To Win");
         }
-        if (mCcontrolModeNumber == RELAX_NUMBER){
-            message.setText("Relax To Win");}
+        if (mCcontrolMode.equals( "Relax")){
+            message.setText("Relax To Win");
+        }
 
     }
 
@@ -359,7 +311,20 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
             case R.id.quit:
                 DeleteMessage();
                 break;
+            case R.id.LevelsBtn_f:
+            case R.id.LevelsBtn_c:
+                goTo(SelectGameLevelActivity.class);
+                break;
         }
+
+    }
+
+    private void goTo(Class nextClass) {
+
+        Context context = this;
+        Intent intent = new Intent(context,nextClass);
+        intent.putExtra(CONTROL_MODE_GAME_INTENT,getIntent().getStringExtra(CONTROL_MODE_GAME_INTENT));
+        startActivity(intent);
 
     }
 
@@ -378,14 +343,12 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
 
         @Override
         public void onFinish() {
-            mTextFeild.setText("GO!");
             if(mTextFeild.getText().equals("GO!")){
                 message.setVisibility(View.VISIBLE);
                 quit.setVisibility(View.VISIBLE);
                 mTextFeild.setVisibility(View.GONE);
 
                 sbDelegate.setStarted(true);
-                checkOfEndPlayTimer();
 
             }
         }
@@ -394,55 +357,82 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         public void onTick(long millisUntilFinished) {
             mTextFeild.setText("  "+millisUntilFinished / 1000);
 
+            if(millisUntilFinished / 1000 == 0)
+                mTextFeild.setText("GO!");
+
+
         }
 
     }
 
     private void DeleteMessage(){
 
+        if(sbDelegate.getEnded()){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle("QUIT");
-        builder.setMessage("Do You Want to Quit Current Game?");
-        builder.setPositiveButton("YES",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
-                        startActivity(new Intent(StartPlay1Activity.this, MainActivity.class));
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(true);
+            builder.setTitle("QUIT");
+            builder.setMessage("Do You Want to Quit Current Game?");
+            builder.setPositiveButton("YES",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
+                            startActivity(new Intent(StartPlay1Activity.this, MainActivity.class));
 
-                    }
-                });
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-                return;
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+                    return;
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }else {
+            startActivity(new Intent(StartPlay1Activity.this, MainActivity.class));
+
+
+        }
 
     }
-
-    public void goToComplatedGame(){
-
-        Context context = this;
-        Class complatedClass = CompletedActivity.class;
-
-        Intent intent = new Intent(context,complatedClass);
-        startActivity(intent);
-    }
-
-
-
-
-
-
 
     public Context getContext(){
 
         return mContext;
+    }
+
+    private void getSavedScore(){
+
+        FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
+        final String CurrentplayeId = CurrentPlayer.getUid();
+        DatabaseReference refrence= FirebaseDatabase.getInstance().getReference().child("PlayersGameInfo");
+
+        refrence.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot child : snapshot.getChildren()) {
+
+                    if(child.getKey().equals(CurrentplayeId)) {
+
+                        mSavedScore = Integer.parseInt(child.child("score").getValue().toString());
+
+                        setDataToSbDelegate();
+
+
+                    }
+
+                }}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+
+
+
+        });
+
     }
 }
