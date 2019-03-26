@@ -624,28 +624,39 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         public TrainingInformation endTrainFocus(TrainingInformation trainingInformation){
 
-            trainingInformation.setAvgFocus(getAvarage(mFocusArray));
-            trainingInformation.setMaxFocus(Collections.max(mFocusArray));
+            if(mFocusArray.size() != 0){
+                trainingInformation.setAvgFocus(getAvarage(mFocusArray));
+                trainingInformation.setMaxFocus(Collections.max(mFocusArray));
 
-            /*test*/
-            avg_foucs.setText("avg : "+String.valueOf(getAvarage(mFocusArray)));
-            max_focus.setText("max : "+ String.valueOf(Collections.max(mFocusArray)));
+                /*test*/
+                avg_foucs.setText("avg : "+String.valueOf(getAvarage(mFocusArray)));
+                max_focus.setText("max : "+ String.valueOf(Collections.max(mFocusArray)));
 
-            return trainingInformation;
+                return trainingInformation;
+
+            }else {
+
+                return null;
+            }
 
         }
         public TrainingInformation endTrainRelax(TrainingInformation trainingInformation){
 
-
-            trainingInformation.setAvgRelax(getAvarage(mRelaxArray));
-            trainingInformation.setMaxRelax(Collections.max(mRelaxArray));
-
-            /*test*/
-            avg_relax.setText("avg : "+String.valueOf(getAvarage(mRelaxArray)));
-            max_relax.setText("max : "+ String.valueOf(Collections.max(mRelaxArray)));
+            if(mRelaxArray.size() != 0){
 
 
-            return trainingInformation;
+                trainingInformation.setAvgRelax(getAvarage(mRelaxArray));
+                trainingInformation.setMaxRelax(Collections.max(mRelaxArray));
+
+                /*test*/
+                avg_relax.setText("avg : "+String.valueOf(getAvarage(mRelaxArray)));
+                max_relax.setText("max : "+ String.valueOf(Collections.max(mRelaxArray)));
+
+
+                return trainingInformation;
+            }else {
+                return null;
+            }
 
         }
 
@@ -740,12 +751,14 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
         public void connectionFail(String s, String s1)
         {
             Log.e(TAG,"Connection fail! " + s1);
+            displayDialog("Connection fail! ");
+
         }
 
         public void connectionBroken(String s)
         {
             Log.e(TAG,"connection broken " + s );
-            displayDialog();
+            displayDialog("Connection Broken ");
 
         }
 
@@ -756,24 +769,36 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
 
 
-        private void displayDialog(){
+        private void displayDialog(final String messageTitle){
 
             nsbTrainingActivity = new NSBTrainingActivity();
             traniningContext = nsbTrainingActivity.getContext();
 
+
+
             if(traniningContext != null){
+
+
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
+                        String message = "The Connection with your headset was fail. \n Please make sure your headset is working and has enough battery ,and try reconnect again";
+
+                        if(messageTitle.equals("Connection fail! "))
+                            message = message;
+                        else if(messageTitle.equals("Connection Broken "))
+                            message = "The Connection with your headset was Broken. \n Please make sure your headset is working and has enough battery ,and try reconnect again";
+
+
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                                 traniningContext);
                         // set title
-                        alertDialogBuilder.setTitle("Connection Broken");
+                        alertDialogBuilder.setTitle(messageTitle);
                         // set dialog message
                         alertDialogBuilder
-                                .setMessage("The Connection with your headset was Broken. \n Please make sure your headset is working and has enough battery ")
+                                .setMessage( message)
                                 .setCancelable(false)
                                 .setPositiveButton("Ok",
                                         new DialogInterface.OnClickListener() {

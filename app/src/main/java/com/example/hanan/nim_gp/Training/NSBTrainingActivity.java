@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -521,6 +522,44 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         super.onStop();
 
        NativeNSBInterface.getInstance().UnregisterUnbind();
+    }
+
+
+    private void displayDialog(){
+
+
+        runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                            mContext);
+                    // set title
+                    alertDialogBuilder.setTitle("Unable to receive your signals");
+                    // set dialog message
+                    alertDialogBuilder
+                            .setMessage(" Unable to receive your signals from your headset. \n Please make sure your headset is working and has enough battery, and try reconnect again ")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(
+                                                DialogInterface dialog, int which) {
+                                            goTo(BeforeTrainingConnectingWithNeeruo.class);
+                                        }
+                                    });
+
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    try {
+
+                        alertDialog.show();
+                    }
+                    catch (WindowManager.BadTokenException e) { }
+
+                }
+            });
+
+
     }
 
 

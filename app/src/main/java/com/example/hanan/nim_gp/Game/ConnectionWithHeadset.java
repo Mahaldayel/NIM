@@ -673,8 +673,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         private Bluetooth controlRobotBluetooth;
         private TextView msg;
-        private Boolean isEnded;
-        private Boolean isStarted;
+        private Boolean isEnded ;
+        private Boolean isStarted ;
 
 
         private TextView relaxTextView;
@@ -700,6 +700,11 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         public void EEG_GetAttention(float result) {
 
+            if(isEnded == null)
+                setEnded(false);
+
+            if(isStarted == null)
+                setStarted(false);
 
             if(controlModeNumber == 2 && !isEnded  && isStarted)
                 if(result > SignalsAvreg)
@@ -712,10 +717,16 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         public void EEG_GetRelaxation(float result) {
 
+            if(isEnded == null)
+                setEnded(false);
+
+            if(isStarted == null)
+                setStarted(false);
+
+
             if(controlModeNumber == 1 && !isEnded && isStarted)
                 if(result > SignalsAvreg)
                     sendToRobot(String.valueOf((int) Math.floor(2)));
-
 
             relaxTextView.setText(String.valueOf(result));
             receiveMessageFromRobot();

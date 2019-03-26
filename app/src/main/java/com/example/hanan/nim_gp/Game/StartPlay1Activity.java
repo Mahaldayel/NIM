@@ -371,7 +371,7 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
 
     private void DeleteMessage(){
 
-        if(sbDelegate.getEnded()){
+        if(!sbDelegate.getEnded()){
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(true);

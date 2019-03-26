@@ -461,7 +461,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.588"
         app:srcCompat="@drawable/separator1" />
-    
+
     <Button
         android:id="@+id/CWbuttonof"
         android:layout_width="90dp"
