@@ -690,7 +690,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         private ImageView starsImageView;
         private Timer timer;
         private TimerTask timerTask;
-        private int mScore;
+        private double mScore;
         private TextView mScore_f_tv;
         private double numOfStars;
         private int mSavedScore;
@@ -888,13 +888,13 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
             mFullScreenOpacity.setVisibility(View.VISIBLE);
 
-            if(mScore >= 140) { // 140 MUST TO BE CHANGED AFTER DEMO 2
+            if(mScore >= 130) { // 140 MUST TO BE CHANGED AFTER DEMO 2
                 mCompleted_l.setVisibility(View.VISIBLE);
             }
             else{
 
                 /** Change imageViewStars in failed.xml according to the player score */
-                numOfStars = ((mScore)*(100)/140); // 140 MUST TO BE CHANGED AFTER DEMO 2
+                numOfStars = ((mScore)*(100)/130); // 140 MUST TO BE CHANGED AFTER DEMO 2
                 Drawable new_image = ConnectionWithHeadset.this.getResources().getDrawable(R.drawable.starsunfilled);
 
 
@@ -912,9 +912,9 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             }
 
             if((endTime*millisecondsToMinutes) > 1)
-                mScore = (int)(mScore / (endTime * millisecondsToMinutes));
-            mScore_c_tv.setText(String.valueOf(mScore));
-            mScore_f_tv.setText(String.valueOf(mScore));
+                mScore = (mScore / (endTime * millisecondsToMinutes));
+            mScore_c_tv.setText(String.valueOf((int)mScore));
+            mScore_f_tv.setText(String.valueOf((int)mScore));
 
 
 
@@ -924,7 +924,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
             //Update player score
             DatabaseReference updateData = FirebaseDatabase.getInstance().getReference("PlayersGameInfo").child(playeId);
-            updateData.child("score").setValue(mSavedScore+mScore);
+            updateData.child("score").setValue(mSavedScore+((int)mScore));
 
             //Update player level
             updateData.child("levelNum").setValue(1); //MUST TO BE CHANGED AFTER DEMO 2
