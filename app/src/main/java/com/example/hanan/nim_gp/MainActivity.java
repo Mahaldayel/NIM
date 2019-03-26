@@ -3,6 +3,8 @@ package com.example.hanan.nim_gp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import com.example.hanan.nim_gp.AccountActivity.FirstPage;
 import com.example.hanan.nim_gp.AccountActivity.ViewAccountActivity;
 import com.example.hanan.nim_gp.Game.control_modeActivity;
+import com.example.hanan.nim_gp.Game.play;
 import com.example.hanan.nim_gp.GameOver.CompletedActivity;
 import com.example.hanan.nim_gp.Training.BeforeTrainingConnectingWithNeeruo;
 import com.example.hanan.nim_gp.leaders.LeadersActivity;
@@ -34,7 +37,10 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
     private Button signout;
     private TextView ScoreView;
     private String Score;
-
+    long currentTime, currentTime2;
+    Handler hand = new Handler();
+   // TextView ti;
+    int i =0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,14 +98,60 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
             signout.setOnClickListener(this);
 
             ScoreView=findViewById(R.id.score1);
+           // startTimer();
+           currentTime=  System.currentTimeMillis();
+run();        }
+
+
+
+
+        public void run() {
+            long totalTime = 30;
+            int i = 2;
+            while (true) {
+                currentTime2 = System.currentTimeMillis();
+                if (currentTime2 - currentTime / 1000 == totalTime) {
+                    totalTime *= i;
+                    System.out.println("HHHHHH" + totalTime);
+                    i += 2;
+                }
+                if (System.currentTimeMillis()- currentTime== 2400000)
+                    break;
+            }
+
+
         }
 
+  // Declare timer
+    CountDownTimer cTimer = null;
+
+    //start timer function
+    void startTimer() {
+        cTimer = new CountDownTimer(30000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                System.out.print("  OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOoooo"+millisUntilFinished);
+
+            }
+            public void onFinish() {
+            }
+        };
+        cTimer.start();
+
+    }
+
+
+    //cancel timer
+    void cancelTimer() {
+        if(cTimer!=null)
+            cTimer.cancel();
+    }
     @Override
     public void onClick(View view) {
 
         switch (view.getId()){
             case R.id.buttonPlay:
-                goTo(control_modeActivity.class);
+                startActivity(new Intent(MainActivity.this, play.class));
+                // goTo(control_modeActivity.class);
                 break;
             case R.id.buttonAccount:
                 goTo(ViewAccountActivity.class);
