@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.ManageDevices.Device;
@@ -224,7 +223,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         mSave_bt.setOnClickListener(this);
 
         mSaveCarLayout = findViewById(R.id.save_device_layout);
-        mFullScreen = findViewById(R.id.full_screen);
+        mFullScreen = findViewById(R.id.full_screen_opacity);
 
         mName_et = findViewById(R.id.new_name_et);
 

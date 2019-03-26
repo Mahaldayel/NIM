@@ -140,7 +140,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/full_screen"
+        android:id="@+id/full_screen_opacity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#88f7e7e1"
@@ -160,7 +160,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:background="@drawable/start_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -169,6 +169,7 @@
 
 
     <!-- Game Over-->
+
     <include
         layout="@layout/activity_completed"/>
 

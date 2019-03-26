@@ -30,8 +30,8 @@ public class FailedActivity extends AppCompatActivity implements View.OnClickLis
 
         textViewScore = findViewById(R.id.textViewScore);
         imageViewLevel = findViewById(R.id.imageViewLevel);
-        LevelsBtn = findViewById(R.id.LevelsBtn);
-        RestartBtn = findViewById(R.id.RestartBtn);
+        LevelsBtn = findViewById(R.id.LevelsBtn_f);
+        RestartBtn = findViewById(R.id.RestartBtn_f);
         imageViewStars = findViewById(R.id.imageViewStars);
 
         LevelsBtn.setOnClickListener(this);

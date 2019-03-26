@@ -29,8 +29,8 @@ public class CompletedActivity extends AppCompatActivity implements View.OnClick
 
         textViewScore = findViewById(R.id.textViewScore);
         imageViewLevel = findViewById(R.id.imageViewLevel);
-        LevelsBtn = findViewById(R.id.LevelsBtn);
-        RestartBtn = findViewById(R.id.RestartBtn);
+        LevelsBtn = findViewById(R.id.LevelsBtn_c);
+        RestartBtn = findViewById(R.id.RestartBtn_c);
 
         LevelsBtn.setOnClickListener(this);
         RestartBtn.setOnClickListener(this);
