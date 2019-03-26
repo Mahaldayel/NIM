@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -890,6 +891,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
             if(mScore >= 130) { // 140 MUST TO BE CHANGED AFTER DEMO 2
                 mCompleted_l.setVisibility(View.VISIBLE);
+
             }
             else{
 
@@ -1028,7 +1030,6 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             Log.e(TAG,"connectionCB error Log " + s );
         }
     }
-
 
 
 

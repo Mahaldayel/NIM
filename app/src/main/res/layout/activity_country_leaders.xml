@@ -446,6 +446,22 @@
         app:layout_constraintVertical_bias="0.557"
         app:srcCompat="@drawable/flag_ae" />
 
+    <ImageView
+        android:id="@+id/Spreator2"
+        android:layout_width="270dp"
+        android:layout_height="13dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.578"
+        app:layout_constraintStart_toStartOf="@+id/imageView7"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.588"
+        app:srcCompat="@drawable/separator1" />
+    
     <Button
         android:id="@+id/CWbuttonof"
         android:layout_width="90dp"

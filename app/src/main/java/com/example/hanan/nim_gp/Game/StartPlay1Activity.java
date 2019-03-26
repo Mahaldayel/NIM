@@ -34,6 +34,7 @@ import java.util.TimerTask;
 
 import me.aflak.bluetooth.Bluetooth;
 
+import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.LEVEL_ONE_TIME;
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.NEEURO_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.CONNECTED_DEVICE_INTENT;
@@ -109,6 +110,7 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
     private Button mLevelsBtnC;
     private Button mLevelsBtnF;
     private int mSavedScore;
+    private TextView mPlayCounter_tv;
 
     private void initElements(){
 
@@ -138,6 +140,8 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         mLevelsBtnC.setOnClickListener(this);
         mLevelsBtnF = findViewById(R.id.LevelsBtn_f);
         mLevelsBtnF.setOnClickListener(this);
+
+        mPlayCounter_tv = findViewById(R.id.play_counter);
 
 
         mContext = StartPlay1Activity.this;
@@ -347,8 +351,8 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
                 message.setVisibility(View.VISIBLE);
                 quit.setVisibility(View.VISIBLE);
                 mTextFeild.setVisibility(View.GONE);
-
                 sbDelegate.setStarted(true);
+                displayCounter();
 
             }
         }
@@ -435,4 +439,49 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         });
 
     }
+
+
+    private void displayCounter(){
+
+
+        final int[] i = {(LEVEL_ONE_TIME/1000)};
+        CountDownTimer timer = new CountDownTimer(LEVEL_ONE_TIME,1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // this method will be executed every second ( 1000 ms : the second parameter in the CountDownTimer constructor)
+
+                if(i[0] == 240 ){
+
+                    mPlayCounter_tv.setText(String.valueOf(i[0]/60)+":"+String.valueOf(i[0]-240));
+
+                } else if(i[0] < 240 && i[0] >= 180){
+
+                    mPlayCounter_tv.setText(String.valueOf(i[0]/60)+":"+String.valueOf(i[0]-180));
+
+                } else if(i[0] < 180 && i[0] >= 120){
+                    mPlayCounter_tv.setText(String.valueOf(i[0]/60)+":"+String.valueOf(i[0]-120));
+
+
+                } else if(i[0] <= 120 && i[0] > 60){
+
+                    mPlayCounter_tv.setText(String.valueOf(i[0]/60)+":"+String.valueOf(i[0]-60));
+
+                }else if(i[0] <= 60 && i[0] > 0) {
+                    mPlayCounter_tv.setText(String.valueOf(i[0]/60)+":"+String.valueOf(i[0]));
+
+                }
+                i[0]--;
+
+            }
+
+            @Override
+            public void onFinish() {
+                // TODO Auto-generated method stub
+
+            }
+        };
+        timer.start();
+    }
+
 }
