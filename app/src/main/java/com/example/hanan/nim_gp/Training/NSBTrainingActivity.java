@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -215,15 +214,15 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
             case R.id.start_training_bt:
                 if(mFinish)
-                    if(checkOfData())
+                    if(checkOfFocusData())
                         saveTrainingInformationOnDatabase();
                     else
                         trainFailed();
                 else
                     startTraining();
                 break;
-            case R.id.try_again_bt:
-                initTrainingInformation();
+                case R.id.try_again_bt:
+//                initTrainingInformation();
                 prepareForFocusTraining();
                 break;
             case R.id.back_bt:
@@ -233,16 +232,29 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    private boolean checkOfData() {
+    private boolean checkOfFocusData() {
+        if(mTainingInformation != null){
 
-        if(mTainingInformation.getAvgFocus() == 0)
-            return false;
-        if(mTainingInformation.getMaxFocus() == 0)
-            return false;
-        if(mTainingInformation.getAvgRelax() == 0)
-            return false;
-        if(mTainingInformation.getMaxRelax() == 0)
-            return false;
+            if(mTainingInformation.getAvgFocus() == 0)
+                return false;
+            if(mTainingInformation.getMaxFocus() == 0)
+                return false;
+
+        }
+
+        return true;
+    }
+
+    private boolean checkOfRelaxData() {
+
+        if(mTainingInformation != null){
+
+            if(mTainingInformation.getAvgRelax() == 0)
+                return false;
+            if(mTainingInformation.getMaxRelax() == 0)
+                return false;
+
+        }
 
         return true;
     }
@@ -259,7 +271,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
     private void goTo(Class nextClass) {
 
-        NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
+//        NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
 
         Context context = NSBTrainingActivity.this;
 
@@ -298,8 +310,8 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
                 mTraining_layout.setVisibility(View.VISIBLE);
 
 
-                if(mCurrentTrainingMode == TRAINING_MODE_RELAX)
-                    mTryAgain_bt.setVisibility(View.VISIBLE);
+//                if(mCurrentTrainingMode == TRAINING_MODE_RELAX)
+//                    mTryAgain_bt.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -357,6 +369,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
         mFinish = true;
         mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.finish_bt));
+        mTryAgain_bt.setVisibility(View.GONE);
         mDesciption.setText("You have completed the calibrating ");
         mCurrentTrainingMode_tv.setText("Relaxation Mode");
         moveBackword();
@@ -387,8 +400,23 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
             public void run() {
 
 
-                    trainSucceed();
-                    timer.cancel();
+                if(mCurrentTrainingMode == TRAINING_MODE_FOCUS){
+                    mTainingInformation = sbDelegate.endTrainFocus(mTainingInformation);
+                    if(checkOfFocusData())
+                        trainSucceed();
+                    else
+                        trainFailed();
+                }
+
+                if(mCurrentTrainingMode == TRAINING_MODE_RELAX){
+                    mTainingInformation = sbDelegate.endTrainRelax(mTainingInformation);
+                    if(checkOfRelaxData())
+                        trainSucceed();
+                    else
+                        trainFailed();
+                }
+
+                timer.cancel();
                     timerTask.cancel();
 
             }
@@ -473,7 +501,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
                                     public void onClick(
                                             DialogInterface dialog, int which) {
 
-                                        prepareForFocusTraining();
+                                        startTraining();
                                     }
                                 });
 
@@ -521,7 +549,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     protected void onStop() {
         super.onStop();
 
-       NativeNSBInterface.getInstance().UnregisterUnbind();
+//       NativeNSBInterface.getInstance().UnregisterUnbind();
     }
 
 

@@ -248,23 +248,20 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
 
 
         progressDialog.show();
-        DatabaseReference refrence = FirebaseDatabase.getInstance().getReference().child("DeviceInformation");
+        DatabaseReference refrence = FirebaseDatabase.getInstance().getReference().child("DeviceInformation").child(playerId);
 
         refrence.addListenerForSingleValueEvent(new ValueEventListener() {
 
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists() ){
-                    for (DataSnapshot child : snapshot.getChildren()) {
 
+                    GenericTypeIndicator<ArrayList<Device>> t = new GenericTypeIndicator<ArrayList<Device>>() {};
+                    ArrayList<Device> value = snapshot.getValue(t);
+                    setData(value);
 
-                        if (child.getKey().equals(playerId)){
+                }else {
 
-                            GenericTypeIndicator<ArrayList<Device>> t = new GenericTypeIndicator<ArrayList<Device>>() {};
-                            ArrayList<Device> value = child.getValue(t);
-                            setData(value);
-
-                        }
-                    }
+                    progressDialog.dismiss();
                 }
             }
             @Override

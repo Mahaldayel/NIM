@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -51,6 +52,8 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
 
     public static final int RELAX_NUMBER = 1;
     public static final int FOCUS_NUMBER = 2;
+
+    private MediaPlayer mPlaymediaPlayer;
 
 
 
@@ -146,6 +149,9 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
 
 
         mContext = StartPlay1Activity.this;
+
+
+        mPlaymediaPlayer =  MediaPlayer.create(this, R.raw.cat_sound);
 
         setPlayCallBack();
         setMessage();
@@ -354,6 +360,8 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
                 mTextFeild.setVisibility(View.GONE);
                 sbDelegate.setStarted(true);
                 displayCounter();
+                mPlaymediaPlayer.start();
+                mPlaymediaPlayer.setLooping(true);
 
             }
         }
@@ -478,6 +486,7 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
                 }
 
                 else {
+                    mPlaymediaPlayer.setLooping(false);
                     playTimer.cancel();
                 }
 

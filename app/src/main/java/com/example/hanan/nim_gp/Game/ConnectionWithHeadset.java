@@ -122,6 +122,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     private Button mQuitSkipLayout_bt;
     private TextView mSaveHeadsetTitle_tv;
     private Button mQuit_bt;
+    private boolean beForeScan;
 
 
     @Override
@@ -187,7 +188,9 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
     private void getDevicesFromFirebase(){
 
-//        progressDialog.show();
+        progressDialog.setMessage("Loading ...");
+        progressDialog.show();
+
         DatabaseReference refrence = FirebaseDatabase.getInstance().getReference().child("DeviceInformation");
 
         refrence.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -219,12 +222,30 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         setSelectedDevicesAddress();
         initAdapter();
-//        if(devices != null)
-//            displaySkipLayout();
+
+        if(IsDeviceArrayListHasHeadset() && beForeScan){
+            progressDialog.dismiss();
+            displaySkipLayout();
+        }
+
+        progressDialog.dismiss();
 
     }
 
+
+    private boolean IsDeviceArrayListHasHeadset(){
+
+        for(Device device: deviceArrayList){
+            if(device.getType().equals(DeviceType.Headset))
+                return true;
+        }
+
+        return false;
+    }
+
     private void displaySkipLayout() {
+
+        beForeScan = false;
 
         mSkip_layout.setVisibility(View.VISIBLE);
         mFullScreen.setVisibility(View.VISIBLE);
@@ -316,6 +337,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
 
+        beForeScan = true;
 
         mQuitSkipLayout_bt = findViewById(R.id.skip_quit_bt);
         mQuitSkipLayout_bt.setOnClickListener(this);
@@ -382,8 +404,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         if(adapterView == headsetsListView){
             selectedDeviceIndex = i;
-//            displaySaveHeadset();
-            play(mNewDevices.get(selectedDeviceIndex).getAddress());
+            displaySaveHeadset();
+//            play(mNewDevices.get(selectedDeviceIndex).getAddress());
 
 
         }
@@ -403,11 +425,11 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 //        if(mIsContinueCar)
 //            intent.putExtra(ROBOT_ADDRESS_OF_SELECTED_DEVICE,mSelectedRobotDeviceAddress);
 //        else
-            intent.putExtra(CONNECTED_DEVICE_INTENT,mConnectedDeviceIndex);
+        intent.putExtra(CONNECTED_DEVICE_INTENT,mConnectedDeviceIndex);
 
-//        if(mIsContinueHeadset)
-//            intent.putExtra(HEADSET_ADDRESS_OF_SELECTED_DEVICE,mSelectedHeadsetDeviceAddress);
-//        else
+        if(mIsContinueHeadset)
+            intent.putExtra(HEADSET_ADDRESS_OF_SELECTED_DEVICE,mSelectedHeadsetDeviceAddress);
+        else
             intent.putExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE,neeuroAddress);
 
         intent.putExtra(SELECTED_GAME_LEVEL_INTENT, mSelectedGameLevel);
@@ -605,22 +627,26 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         private void checkIfheadsetOn(){
 
-            if(!mConnectToHeadset){
-                if(mIsContinueHeadset && mSelectedHeadsetOn)
-                    play(mSelectedHeadsetDeviceAddress);
-                else if(mIsContinueHeadset && !mSelectedHeadsetOn){
-                    //TODO display dialog set your car ON
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-//                            Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (!mConnectToHeadset) {
+                        if (mIsContinueHeadset && mSelectedHeadsetOn) {
+                            mBeforeScanningDeception_tv.setText("ON");
+
+                            play(mSelectedHeadsetDeviceAddress);
+                        } else if (mIsContinueHeadset && !mSelectedHeadsetOn) {
+                            //TODO display dialog set your car ON
+
+                            mBeforeScanningDeception_tv.setText("OFF");
                             progressDialog.dismiss();
                             NativeNSBInterface.getInstance().startStopScanning(false);
 
                         }
-                    });
-            }
-            }
+
+                    }
+                }
+            });
         }
 
         private void dismissPrograss(){
@@ -711,6 +737,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                     sendToRobot(String.valueOf((int) Math.floor(2)));
 
             focusTextView.setText(String.valueOf(result));
+            receiveMessageFromRobot();
 
             }
 

@@ -628,9 +628,11 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
                 trainingInformation.setAvgFocus(getAvarage(mFocusArray));
                 trainingInformation.setMaxFocus(Collections.max(mFocusArray));
 
+                mFocusArray.clear();
+                mRelaxArray.clear();
                 /*test*/
-                avg_foucs.setText("avg : "+String.valueOf(getAvarage(mFocusArray)));
-                max_focus.setText("max : "+ String.valueOf(Collections.max(mFocusArray)));
+//                avg_foucs.setText("avg : "+String.valueOf(getAvarage(mFocusArray)));
+//                max_focus.setText("max : "+ String.valueOf(Collections.max(mFocusArray)));
 
                 return trainingInformation;
 
@@ -648,9 +650,11 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
                 trainingInformation.setAvgRelax(getAvarage(mRelaxArray));
                 trainingInformation.setMaxRelax(Collections.max(mRelaxArray));
 
+                mFocusArray.clear();
+                mRelaxArray.clear();
                 /*test*/
-                avg_relax.setText("avg : "+String.valueOf(getAvarage(mRelaxArray)));
-                max_relax.setText("max : "+ String.valueOf(Collections.max(mRelaxArray)));
+//                avg_relax.setText("avg : "+String.valueOf(getAvarage(mRelaxArray)));
+//                max_relax.setText("max : "+ String.valueOf(Collections.max(mRelaxArray)));
 
 
                 return trainingInformation;

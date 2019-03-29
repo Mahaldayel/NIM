@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.ManageDevices.Device;
@@ -103,6 +104,8 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
     private String mSelectedRobotDeviceAddress;
     private TextView mSaveCarTitle_tv;
     private Button mQuit_bt;
+    private boolean beForeScan;
+    private int mSelectedRobotDeviceIdex;
 
 
     @Override
@@ -167,9 +170,11 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
         mSelectedRobotDeviceIndex = -1;
 
-//        initSaveCarLayoutElements();
-//        initElementToSaveCars();
-//        initSkipLayoutElements();
+        beForeScan = true;
+
+        initSaveCarLayoutElements();
+        initElementToSaveCars();
+        initSkipLayoutElements();
 
 
     }
@@ -193,7 +198,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         mBeforeScanningDeception_tv.setOnClickListener(this);
         mBeforeScanningDeception_tv.setTypeface(font);
 
-        mBeforeScanningDeception_tv.setText("Click continue if you want play with selected car that you played with before, \nelse click scan ");
+        mBeforeScanningDeception_tv.setText("Click continue if you want play with selected car that you played with before, else click scan ");
 
         mSkip_layout = findViewById(R.id.before_scanning_layout);
 
@@ -278,15 +283,18 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
                 checkIfSelectedCarOn();
                 if(mIsContinueCar && mSelectedCarOn) {
+                    mBeforeScanningDeception_tv.setText("ON");
                     timer.cancel();
                     timerTask.cancel();
-                    goToNextActivity();
+                    connectToSelectedDevice(mSelectedRobotDeviceIdex);
+
                 }else if(mIsContinueCar && !mSelectedCarOn)
                     //TODO display dialog set your car ON
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-//                            Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
+
+                            mBeforeScanningDeception_tv.setText("OFF");
 
                         }
                     });
@@ -303,11 +311,14 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
     }
 
+
+
     private void checkIfSelectedCarOn() {
 
         for(BluetoothDevice device: mNewDevices){
             if(device.getAddress().equals(mSelectedRobotDeviceAddress)) {
                 mSelectedCarOn = true;
+                mSelectedRobotDeviceIdex = mNewDevices.indexOf(device);
 
             }
 
@@ -336,13 +347,18 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
 
         if (adapterView == mLvNewDevices){
-            mSelectedRobotDeviceAddress = mNewDevices.get(i).getAddress();
-            mConnectedDevice = mNewDevices.get(i);
-            pairedAndConnectClickedDevice(i);
+            connectToSelectedDevice(i);
         }
 
 
 
+    }
+
+    private void connectToSelectedDevice(int i){
+
+        mSelectedRobotDeviceAddress = mNewDevices.get(i).getAddress();
+        mConnectedDevice = mNewDevices.get(i);
+        pairedAndConnectClickedDevice(i);
     }
 
     private void pairedAndConnectClickedDevice(int i) {
@@ -372,9 +388,13 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
                     public void run() {
                         progressDialog.dismiss();
                         displayNameForExitsDevice(device);
-//                        displaySaveRobotCar();
-                        goToNextActivity();
 
+                        if(!mIsContinueCar)
+                            displaySaveRobotCar();
+                        else {
+                            goToNextActivity();
+
+                        }
 
                     }
                 });
@@ -488,7 +508,6 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
     private void goToNextActivity(){
 
-//        bluetooth.stopScanning();
 
         Context context = ConnectionWithRobotCarActivity.this;
         Class nextClass = ConnectionWithHeadset.class;
@@ -497,6 +516,9 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         int index = mPairedDevices.indexOf(mConnectedDevice);
         if(!mIsContinueCar)
             intent.putExtra(CONNECTED_DEVICE_INTENT,index);
+        else
+            intent.putExtra(CONNECTED_DEVICE_INTENT,index);
+
         intent.putExtra(SELECTED_GAME_LEVEL_INTENT, mSelectedGameLevel);
         intent.putExtra(CONTROL_MODE_GAME_INTENT,mControlMode);
 
@@ -636,6 +658,8 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
     private void getDevicesFromFirebase(){
 
+        progressDialog.setMessage("Loading ...");
+        progressDialog.show();
 
         DatabaseReference refrence = FirebaseDatabase.getInstance().getReference().child("DeviceInformation");
 
@@ -668,13 +692,27 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         this.deviceArrayList = devices;
         setSelectedDevicesAddress();
 
-//        if(devices != null)
-//            displaySkipLayout();
+        if(IsDeviceArrayListHasCar() && beForeScan) {
+            progressDialog.dismiss();
+            displaySkipLayout();
+        }
 
+        progressDialog.dismiss();
+    }
+
+    private boolean IsDeviceArrayListHasCar(){
+
+        for(Device device: deviceArrayList){
+            if(device.getType().equals(DeviceType.RobotCar))
+                return true;
+        }
+
+        return false;
     }
 
     private void displaySkipLayout() {
 
+        beForeScan = false;
         mSkip_layout.setVisibility(View.VISIBLE);
         mFullScreen.setVisibility(View.VISIBLE);
         mQuit_bt.setVisibility(View.GONE);
