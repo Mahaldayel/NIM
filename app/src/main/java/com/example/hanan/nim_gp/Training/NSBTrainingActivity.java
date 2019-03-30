@@ -58,6 +58,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     private Button mStartTraining_bt;
     private Button mTryAgain_bt;
     private Button mBack_bt;
+    private Button mQuit_bt;
     private ImageView mTrainingCar_iv;
     private TextView mDesciption;
     private int mCurrentTrainingMode;
@@ -73,6 +74,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     private TrainingInformation mTainingInformation;
 
     private static Context mContext;
+
 
     /** training callback **/
     BeforeTrainingConnectingWithNeeruo.senzeBandDelegates sbDelegate ;
@@ -104,6 +106,9 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
         mBack_bt = findViewById(R.id.back_bt);
         mBack_bt.setOnClickListener(this);
+
+        mQuit_bt = findViewById(R.id.quit);
+        mQuit_bt.setOnClickListener(this);
 
         mTraining_layout = findViewById(R.id.training_layout);
 
@@ -204,6 +209,9 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         sbDelegate.pumpAvgRelaxationTextView(max_relax);
 
         sbDelegate.pumpBatteryTextView(battery);
+
+
+        connectionCB.setFinish(false);
     }
 
 
@@ -222,11 +230,15 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
                     startTraining();
                 break;
                 case R.id.try_again_bt:
-//                initTrainingInformation();
                 prepareForFocusTraining();
                 break;
             case R.id.back_bt:
                 goTo(BeforeTrainingConnectingWithNeeruo.class);
+                break;
+            case R.id.quit:
+                connectionCB.setFinish(true);
+                NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
+                goTo(MainActivity.class);
                 break;
         }
 
@@ -271,12 +283,15 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
     private void goTo(Class nextClass) {
 
-//        NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
 
         Context context = NSBTrainingActivity.this;
 
         Intent intent = new Intent(context,nextClass);
+        NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
+
         startActivity(intent);
+
+
     }
 
 
@@ -309,9 +324,9 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
                 mStartTraining_bt.setVisibility(View.VISIBLE);
                 mTraining_layout.setVisibility(View.VISIBLE);
 
+                if(mFinish)
+                    mQuit_bt.setVisibility(View.GONE);
 
-//                if(mCurrentTrainingMode == TRAINING_MODE_RELAX)
-//                    mTryAgain_bt.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -414,6 +429,9 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
                         trainSucceed();
                     else
                         trainFailed();
+
+                    connectionCB.setFinish(true);
+
                 }
 
                 timer.cancel();

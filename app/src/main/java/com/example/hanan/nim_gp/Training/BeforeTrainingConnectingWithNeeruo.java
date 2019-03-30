@@ -97,6 +97,7 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
     private Context mContext;
     private boolean mConnectToHeadset;
     private TextView mSaveHeadsetTitle_tv;
+    private boolean beForeScan;
 
 
     @Override
@@ -105,9 +106,7 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
         setContentView(R.layout.activity_before_trining_connecting_with_neeruo);
 
         initElements();
-
-
-//        getDevicesFromFirebase();
+        getDevicesFromFirebase();
         NativeNSBInterface.getInstance().initializeNSB(getApplicationContext(),this,nsbFunctionsCB,scanCB,connectionCB,sbDelegate);
 
     }
@@ -117,8 +116,9 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
         headsetsListView = findViewById(R.id.headsets_lv);
         headsetsListView.setOnItemClickListener(this);
 
-//        headsetsAddressArray = new ArrayList<>();
-//        deviceArrayList = new ArrayList<>();
+        headsetsAddressArray = new ArrayList<>();
+        deviceArrayList = new ArrayList<>();
+
         mContext = this;
 
         mNewDevices = new ArrayList<>();
@@ -137,6 +137,7 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         mSelectedHeadsetDeviceIndex = -1;
 
+        beForeScan = true;
 
         initAdapter();
         initInterfaces();
@@ -165,6 +166,9 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         mBeforeScanningDeception_tv = findViewById(R.id.before_scanning_deception);
         mBeforeScanningDeception_tv.setTypeface(font);
+
+        mBeforeScanningDeception_tv.setText("Click continue if you want play with selected car that you played with before, else click scan ");
+
 
         mSkip_layout = findViewById(R.id.before_scanning_layout);
 
@@ -221,23 +225,25 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
     private void getDevicesFromFirebase(){
 
-//        progressDialog.show();
-        DatabaseReference refrence = FirebaseDatabase.getInstance().getReference().child("DeviceInformation");
+        progressDialog.setMessage("Loading");
+        progressDialog.show();
+
+        DatabaseReference refrence = FirebaseDatabase.getInstance().getReference().child("DeviceInformation").child(playerId);
 
         refrence.addListenerForSingleValueEvent(new ValueEventListener() {
 
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists() ){
-                    for (DataSnapshot child : snapshot.getChildren()) {
 
-                        if (child.getKey().equals(playerId)){
 
-                            GenericTypeIndicator<ArrayList<Device>> t = new GenericTypeIndicator<ArrayList<Device>>() {};
-                            ArrayList<Device> value = child.getValue(t);
-                            setDevices(value);
+                    GenericTypeIndicator<ArrayList<Device>> t = new GenericTypeIndicator<ArrayList<Device>>() {};
+                    ArrayList<Device> value = snapshot.getValue(t);
+                    setDevices(value);
 
-                        }
-                    }
+
+                }else {
+
+                    progressDialog.dismiss();
                 }
             }
             @Override
@@ -253,15 +259,33 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         setSelectedDevicesAddress();
         initAdapter();
-        if(devices != null)
+        if(IsDeviceArrayListHasHeadset() && beForeScan){
+            progressDialog.dismiss();
             displaySkipLayout();
+        }
+
+        progressDialog.dismiss();
 
     }
 
+
+    private boolean IsDeviceArrayListHasHeadset(){
+
+        for(Device device: deviceArrayList){
+            if(device.getType().equals(DeviceType.Headset))
+                return true;
+        }
+
+        return false;
+    }
     private void displaySkipLayout() {
+
+        beForeScan = false;
 
         mSkip_layout.setVisibility(View.VISIBLE);
         mFullScreen.setVisibility(View.VISIBLE);
+        mQuit_bt.setVisibility(View.GONE);
+
 
 
     }
@@ -289,9 +313,9 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         if(adapterView == headsetsListView){
 
-//            selectedDeviceIndex = i;
-//            displaySaveHeadset();
-            goToTrainingActivity(mNewDevices.get(i).getAddress());
+            selectedDeviceIndex = i;
+            displaySaveHeadset();
+//            goToTrainingActivity(mNewDevices.get(i).getAddress());
 
         }
     }
@@ -361,6 +385,8 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         mSkip_layout.setVisibility(View.GONE);
         mFullScreen.setVisibility(View.GONE);
+        mQuit_bt.setVisibility(View.VISIBLE);
+
 
     }
 
@@ -473,15 +499,6 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
             Log.i(TAG,"One NEEURO device found! " +result);
 
-//            dismissPrograss();
-//            if(!headsetsAddressArray.contains(result)){
-//
-//                headsetsAddressArray.add(result);
-//                headsetsListView.setAdapter(adapter);
-//
-//
-//            }
-
             dismissPrograss();
             if(!mNewDevicesString.contains(result)){
 
@@ -498,6 +515,27 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
             }
         }
 
+        private void checkIfheadsetOn(){
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (!mConnectToHeadset) {
+                        if (mIsContinueHeadset && mSelectedHeadsetOn) {
+                            mBeforeScanningDeception_tv.setText("ON");
+
+                            goToTrainingActivity(mSelectedHeadsetDeviceAddress);
+                        } else if (mIsContinueHeadset && !mSelectedHeadsetOn) {
+                            mBeforeScanningDeception_tv.setText("OFF");
+                            progressDialog.dismiss();
+                            NativeNSBInterface.getInstance().startStopScanning(false);
+
+                        }
+
+                    }
+                }
+            });
+        }
         private void dismissPrograss(){
 
             runOnUiThread(new Runnable() {
@@ -508,29 +546,11 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
             });
         }
 
-        private void checkIfheadsetOn(){
-
-            if(!mConnectToHeadset){
-                if(mIsContinueHeadset && mSelectedHeadsetOn)
-                    goToTrainingActivity(mSelectedHeadsetDeviceAddress);
-                else if(mIsContinueHeadset && !mSelectedHeadsetOn){
-                    //TODO display dialog set your car ON
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(mContext,"OFF",Toast.LENGTH_LONG).show();
-                            progressDialog.dismiss();
-                            NativeNSBInterface.getInstance().startStopScanning(false);
-
-                        }
-                    });
-                }
-            }
-        }
 
 
         public void scanReset()
         {
+            checkIfheadsetOn();
             Log.i(TAG,"Scan reset " );
         }
 
@@ -582,6 +602,7 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
 
 
+
         public void EEG_GetAttention(float result) {
 
 
@@ -624,15 +645,14 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         public TrainingInformation endTrainFocus(TrainingInformation trainingInformation){
 
+
             if(mFocusArray.size() != 0){
                 trainingInformation.setAvgFocus(getAvarage(mFocusArray));
                 trainingInformation.setMaxFocus(Collections.max(mFocusArray));
 
                 mFocusArray.clear();
                 mRelaxArray.clear();
-                /*test*/
-//                avg_foucs.setText("avg : "+String.valueOf(getAvarage(mFocusArray)));
-//                max_focus.setText("max : "+ String.valueOf(Collections.max(mFocusArray)));
+
 
                 return trainingInformation;
 
@@ -641,8 +661,10 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
                 return null;
             }
 
+
         }
         public TrainingInformation endTrainRelax(TrainingInformation trainingInformation){
+
 
             if(mRelaxArray.size() != 0){
 
@@ -652,9 +674,6 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
                 mFocusArray.clear();
                 mRelaxArray.clear();
-                /*test*/
-//                avg_relax.setText("avg : "+String.valueOf(getAvarage(mRelaxArray)));
-//                max_relax.setText("max : "+ String.valueOf(Collections.max(mRelaxArray)));
 
 
                 return trainingInformation;
@@ -744,6 +763,7 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
     {
 
         private Context traniningContext;
+        private boolean mFinish;
 
         public void connectionSucceed(String address)
         {
@@ -762,7 +782,9 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
         public void connectionBroken(String s)
         {
             Log.e(TAG,"connection broken " + s );
-            displayDialog("Connection Broken ");
+
+            if(!mFinish)
+                displayDialog("Connection Broken ");
 
         }
 
@@ -841,6 +863,10 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
             startActivity(intent);
         }
 
+        public void setFinish(boolean finish) {
+
+            mFinish = finish;
+        }
     }
 
 

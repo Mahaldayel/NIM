@@ -661,23 +661,20 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         progressDialog.setMessage("Loading ...");
         progressDialog.show();
 
-        DatabaseReference refrence = FirebaseDatabase.getInstance().getReference().child("DeviceInformation");
+        DatabaseReference refrence = FirebaseDatabase.getInstance().getReference().child("DeviceInformation").child(playerId);
 
         refrence.addListenerForSingleValueEvent(new ValueEventListener() {
 
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists() ){
-                    for (DataSnapshot child : snapshot.getChildren()) {
 
+                    GenericTypeIndicator<ArrayList<Device>> t = new GenericTypeIndicator<ArrayList<Device>>() {};
+                    ArrayList<Device> value = snapshot.getValue(t);
+                    setDevices(value);
 
-                        if (child.getKey().equals(playerId)){
+                }else {
 
-                            GenericTypeIndicator<ArrayList<Device>> t = new GenericTypeIndicator<ArrayList<Device>>() {};
-                            ArrayList<Device> value = child.getValue(t);
-                            setDevices(value);
-
-                        }
-                    }
+                    progressDialog.dismiss();
                 }
             }
             @Override
@@ -697,7 +694,6 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
             displaySkipLayout();
         }
 
-        progressDialog.dismiss();
     }
 
     private boolean IsDeviceArrayListHasCar(){

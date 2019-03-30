@@ -487,6 +487,7 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
 
                 else {
                     mPlaymediaPlayer.setLooping(false);
+                    NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
                     playTimer.cancel();
                 }
 

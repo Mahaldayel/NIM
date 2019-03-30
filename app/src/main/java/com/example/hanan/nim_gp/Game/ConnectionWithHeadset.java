@@ -405,8 +405,6 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         if(adapterView == headsetsListView){
             selectedDeviceIndex = i;
             displaySaveHeadset();
-//            play(mNewDevices.get(selectedDeviceIndex).getAddress());
-
 
         }
     }
@@ -421,14 +419,11 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         Intent intent = new Intent(context,nextClass);
 
-        //TODO send device address to next activity
-//        if(mIsContinueCar)
-//            intent.putExtra(ROBOT_ADDRESS_OF_SELECTED_DEVICE,mSelectedRobotDeviceAddress);
-//        else
+
         intent.putExtra(CONNECTED_DEVICE_INTENT,mConnectedDeviceIndex);
 
         if(mIsContinueHeadset)
-            intent.putExtra(HEADSET_ADDRESS_OF_SELECTED_DEVICE,mSelectedHeadsetDeviceAddress);
+            intent.putExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE,mSelectedHeadsetDeviceAddress);
         else
             intent.putExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE,neeuroAddress);
 
@@ -636,8 +631,6 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
                             play(mSelectedHeadsetDeviceAddress);
                         } else if (mIsContinueHeadset && !mSelectedHeadsetOn) {
-                            //TODO display dialog set your car ON
-
                             mBeforeScanningDeception_tv.setText("OFF");
                             progressDialog.dismiss();
                             NativeNSBInterface.getInstance().startStopScanning(false);
@@ -973,6 +966,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             //Update player level
             updateData.child("levelNum").setValue(1); //MUST TO BE CHANGED AFTER DEMO 2
 
+            controlRobotBluetooth.disconnect();
+
         }
 
         public void setComplatedLayout(ConstraintLayout mCompleted_l) {
@@ -1023,9 +1018,14 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            setEnded(true);
 
-                            calculateScore();
+                            if(!getEnded()){
+
+                                setEnded(true);
+                                calculateScore();
+                            }
+
+
 
                         }
                     });
