@@ -1,7 +1,9 @@
 package com.example.hanan.nim_gp.AccountActivity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -15,14 +17,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hanan.nim_gp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -41,16 +44,17 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.UUID;
 
-public class update_accountActivity extends AppCompatActivity implements View.OnClickListener {
-    String email,name1,name,countryCode,Bdate,pic;
-    private TextView mTextViewName;
-    private TextView mTextViewEmail;
+public class UpdateAccountActivity extends AppCompatActivity implements View.OnClickListener {
+
+    String email, oldName,name,countryCode, bDate,pic;
+    private EditText mEditTextName ;
+    private EditText mEditTextVEmail;
     private Button mTextViewCountry;
     private ImageView mTextViewPic;
     private Button mUpdateButton;
     private ImageView back;
     private CountryPicker picker;
-    private TextView mDisplayDate;
+    private EditText mDisplayDate;
     private StorageReference mStorage;
     private DatabaseReference mDatabase;
     boolean  available ;
@@ -59,8 +63,12 @@ public class update_accountActivity extends AppCompatActivity implements View.On
     StorageReference storageReference;
     FirebaseStorage storage;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
+    private boolean availableIsUpdated;
+    private Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
@@ -97,7 +105,7 @@ public class update_accountActivity extends AppCompatActivity implements View.On
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
                 System.out.println("problem to read value ");
-                Toast.makeText(update_accountActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(UpdateAccountActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
             }
 
         });
@@ -121,7 +129,7 @@ public class update_accountActivity extends AppCompatActivity implements View.On
                     int day = cal.get(Calendar.DAY_OF_MONTH);
 
                     DatePickerDialog dialog = new DatePickerDialog(
-                            update_accountActivity.this,
+                            UpdateAccountActivity.this,
                             android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                             mDateSetListener,
                             year,month,day);
@@ -137,7 +145,7 @@ public class update_accountActivity extends AppCompatActivity implements View.On
                     //Log.d(TAG, "onDateSet: mm/dd/yyy: " + month + "/" + day + "/" + year);
                     String date = month + "/" + day + "/" + year;
                     mDisplayDate.setText(date);
-                    Bdate=date;
+                    bDate =date;
 
                 }
             };
@@ -147,33 +155,36 @@ public class update_accountActivity extends AppCompatActivity implements View.On
     private void initElements(){
         mStorage = FirebaseStorage.getInstance().getReference();
 
-        mTextViewEmail=findViewById(R.id.email);
+        mEditTextVEmail = findViewById(R.id.email);
         Typeface playerEmail_font = Typeface.createFromAsset(getAssets(),  "fonts/Lalezar-Regular.ttf");
-        mTextViewEmail.setTypeface(playerEmail_font);
+        mEditTextVEmail.setTypeface(playerEmail_font);
 
-        mTextViewCountry=findViewById(R.id.countryCode);
+        mTextViewCountry = findViewById(R.id.countryCode);
         Typeface country_font = Typeface.createFromAsset(getAssets(),  "fonts/Lalezar-Regular.ttf");
         mTextViewCountry.setTypeface(country_font);
 
-        mTextViewName=findViewById(R.id.userName);
+        mEditTextName = findViewById(R.id.userName);
         Typeface playerName_font = Typeface.createFromAsset(getAssets(),  "fonts/Lalezar-Regular.ttf");
-        mTextViewName.setTypeface(playerName_font);
+        mEditTextName.setTypeface(playerName_font);
 
-        mUpdateButton=findViewById(R.id.update_button);
+        mUpdateButton = findViewById(R.id.update_button);
         Typeface updateButton_font = Typeface.createFromAsset(getAssets(),  "fonts/Lalezar-Regular.ttf");
         mUpdateButton.setTypeface(updateButton_font);
 
-        mDisplayDate = (TextView) findViewById(R.id.date_tv);
+        mDisplayDate =  findViewById(R.id.date_tv);
         Typeface playerBdate_font = Typeface.createFromAsset(getAssets(),  "fonts/Lalezar-Regular.ttf");
         mDisplayDate.setTypeface(playerBdate_font);
 
-        mTextViewPic=findViewById(R.id.playerImage_iv);
-        back=findViewById(R.id.back);
+        mTextViewPic = findViewById(R.id.playerImage_iv);
+        back = findViewById(R.id.back);
 
         mUpdateButton.setOnClickListener(this);
         back.setOnClickListener(this);
         mTextViewPic.setOnClickListener(this);
         mTextViewCountry.setOnClickListener(this);
+
+        availableIsUpdated = false;
+        mContext = this;
 
 
     }
@@ -182,35 +193,11 @@ public class update_accountActivity extends AppCompatActivity implements View.On
     public void onClick(View view) {
         if(view == mUpdateButton) {
             uploadImage();
-            email = mTextViewEmail.getText().toString();
-            name = mTextViewName.getText().toString();
-            Bdate =mDisplayDate.getText().toString();
-            if(email.equals("")||countryCode.equals("")||name.equals("")|| Bdate.equals("")){
-                Toast.makeText(update_accountActivity.this, "empty field not accepted ", Toast.LENGTH_SHORT).show();
-            }
-            if(!name1.equals(name)){
-                checkUsernameAvailability();
-            if(!available){
+            beforeUpdate();
 
-                Toast.makeText(update_accountActivity.this,"This username is already taken, Please enter another one",Toast.LENGTH_LONG).show();
-                return;}
-            }
-            else{
-
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                String playeId = user.getUid();
-                DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Players").child(playeId);
-
-            rootRef.child("email").setValue(email);
-            rootRef.child("countyCode").setValue(countryCode);
-            rootRef.child("username").setValue(name);
-          //  rootRef.child("picURL").setValue(pic);
-            rootRef.child("birthDate").setValue(Bdate);
-            updateSuccessfully();
-
-        }}
+           }
     if(view==back){
-        startActivity(new Intent(update_accountActivity.this, ViewAccountActivity.class));}
+        startActivity(new Intent(UpdateAccountActivity.this, ViewAccountActivity.class));}
     if(view==mTextViewPic){
         //selectImage();
     }
@@ -218,27 +205,120 @@ public class update_accountActivity extends AppCompatActivity implements View.On
         openPicker();
     }
     }
+
+    private void beforeUpdate(){
+
+        getPlayerIntonationFields();
+        if(!oldName.equals(name))
+            checkUsernameAvailability(name,this);
+        else
+            update(false, name, email, bDate,false);
+    }
+
+    public boolean update(boolean checkUsernameAvailability, String nameStr, String emailStr, String bDateStr,boolean forTest) {
+
+        if(!emailNotEmpty(emailStr) || !nameNotEmpty(nameStr)|| !birthDateNotEmpty(bDateStr) ){
+            displayToast("empty field not accepted ",forTest);
+            return false;
+        }
+        if(checkUsernameAvailability)
+            if(getAvailableIsUpdated() && !getAvailable()){
+                displayToast("This username is already taken, Please enter another one",forTest);
+                return false;
+        }
+
+        updateFirebase(forTest);
+        return true;
+
+    }
+
+    private void displayToast(String message,boolean forTest){
+
+        if(forTest)
+            return;
+
+        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+
+    }
+
+    public boolean emailNotEmpty(String emailStr) {
+
+        if(emailStr.equals(""))
+            return false;
+        return true;
+    }
+
+
+    public boolean nameNotEmpty(String nameStr) {
+
+        if(nameStr.equals(""))
+            return false;
+        return true;
+    }
+
+    public boolean birthDateNotEmpty(String bDateStr) {
+
+        if(bDateStr.equals(""))
+            return false;
+        return true;
+    }
+
+    private void updateFirebase(boolean forTest) {
+
+        if(forTest)
+            return;
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String playeId = user.getUid();
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Players").child(playeId);
+
+        rootRef.child("email").setValue(email);
+        rootRef.child("countyCode").setValue(countryCode);
+        rootRef.child("username").setValue(name);
+        rootRef.child("birthDate").setValue(bDate);
+        updateSuccessfully();
+
+    }
+
+
+
+    public String getInformationFromField(EditText editText){
+
+        return editText.getText().toString();
+    }
+
+    private void getPlayerIntonationFields() {
+
+        email = getInformationFromField(mEditTextVEmail);
+        name = getInformationFromField(mEditTextName);
+        bDate = getInformationFromField(mDisplayDate);
+
+
+    }
+
     public void openPicker(){
         picker.show(getSupportFragmentManager(), "COUNTRY_PICKER");
 
     }
     private void updateSuccessfully() {
-        Toast.makeText(update_accountActivity.this, "The Information was Updated", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(update_accountActivity.this, ViewAccountActivity.class));}
+        Toast.makeText(UpdateAccountActivity.this, "The Information was Updated", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(UpdateAccountActivity.this, ViewAccountActivity.class));}
 
     private void getData(DataSnapshot dataSnapshot) {
 
         countryCode = (String) dataSnapshot.child("countyCode").getValue();
-        Bdate=(String)dataSnapshot.child("birthDate").getValue();
+        bDate =(String)dataSnapshot.child("birthDate").getValue();
         email = (String) dataSnapshot.child("email").getValue();
-        name1 = (String) dataSnapshot.child("username").getValue();
-        pic=(String)dataSnapshot.child("picURL").getValue();
+        oldName = (String) dataSnapshot.child("username").getValue();
+        pic = (String)dataSnapshot.child("picURL").getValue();
         Picasso.get().load(pic).into(mTextViewPic);
-            mTextViewEmail.setText(email);
+            mEditTextVEmail.setText(email);
             mTextViewCountry.setText(String.valueOf(countryCode));
-            mTextViewName.setText(name1);
-            mDisplayDate.setText(Bdate);
+            mEditTextName.setText(oldName);
+            mDisplayDate.setText(bDate);
         }
+
+
     private void uploadImage() {
 
         if(filePath != null){
@@ -274,7 +354,7 @@ public class update_accountActivity extends AppCompatActivity implements View.On
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(update_accountActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UpdateAccountActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
 
                     });
@@ -299,26 +379,29 @@ public class update_accountActivity extends AppCompatActivity implements View.On
     }
 
 
-    public void checkUsernameAvailability(){
+    public void checkUsernameAvailability(String nameStr, Context context){
 
-
-
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Players");
+        FirebaseApp.initializeApp(context);
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Players");
 
         //check if the username exist in Database or not
-        mDatabase.orderByChild("username").equalTo(name)
+        database.orderByChild("username").equalTo(nameStr)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
 
-                            available =false;
+                            setAvailable(false);
 
                             //the username exists
                         } else {
-                            available =true;
+                            setAvailable(true);
+
 
                         }
+
+                        setAvailableIsUpdatede(true);
+                        update(true,name,email,bDate,false);
                     }
 
                     @Override
@@ -329,6 +412,32 @@ public class update_accountActivity extends AppCompatActivity implements View.On
                 });
 
 
+    }
+
+    public boolean getAvailable(){
+
+        return available;
+    }
+
+
+    public void setAvailable(boolean available){
+
+        this.available = available;
+    }
+
+    public void setAvailableIsUpdatede(boolean availableIsUpdated){
+
+        this.availableIsUpdated = availableIsUpdated;
+    }
+
+    public boolean getAvailableIsUpdated(){
+
+        return availableIsUpdated;
+    }
+
+    public  Activity getContext(){
+
+        return UpdateAccountActivity.this;
     }
 
 

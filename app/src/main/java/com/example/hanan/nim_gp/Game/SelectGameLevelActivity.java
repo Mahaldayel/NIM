@@ -1,5 +1,6 @@
 package com.example.hanan.nim_gp.Game;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -206,7 +207,15 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
         }
 
 
-        mHigherAvalableLevel = (int)(mPlyaerScore/100);
+
+        mHigherAvalableLevel = getHigherAvalableLevel(mPlyaerScore);
+
+
+    }
+
+    public int getHigherAvalableLevel(double playerScore) {
+
+       return  (int)(playerScore/100);
 
 
     }
@@ -318,7 +327,7 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
 
     }
 
-    private void hideScoreLayout(){
+    public void hideScoreLayout(){
 
         mScoreFullScreen.setVisibility(View.GONE);
         mScoreLayout.setVisibility(View.GONE);
@@ -326,4 +335,6 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
         mQuitButton.setVisibility(View.VISIBLE);
         mBackButton.setVisibility(View.VISIBLE);
     }
+
+
 }

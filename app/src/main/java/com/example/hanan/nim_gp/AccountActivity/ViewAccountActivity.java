@@ -52,6 +52,7 @@ public class ViewAccountActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
+
         progressDialog = new ProgressDialog(this);
         initElements();
 
@@ -141,9 +142,9 @@ public class ViewAccountActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View view) {
         if(view == mUpdateButton){
-            startActivity(new Intent(ViewAccountActivity.this,update_accountActivity.class));
+            startActivity(new Intent(ViewAccountActivity.this,UpdateAccountActivity.class));
             }
-            if(view==password){  startActivity(new Intent(ViewAccountActivity.this, changeUserPassword.class));
+            if(view==password){  startActivity(new Intent(ViewAccountActivity.this, ChangeUserPassword.class));
             }
             if(view==deleteAccount){
                 startActivity(new Intent(ViewAccountActivity.this,DeleteAccount.class));

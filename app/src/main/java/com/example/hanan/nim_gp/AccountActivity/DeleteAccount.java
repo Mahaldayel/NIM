@@ -27,21 +27,29 @@ public class DeleteAccount extends AppCompatActivity implements View.OnClickList
     ProgressDialog progressDialog;
     Boolean Deleted = false;
     final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading...");
+
+
+        initElements();
         DeleteMessage();
 
 
 
+    }
+
+    private void initElements(){
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
 
         database = FirebaseDatabase.getInstance().getReference().child("Players");
 
         DeleteButton = findViewById(R.id.DeleteAccount);
-
         DeleteButton.setOnClickListener(this);
 
     }

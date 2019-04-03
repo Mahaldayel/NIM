@@ -1,4 +1,4 @@
-package com.example.hanan.nim_gp.Game;
+package com.example.hanan.nim_gp.Levels;
 
 import android.app.Application;
 
@@ -6,12 +6,12 @@ import java.util.ArrayList;
 
 public class LevelsOfTheGame extends Application {
 
-    private int levelNum;
-    private int levelScore;
-    private String levelName;
-    private double levelOptimalTime;
-    private double levelMaxTime;
-    ArrayList<LevelsOfTheGame> ArrayListOfLevels=new ArrayList<LevelsOfTheGame>();
+    protected int levelNum; // may be deleted
+    protected int levelScore;
+    protected String levelName;
+    protected double levelOptimalTime;
+    protected double levelMaxTime;
+    ArrayList<LevelsOfTheGame> ArrayListOfLevels = new ArrayList<LevelsOfTheGame>(); // may be deleted
 
 
     public LevelsOfTheGame(){}

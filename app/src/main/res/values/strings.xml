@@ -31,4 +31,6 @@
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
     <string name="email_id">Email ID</string>
     <string name="title_activity_start_play1">StartPlay1Activity</string>
+
+    <string name="hello_world">Hello </string>
 </resources>

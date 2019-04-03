@@ -24,7 +24,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".Game.LevelsOfTheGame">
+        android:name=".Levels.LevelsOfTheGame">
         <activity
             android:name=".Game.StartPlay1Activity"
             android:label="@string/title_activity_start_play1"
@@ -47,8 +47,8 @@
 
         <activity android:name=".MainActivity" />
         <activity android:name=".AccountActivity.ResetPasswordActivity" />
-        <activity android:name=".AccountActivity.changeUserPassword" />
-        <activity android:name=".AccountActivity.update_accountActivity" />
+        <activity android:name=".AccountActivity.ChangeUserPassword" />
+        <activity android:name=".AccountActivity.UpdateAccountActivity" />
         <activity android:name=".AccountActivity.ViewAccountActivity" />
         <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo"></activity>
         <activity android:name=".Training.NSBTrainingActivity"></activity>

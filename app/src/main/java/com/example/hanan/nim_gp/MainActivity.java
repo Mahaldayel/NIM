@@ -134,4 +134,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         Intent intent = new Intent(context,nextClass);
         startActivity(intent);
     }
+
+
+
 }

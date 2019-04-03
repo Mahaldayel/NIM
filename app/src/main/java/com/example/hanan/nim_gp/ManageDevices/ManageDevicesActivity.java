@@ -237,7 +237,8 @@ public class ManageDevicesActivity extends AppCompatActivity implements AdapterV
 
     }
 
-    private void hideLayout(){
+    public void hideLayout(){
+
 
         mScoreFullScreen.setVisibility(View.GONE);
         mLayout.setVisibility(View.GONE);

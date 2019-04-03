@@ -21,7 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class changeUserPassword extends AppCompatActivity implements View.OnClickListener{
+public class ChangeUserPassword extends AppCompatActivity implements View.OnClickListener{
     EditText editTextPassword,editTextRepeatPassword;
     private Button buttonupdate;
     private ImageView back;
@@ -68,7 +68,7 @@ public class changeUserPassword extends AppCompatActivity implements View.OnClic
             change(v);
 
         }
-        if(v==back){   startActivity(new Intent(changeUserPassword.this, ViewAccountActivity.class));}
+        if(v==back){   startActivity(new Intent(ChangeUserPassword.this, ViewAccountActivity.class));}
     }
 
 
@@ -86,11 +86,11 @@ public class changeUserPassword extends AppCompatActivity implements View.OnClic
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             dialog.dismiss();
-                            Toast.makeText(changeUserPassword.this, "Your password changed successfully! ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChangeUserPassword.this, "Your password changed successfully! ", Toast.LENGTH_SHORT).show();
                             goToHome();
                         } else {
                             dialog.dismiss();
-                            Toast.makeText(changeUserPassword.this, "Your password could not change! ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChangeUserPassword.this, "Your password could not change! ", Toast.LENGTH_SHORT).show();
 
                         }
 
@@ -145,7 +145,7 @@ public class changeUserPassword extends AppCompatActivity implements View.OnClic
     /**/
     private void goToHome(){
 
-        Context context = changeUserPassword.this;
+        Context context = ChangeUserPassword.this;
         Class homeClass = MainActivity.class;
         Intent intent = new Intent(context,homeClass);
         startActivity(intent);
