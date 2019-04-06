@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -109,6 +108,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     private ArrayList<Device> mNewDevices;
     private ArrayList<String> mNewDevicesString;
     private DeviceListAdapter mNewDeviceListAdapter;
+    private int distance;
 
     private Button mContinue_bt;
     private Button mGoToScan_bt;
@@ -893,8 +893,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
                         if(Integer.parseInt(message) == Integer.parseInt(String.valueOf("2")))
                         {
-                            msg.setText(message+"\nScore :"+mScore);
-                            mScore += Integer.parseInt(message);
+                            msg.setText(message+"\nScore :"+distance);
+                            distance += Integer.parseInt(message);
 
 
                         }else{
@@ -924,14 +924,16 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
             mFullScreenOpacity.setVisibility(View.VISIBLE);
 
-            if(mScore >= 130) { // 140 MUST TO BE CHANGED AFTER DEMO 2
-                mCompleted_l.setVisibility(View.VISIBLE);
+            //Calculate score
+            mScore = (distance / (endTime * millisecondsToMinutes));
 
+            if(mScore >= 65) { // 65 MUST TO BE CHANGED
+                mCompleted_l.setVisibility(View.VISIBLE);
             }
             else{
 
                 /** Change imageViewStars in failed.xml according to the player score */
-                numOfStars = ((mScore)*(100)/130); // 140 MUST TO BE CHANGED AFTER DEMO 2
+                numOfStars = ((mScore/65)*100); // 65 MUST TO BE CHANGED
                 Drawable new_image = ConnectionWithHeadset.this.getResources().getDrawable(R.drawable.starsunfilled);
 
 
@@ -948,8 +950,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
             }
 
-            if((endTime*millisecondsToMinutes) > 1)
-                mScore = (mScore / (endTime * millisecondsToMinutes));
+//            if((endTime*millisecondsToMinutes) > 1)
+//                mScore = (mScore / (endTime * millisecondsToMinutes));
             mScore_c_tv.setText(String.valueOf((int)mScore));
             mScore_f_tv.setText(String.valueOf((int)mScore));
 
@@ -963,8 +965,9 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             DatabaseReference updateData = FirebaseDatabase.getInstance().getReference("PlayersGameInfo").child(playeId);
             updateData.child("score").setValue(mSavedScore+((int)mScore));
 
+            //Check total score
             //Update player level
-            updateData.child("levelNum").setValue(1); //MUST TO BE CHANGED AFTER DEMO 2
+            updateData.child("levelNum").setValue(1); //MUST TO BE CHANGED
 
             controlRobotBluetooth.disconnect();
 
