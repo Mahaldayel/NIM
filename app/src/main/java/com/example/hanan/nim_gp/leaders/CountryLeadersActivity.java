@@ -1,5 +1,6 @@
 package com.example.hanan.nim_gp.leaders;
 
+import android.app.ProgressDialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -42,6 +43,7 @@ public class CountryLeadersActivity extends AppCompatActivity {
     FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
     String CurrentplayeId = CurrentPlayer.getUid();
 String CurrentPlayerCountryCode;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -50,6 +52,7 @@ String CurrentPlayerCountryCode;
         setContentView(R.layout.activity_country_leaders);
         ininatItems();
         retrivePlayerInfo();
+
 
     }
 
@@ -110,9 +113,15 @@ String CurrentPlayerCountryCode;
         CurrentPlayerScore.setTypeface(typeface);
         CurrentPlayerOrder.setTypeface(typeface);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading ...");
+        progressDialog.show();
+
     }
 
     private void retrivePlayerInfo(){
+
+
         refrence.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -160,6 +169,7 @@ String CurrentPlayerCountryCode;
                     thirdpic.setVisibility(View.INVISIBLE);
                 }
                 retrivePlayerScore();
+
 
             }
             @Override
@@ -214,6 +224,7 @@ if(players.get(i).getID().equals(Scores.get(j).getID()))
         ReciclerViewLBAdapterActivity reciclerViewLBAdapter = new ReciclerViewLBAdapterActivity (this, read());
         recyclerView.setAdapter(reciclerViewLBAdapter);
         recyclerView.setHasFixedSize(true);
+        progressDialog.dismiss();
     }
 
 

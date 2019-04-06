@@ -1,5 +1,6 @@
 package com.example.hanan.nim_gp.leaders;
 
+import android.app.ProgressDialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -39,8 +40,7 @@ TextView Player1Name,Player2Name,Player3Name,CurrentPlayerName,Player1Score,Play
 FlagImageView Player1Country,Player2Country,Player3Country,CurrentPlayerCountry;
     FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
     String CurrentplayeId = CurrentPlayer.getUid();
-
-
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -112,6 +112,10 @@ FlagImageView Player1Country,Player2Country,Player3Country,CurrentPlayerCountry;
             CurrentPlayerName.setTypeface(typeface);
             CurrentPlayerScore.setTypeface(typeface);
             CurrentPlayerOrder.setTypeface(typeface);
+
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Loading ...");
+            progressDialog.show();
         }
 
 
@@ -218,6 +222,7 @@ String id=child.getKey();
  ReciclerViewLBAdapterActivity reciclerViewLBAdapter = new ReciclerViewLBAdapterActivity (this, read());
        recyclerView.setAdapter(reciclerViewLBAdapter);
        recyclerView.setHasFixedSize(true);
+       progressDialog.dismiss();
     }
 
     private void arrange() {

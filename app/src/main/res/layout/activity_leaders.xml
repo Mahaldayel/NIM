@@ -220,7 +220,6 @@
 
         android:layout_marginBottom="8dp"
 
-        android:text="Shahad1"
 
         android:textSize="13dp"
 
@@ -390,8 +389,6 @@
         android:layout_marginEnd="8dp"
 
         android:layout_marginBottom="8dp"
-
-        android:text="Shahad2"
 
         android:textSize="13dp"
 
@@ -563,7 +560,6 @@
 
         android:layout_marginBottom="8dp"
 
-        android:text="Shahad3"
 
         android:textSize="13dp"
 
@@ -823,7 +819,6 @@
 
         android:layout_marginBottom="8dp"
 
-        android:text="Shahad"
 
         android:textSize="13dp"
        android:textStyle="italic"
