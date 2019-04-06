@@ -51,7 +51,7 @@ public class ViewAccountActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.profile);
+        setContentView(R.layout.activity_view_account);
 
         progressDialog = new ProgressDialog(this);
         initElements();

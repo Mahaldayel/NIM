@@ -65,6 +65,7 @@ public class UpdateAccountActivity extends AppCompatActivity implements View.OnC
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private boolean availableIsUpdated;
     private Context mContext;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,12 +187,17 @@ public class UpdateAccountActivity extends AppCompatActivity implements View.OnC
         availableIsUpdated = false;
         mContext = this;
 
+        progressDialog = new ProgressDialog(this);
+
+
 
     }
 
     @Override
     public void onClick(View view) {
         if(view == mUpdateButton) {
+            progressDialog.setMessage("Updating ...");
+            progressDialog.show();
             uploadImage();
             beforeUpdate();
 
@@ -218,11 +224,13 @@ public class UpdateAccountActivity extends AppCompatActivity implements View.OnC
     public boolean update(boolean checkUsernameAvailability, String nameStr, String emailStr, String bDateStr,boolean forTest) {
 
         if(!emailNotEmpty(emailStr) || !nameNotEmpty(nameStr)|| !birthDateNotEmpty(bDateStr) ){
+            progressDialog.dismiss();
             displayToast("empty field not accepted ",forTest);
             return false;
         }
         if(checkUsernameAvailability)
             if(getAvailableIsUpdated() && !getAvailable()){
+                progressDialog.dismiss();
                 displayToast("This username is already taken, Please enter another one",forTest);
                 return false;
         }
@@ -301,8 +309,13 @@ public class UpdateAccountActivity extends AppCompatActivity implements View.OnC
 
     }
     private void updateSuccessfully() {
+        progressDialog.dismiss();
         Toast.makeText(UpdateAccountActivity.this, "The Information was Updated", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(UpdateAccountActivity.this, ViewAccountActivity.class));}
+
+        startActivity(new Intent(UpdateAccountActivity.this, ViewAccountActivity.class));
+
+
+    }
 
     private void getData(DataSnapshot dataSnapshot) {
 
@@ -406,7 +419,7 @@ public class UpdateAccountActivity extends AppCompatActivity implements View.OnC
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        progressDialog.dismiss();
                     }
 
                 });

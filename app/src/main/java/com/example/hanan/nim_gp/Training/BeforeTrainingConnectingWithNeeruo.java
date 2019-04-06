@@ -352,6 +352,8 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
                 goTo(MainActivity.class);
                 break;
             case R.id.save_bt:
+                progressDialog.setMessage("Saving ...");
+                progressDialog.show();
                 save();
                 break;
             case R.id.layout_quit_bt:
@@ -393,6 +395,7 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
     /*save headset*/
     private void displaySaveHeadset(){
 
+        mStart_bt.setVisibility(View.GONE);
         mSaveHeadsetLayout.setVisibility(View.VISIBLE);
         mFullScreen.setVisibility(View.VISIBLE);
         displayNameForExitsDevice(mNewDevices.get(selectedDeviceIndex).getAddress());
@@ -419,10 +422,12 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         mSaveHeadsetLayout.setVisibility(View.GONE);
         mFullScreen.setVisibility(View.GONE);
+        mStart_bt.setVisibility(View.VISIBLE);
 
     }
 
     private void save() {
+
 
 
         if(removeDuplicate()){

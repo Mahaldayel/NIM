@@ -264,7 +264,7 @@
                        android:layout_height="wrap_content"
                        android:layout_gravity="center_horizontal"
                        android:text="Change Password"
-                       android:textColor="@color/colorBrown"
+                       android:textColor="#583100"
                        android:textSize="20dp"
                        android:textStyle="bold" />
 
@@ -277,7 +277,7 @@
                     android:layout_marginTop="10dp"
                     android:text="Delete Account"
                     android:textSize="20dp"
-                    android:textColor="@color/colorBrown"
+                    android:textColor="#f40004"
                     android:textStyle="bold" />
 
             </LinearLayout>
