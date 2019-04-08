@@ -73,7 +73,6 @@ dependencies {
     })
     implementation 'com.android.volley:volley:1.1.0'
 
-
     // Required -- JUnit 4 framework
     testImplementation 'junit:junit:4.12'
     // Optional -- Robolectric environment

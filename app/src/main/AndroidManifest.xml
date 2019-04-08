@@ -16,6 +16,7 @@
         android:required="true" />
 
     <application
+        android:name=".Levels.LevelsOfTheGame"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
@@ -23,16 +24,14 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".Levels.LevelsOfTheGame">
+        android:theme="@style/AppTheme">
+        <activity android:name=".Challenge.SendChallenge"></activity>
         <activity
             android:name=".Game.StartPlay1Activity"
             android:label="@string/title_activity_start_play1"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".GameOver.FailedActivity" />
-        <activity android:name=".GameOver.CompletedActivity" >
-
-        </activity>
+        <activity android:name=".GameOver.CompletedActivity"></activity>
         <activity android:name=".AccountActivity.CropView" />
         <activity android:name=".AccountActivity.FirstPage">
             <intent-filter>
@@ -44,15 +43,14 @@
         <activity android:name=".AccountActivity.UploadProfileImageActivity" />
         <activity android:name=".AccountActivity.SignUpActivity" />
         <activity android:name=".AccountActivity.SignInActivity" />
-
         <activity android:name=".MainActivity" />
         <activity android:name=".AccountActivity.ResetPasswordActivity" />
         <activity android:name=".AccountActivity.ChangeUserPassword" />
         <activity android:name=".AccountActivity.UpdateAccountActivity" />
         <activity android:name=".AccountActivity.ViewAccountActivity" />
-        <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo"></activity>
-        <activity android:name=".Training.NSBTrainingActivity"></activity>
-        <activity android:name=".Game.SelectGameLevelActivity"></activity>
+        <activity android:name=".Training.BeforeTrainingConnectingWithNeeruo" />
+        <activity android:name=".Training.NSBTrainingActivity" />
+        <activity android:name=".Game.SelectGameLevelActivity" />
         <activity android:name=".AccountActivity.DeleteAccount" />
         <activity android:name=".leaders.CountryLeadersActivity" />
         <activity android:name=".leaders.LeadersActivity" />
@@ -61,7 +59,7 @@
         <activity android:name=".Game.ConnectionWithHeadset" />
         <activity android:name=".Game.ControlRobotCarActivity" />
         <activity android:name=".Game.ConnectionWithRobotCarActivity" />
-        <activity android:name=".ManageDevices.ManageDevicesActivity"/>
+        <activity android:name=".ManageDevices.ManageDevicesActivity" />
     </application>
 
 </manifest>
