@@ -8,7 +8,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".leaders.LeadersActivity"
-    android:background="@drawable/back">
+    android:background="@drawable/back"
+    >
 
 
     <android.support.design.widget.AppBarLayout

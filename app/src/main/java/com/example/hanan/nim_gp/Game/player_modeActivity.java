@@ -11,14 +11,17 @@ import com.example.hanan.nim_gp.Challenge.SendChallenge;
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
 
+import static com.example.hanan.nim_gp.Game.SelectGameLevelActivity.SELECTED_GAME_LEVEL_INTENT;
+
+
 public class player_modeActivity extends AppCompatActivity implements View.OnClickListener  {
 
     private Button single;
     private Button multi;
     private ImageView back;
     private String controlType ;
-    private String gameLEVEL;
-    public static final String SELECTED_GAME_LEVEL_INTENT = "SELECTED_GAME_LEVEL_INTENT" ;
+    private int gameLEVEL;
+
     public static final String CONTROL_MODE_GAME_INTENT ="controlMode";
     public static final String CONTROL_GAME_INTENT ="gameMode";
     private Button mQuit_bt;
@@ -30,7 +33,7 @@ public class player_modeActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.player_mode);
         Intent intent = getIntent();
         controlType = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
-        gameLEVEL= intent.getStringExtra(SELECTED_GAME_LEVEL_INTENT);
+        gameLEVEL = intent.getIntExtra("SELECTED_GAME_LEVEL_INTENT",1);
 
         initElements();
 
@@ -53,15 +56,18 @@ public class player_modeActivity extends AppCompatActivity implements View.OnCli
         if(view ==single){
             Intent intent = new Intent(player_modeActivity.this, ConnectionWithRobotCarActivity.class);
             intent.putExtra(CONTROL_MODE_GAME_INTENT,controlType);
-            intent.putExtra(SELECTED_GAME_LEVEL_INTENT,gameLEVEL);
+            intent.putExtra(SELECTED_GAME_LEVEL_INTENT,getIntent().getIntExtra(SELECTED_GAME_LEVEL_INTENT,1));
             intent.putExtra(CONTROL_GAME_INTENT, "Single");
+
             startActivity(intent);
         }
         if (view==multi){
             Intent intent = new Intent(player_modeActivity.this, ConnectionWithRobotCarActivity.class);
             intent.putExtra(CONTROL_MODE_GAME_INTENT,controlType);
-            intent.putExtra(SELECTED_GAME_LEVEL_INTENT,gameLEVEL);
+            intent.putExtra(SELECTED_GAME_LEVEL_INTENT,getIntent().getIntExtra(SELECTED_GAME_LEVEL_INTENT,1));
             intent.putExtra(CONTROL_GAME_INTENT, "MultiPlayer");
+
+
             startActivity(intent);
         }
         if(view==back){   startActivity(new Intent(player_modeActivity.this, SelectGameLevelActivity.class));}

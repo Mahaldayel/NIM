@@ -161,7 +161,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         Intent intent = getIntent();
 
         if(intent.hasExtra(SELECTED_GAME_LEVEL_INTENT))
-            mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,0);
+            mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,1);
     }
 
     private void initElements(){
@@ -206,8 +206,8 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
 
         Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
 
-        mQuitSkipLayout_bt = findViewById(R.id.skip_quit_bt);
-        mQuitSkipLayout_bt.setOnClickListener(this);
+//        mQuitSkipLayout_bt = findViewById(R.id.skip_quit_bt);
+//        mQuitSkipLayout_bt.setOnClickListener(this);
 
         mContinue_bt = findViewById(R.id.continue_bt);
         mContinue_bt.setOnClickListener(this);
@@ -243,9 +243,9 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         mSaveCarTitle_tv.setTypeface(font);
         mSaveCarTitle_tv.setText("Save Car");
 
-
-        mQuitSaveLayout_bt = findViewById(R.id.layout_quit_bt);
-        mQuitSaveLayout_bt.setOnClickListener(this);
+//
+//        mQuitSaveLayout_bt = findViewById(R.id.layout_quit_bt);
+//        mQuitSaveLayout_bt.setOnClickListener(this);
 
         mSave_bt = findViewById(R.id.save_bt);
         mSave_bt.setOnClickListener(this);
@@ -494,15 +494,15 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
             case R.id.save_bt:
                 saveRobotCar();
                 break;
-            case R.id.layout_quit_bt:
-                hideSaveRobotCar();
-                break;
+//            case R.id.layout_quit_bt:
+//                hideSaveRobotCar();
+//                break;
             case R.id.go_to_scan_bt:
                 hideSkipLayout();
                 break;
-            case R.id.skip_quit_bt:
-                hideSkipLayout();
-                break;
+//            case R.id.skip_quit_bt:
+//                hideSkipLayout();
+//                break;
             case R.id.continue_bt:
                 progressDialogShow("Searching ...");
                 mIsContinueCar = true;
@@ -542,10 +542,12 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         else
             intent.putExtra(CONNECTED_DEVICE_INTENT,index);
 
-        intent.putExtra(SELECTED_GAME_LEVEL_INTENT, mSelectedGameLevel);
+        intent.putExtra(SELECTED_GAME_LEVEL_INTENT,getIntent().getIntExtra(SELECTED_GAME_LEVEL_INTENT,1));
+
         intent.putExtra(CONTROL_MODE_GAME_INTENT,mControlMode);
-        intent.putExtra(Game_Score,Score);
+        intent.putExtra(Game_Score,getIntent().getStringExtra(Game_Score));
         intent.putExtra(CONTROL_GAME_INTENT,GameMode);
+
 
 
         startActivity(intent);

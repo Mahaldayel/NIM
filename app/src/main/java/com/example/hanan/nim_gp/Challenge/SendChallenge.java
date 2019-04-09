@@ -39,7 +39,7 @@ public class SendChallenge extends AppCompatActivity implements View.OnClickList
     public static final String CONTROL_MODE_GAME_INTENT ="controlMode";
     public static final String CONTROL_GAME_INTENT ="gameMode";
     public static final String Game_Score ="gameScore";
-
+    double CScore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,8 +57,10 @@ public class SendChallenge extends AppCompatActivity implements View.OnClickList
         TextField=findViewById(R.id.Uname);
         Intent intent = getIntent();
         GameControlMode = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
-        GameLevel= intent.getStringExtra(SELECTED_GAME_LEVEL_INTENT);
+        GameLevel= String.valueOf(intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,1));
         GameMode=intent.getStringExtra(CONTROL_GAME_INTENT);
+        if(intent.hasExtra(Game_Score))
+        CScore = Double.valueOf(intent.getStringExtra(Game_Score));
         System.out.println("*************1***************");
         System.out.println(GameControlMode);
         System.out.println(GameLevel);
@@ -122,13 +124,10 @@ public class SendChallenge extends AppCompatActivity implements View.OnClickList
         if(avalibalty&&!challengeyourself){
 
 
-            GameSetUp=new GameInfo(CurrentPlayerUserName,GameControlMode,SenderPic,GameLevel,GameMode,79,ReciverUname);
-
+            GameSetUp=new GameInfo(CurrentPlayerUserName,GameControlMode,SenderPic,GameLevel,GameMode,(int)CScore,ReciverUname);
 
             reference2.child("Challenges").push().setValue(GameSetUp);
-
             CreateMessage(3);
-
         }
 
 

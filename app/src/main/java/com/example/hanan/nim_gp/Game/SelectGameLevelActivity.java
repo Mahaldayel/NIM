@@ -54,6 +54,7 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
 
     private int mSelectdGameLevel;
     private long mPlyaerScore ;
+    private long mPlayerLevelNumber;
     private int mHigherAvalableLevel ;
     private String mPlayerEmail ;
     private String controlType;
@@ -113,6 +114,8 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
         mQuitButton = findViewById(R.id.quit_bt);
         mQuitButton.setOnClickListener(this);
 
+        mPlayerLevelNumber = 0;
+
 
         initScoreLayoutElements();
 
@@ -163,6 +166,7 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
 
 
                         mPlyaerScore = (Long) child.child("score").getValue();
+                        mPlayerLevelNumber = (Long) child.child("levelNum").getValue();
                         displayAvailableLevel();
                     }
 
@@ -187,21 +191,21 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
 
         progressDialog.dismiss();
 
-        if(mPlyaerScore >= SCORE_LEVEL_ONE){
+        if(mPlyaerScore >= SCORE_LEVEL_ONE && mPlayerLevelNumber >= 1 - 1){
             findViewById(R.id.lockLevel1).setVisibility(View.GONE);
         }
 
-        else if(mPlyaerScore >= SCORE_LEVEL_TWO){
+         if(mPlyaerScore >= SCORE_LEVEL_TWO && mPlayerLevelNumber >= 2 - 1){
             findViewById(R.id.lockLevel2).setVisibility(View.GONE);
 
         }
 
-        else if(mPlyaerScore >= SCORE_LEVEL_THREE){
+         if(mPlyaerScore >= SCORE_LEVEL_THREE && mPlayerLevelNumber >= 3 - 1){
             findViewById(R.id.lockLevel3).setVisibility(View.GONE);
 
         }
 
-        else if(mPlyaerScore >= SCORE_LEVEL_FOUR){
+         if(mPlyaerScore >= SCORE_LEVEL_FOUR && mPlayerLevelNumber >= 4 - 1){
             findViewById(R.id.lockLevel4).setVisibility(View.GONE);
 
         }
@@ -221,8 +225,6 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
     }
 
     private void checkAvailableLevel() {
-
-
 
         if(mSelectdGameLevel != 1 && mSelectdGameLevel > mHigherAvalableLevel)
             showUnavailable();
@@ -304,6 +306,7 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
         Intent intent = new Intent(context,nextClass);
         intent.putExtra(SELECTED_GAME_LEVEL_INTENT,Integer.toString(mSelectdGameLevel));
         intent.putExtra(CONTROL_MODE_GAME_INTENT,controlType);
+
         startActivity(intent);
 
     }

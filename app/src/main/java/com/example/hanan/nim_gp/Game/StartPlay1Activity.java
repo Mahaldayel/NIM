@@ -37,26 +37,29 @@ import java.util.TimerTask;
 import me.aflak.bluetooth.Bluetooth;
 
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.LEVEL_ONE_TIME;
+import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.LEVEL_TWO_TIME;
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.NEEURO_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.CONNECTED_DEVICE_INTENT;
+import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.Game_Score;
+import static com.example.hanan.nim_gp.Game.SelectGameLevelActivity.SELECTED_GAME_LEVEL_INTENT;
 
 //import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
 
 
 public class StartPlay1Activity extends AppCompatActivity implements View.OnClickListener {
 
-String Score;
-    public static final String SELECTED_GAME_LEVEL_INTENT = "SELECTED_GAME_LEVEL_INTENT" ;
-    public static final String CONTROL_MODE_GAME_INTENT ="controlMode";
-    public static final String Game_Score ="gameScore";
-    public static final String CONTROL_GAME_INTENT ="gameMode";
 
+    public static final String CONTROL_MODE_GAME_INTENT ="controlMode";
+    public static final String CONTROL_GAME_INTENT ="gameMode";
 
     public static final int RELAX_NUMBER = 1;
     public static final int FOCUS_NUMBER = 2;
 
     private MediaPlayer mPlaymediaPlayer;
+
+    private Button ChallengeButton;
+
 
 
 
@@ -110,16 +113,17 @@ String Score;
     /**/
     private TextView mScore_c_tv;
     private TextView mScore_f_tv;
+    private TextView mChallengeWin;
     private ConstraintLayout mCompleted_l;
     private ConstraintLayout mFailed_l;
     private ImageView mStarsImageView;
     private Button mLevelsBtnC;
     private Button mLevelsBtnF;
-    private Button ChallengeButton;
-
     private int mSavedScore;
     private TextView mPlayCounter_tv;
     private CountDownTimer playTimer;
+    private String mScoreChallenge;
+    private double mScore;
 
     private void initElements(){
 
@@ -128,12 +132,9 @@ String Score;
 
         mStart_bt = findViewById(R.id.start_bt);
         mStart_bt.setOnClickListener(this);
-        ChallengeButton=findViewById(R.id.challengeButton);
-        ChallengeButton.setOnClickListener(this);
 
         mGameStartCounter = findViewById(R.id.count);
         mFullScreenOpacity = findViewById(R.id.full_screen_opacity);
-
 
         mTextFeild = findViewById(R.id.count);
         countDownTimer = new StartPlay1Activity.MyCountDownTimer(startTime, interval);
@@ -153,11 +154,15 @@ String Score;
         mLevelsBtnF = findViewById(R.id.LevelsBtn_f);
         mLevelsBtnF.setOnClickListener(this);
 
+        mChallengeWin = findViewById(R.id.challengeWin);
+
         mPlayCounter_tv = findViewById(R.id.play_counter);
 
 
         mContext = StartPlay1Activity.this;
 
+        ChallengeButton=findViewById(R.id.challengeButton);
+        ChallengeButton.setOnClickListener(this);
 
         mPlaymediaPlayer =  MediaPlayer.create(this, R.raw.cat_sound);
 
@@ -229,6 +234,9 @@ String Score;
         sbDelegate.setSavedScore(mSavedScore);
         sbDelegate.setStarted(false);
         sbDelegate.setEnded(false);
+        sbDelegate.setmSelectedGameLevel(mSelectedGameLevel);
+        sbDelegate.setScoreChallenge(mScoreChallenge);
+        sbDelegate.setChallengeWin(mChallengeWin);
 
 
     }
@@ -247,17 +255,17 @@ String Score;
             mCcontrolMode = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
 
         }
-        if(intent.hasExtra(Game_Score)){
-            Score = intent.getStringExtra(Game_Score);
-
-        }
 
         if(intent.hasExtra(CONNECTED_DEVICE_INTENT))
             mConnectedDeviceIndex = intent.getIntExtra(CONNECTED_DEVICE_INTENT,-1);
 
+        if(intent.hasExtra(Game_Score)){
+            mScoreChallenge = intent.getStringExtra(Game_Score);
+
+        }
 
         if(intent.hasExtra(SELECTED_GAME_LEVEL_INTENT))
-            mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,0);
+            mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,1);
 
         if(intent.hasExtra(ROBOT_ADDRESS_OF_SELECTED_DEVICE))
             mSelectedRobotDeviceAddress = intent.getStringExtra(ROBOT_ADDRESS_OF_SELECTED_DEVICE);
@@ -339,8 +347,8 @@ String Score;
                 goTo(SelectGameLevelActivity.class);
                 break;
             case R.id.challengeButton:
-                    goTo(SendChallenge.class);
-                    break;
+                goTo(SendChallenge.class);
+                break;
 
         }
 
@@ -351,7 +359,9 @@ String Score;
         Context context = this;
         Intent intent = new Intent(context,nextClass);
         intent.putExtra(CONTROL_MODE_GAME_INTENT,getIntent().getStringExtra(CONTROL_MODE_GAME_INTENT));
-        intent.putExtra(Game_Score,getIntent().getStringExtra(Game_Score));
+        intent.putExtra(SELECTED_GAME_LEVEL_INTENT,getIntent().getIntExtra(SELECTED_GAME_LEVEL_INTENT,1));
+
+        intent.putExtra(Game_Score, String.valueOf(sbDelegate.getScore()));
         intent.putExtra(CONTROL_GAME_INTENT,getIntent().getStringExtra(CONTROL_GAME_INTENT));
         startActivity(intent);
 
@@ -365,6 +375,11 @@ String Score;
 
     }
 
+    public void setCurrentScore(double mScore) {
+
+        this.mScore = mScore;
+    }
+
     public class MyCountDownTimer extends CountDownTimer {
         public MyCountDownTimer(long startTime, long interval) {
             super(startTime, interval);
@@ -372,16 +387,21 @@ String Score;
 
         @Override
         public void onFinish() {
-            if(mTextFeild.getText().equals("GO!")){
+//            if(mTextFeild.getText().equals("GO!")){
                 message.setVisibility(View.VISIBLE);
                 quit.setVisibility(View.VISIBLE);
                 mTextFeild.setVisibility(View.GONE);
                 sbDelegate.setStarted(true);
-                displayCounter();
+
+                if(mSelectedGameLevel == 1)
+                    displayCounterLevelOne();
+                else if (mSelectedGameLevel == 2)
+                    displayCounterLevelTwo();
+
                 mPlaymediaPlayer.start();
                 mPlaymediaPlayer.setLooping(true);
 
-            }
+//            }
         }
 
         @Override
@@ -423,6 +443,7 @@ String Score;
             AlertDialog dialog = builder.create();
             dialog.show();
         }else {
+            NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
             startActivity(new Intent(StartPlay1Activity.this, MainActivity.class));
 
 
@@ -468,7 +489,44 @@ String Score;
     }
 
 
-    private void displayCounter(){
+    private void displayCounterLevelTwo(){
+
+
+        final int[] i = {(LEVEL_TWO_TIME/1000)};
+        playTimer = new CountDownTimer(LEVEL_TWO_TIME,1000) {
+
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // this method will be executed every second ( 1000 ms : the second parameter in the CountDownTimer constructor)
+
+                if(!sbDelegate.getEnded()){
+
+                    mPlayCounter_tv.setText(String.valueOf(0)+":"+String.valueOf(i[0]));
+
+                    i[0]--;
+                }
+
+                else {
+                    mPlaymediaPlayer.setLooping(false);
+                    NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
+                    playTimer.cancel();
+                }
+
+            }
+
+            @Override
+            public void onFinish() {
+                // TODO Auto-generated method stub
+
+            }
+        };
+        playTimer.start();
+
+    }
+
+
+    private void displayCounterLevelOne(){
 
 
         final int[] i = {(LEVEL_ONE_TIME/1000)};

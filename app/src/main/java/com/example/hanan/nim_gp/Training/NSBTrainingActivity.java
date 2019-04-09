@@ -222,7 +222,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
             case R.id.start_training_bt:
                 if(mFinish)
-                    if(checkOfFocusData())
+                    if(checkOfFocusData()&& checkOfRelaxData())
                         saveTrainingInformationOnDatabase();
                     else
                         trainFailed();
@@ -304,12 +304,12 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
         if(mCurrentTrainingMode == TRAINING_MODE_FOCUS){
 
-            mTainingInformation = sbDelegate.endTrainFocus(mTainingInformation);
+//            mTainingInformation = sbDelegate.endTrainFocus(mTainingInformation);
             mCurrentTrainingMode = TRAINING_MODE_RELAX;
 
 
         }else if(mCurrentTrainingMode == TRAINING_MODE_RELAX){
-            mTainingInformation = sbDelegate.endTrainRelax(mTainingInformation);
+//            mTainingInformation = sbDelegate.endTrainRelax(mTainingInformation);
             mCurrentTrainingMode = TRAINING_MODE_FOCUS;
         }
 

@@ -91,7 +91,7 @@ public class ReciclerViewChallengeAdapter extends RecyclerView.Adapter<ReciclerV
                                 intent.putExtra(SELECTED_GAME_LEVEL_INTENT,GameLevel);
                                 intent.putExtra(CONTROL_GAME_INTENT, GameMode);
                                 intent.putExtra(Game_Score, Score);
-
+                                refrence.child(id).removeValue();
                                 c.startActivity(intent);
                                 message.dismiss();
                                 return ;

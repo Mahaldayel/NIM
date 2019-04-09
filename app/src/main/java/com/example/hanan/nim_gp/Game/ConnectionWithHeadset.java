@@ -49,12 +49,19 @@ import static com.example.hanan.nim_gp.Game.control_modeActivity.CONTROL_MODE_GA
 
 
 public class ConnectionWithHeadset extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
-    public static final String Game_Score ="gameScore";
+
     public final static String NEEURO_ADDRESS_OF_SELECTED_DEVICE = "NEEURO_ADDRESS_OF_SELECTED_DEVICE";
     public final static String ROBOT_ADDRESS_OF_SELECTED_DEVICE = "ROBOT_ADDRESS_OF_SELECTED_DEVICE";
     public final static String HEADSET_ADDRESS_OF_SELECTED_DEVICE = "HEADSET_ADDRESS_OF_SELECTED_DEVICE";
     public static final int LEVEL_ONE_TIME = 240000;
+    public static final int LEVEL_TWO_TIME = 60000;
+
     public static final String CONTROL_GAME_INTENT ="gameMode";
+
+    public static final String Game_Score ="gameScore";
+    String Score,GameMode;
+
+
     FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
     String CurrentplayeId = CurrentPlayer.getUid();
     DatabaseReference refrence= FirebaseDatabase.getInstance().getReference().child("TrainingInformation");
@@ -66,7 +73,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     private ProgressDialog progressDialog;
     float SignalsAvreg=0;
     float SignalsMax=0;
-String Score,GameMode;
+
     boolean mIsContinueCar;
 
     private String TAG = "BeforeTrainingConnectingWithNeeruo";
@@ -159,13 +166,13 @@ String Score,GameMode;
             getDevicesFromFirebase();
         }
 
-
-        if(intent.hasExtra(SELECTED_GAME_LEVEL_INTENT))
-            mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,0);
         if(intent.hasExtra(Game_Score))
             Score = intent.getStringExtra(Game_Score);
         if(intent.hasExtra(CONTROL_GAME_INTENT))
             GameMode=intent.getStringExtra(CONTROL_GAME_INTENT);
+
+        if(intent.hasExtra(SELECTED_GAME_LEVEL_INTENT))
+            mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,1);
 
     }
 
@@ -343,8 +350,8 @@ String Score,GameMode;
 
         beForeScan = true;
 
-        mQuitSkipLayout_bt = findViewById(R.id.skip_quit_bt);
-        mQuitSkipLayout_bt.setOnClickListener(this);
+//        mQuitSkipLayout_bt = findViewById(R.id.skip_quit_bt);
+//        mQuitSkipLayout_bt.setOnClickListener(this);
 
         mContinue_bt = findViewById(R.id.continue_bt);
         mContinue_bt.setOnClickListener(this);
@@ -372,8 +379,8 @@ String Score,GameMode;
         mSaveHeadsetTitle_tv = findViewById(R.id.layout_title);
         mSaveHeadsetTitle_tv.setTypeface(font);
 
-        mQuitLayout_bt = findViewById(R.id.layout_quit_bt);
-        mQuitLayout_bt.setOnClickListener(this);
+//        mQuitLayout_bt = findViewById(R.id.layout_quit_bt);
+//        mQuitLayout_bt.setOnClickListener(this);
 
         mSave_bt = findViewById(R.id.save_bt);
         mSave_bt.setOnClickListener(this);
@@ -414,12 +421,13 @@ String Score,GameMode;
     }
 
     private void play(String neeuroAddress) {
-
+        Class nextClass;
         NativeNSBInterface.getInstance().connectBT(neeuroAddress);
         mConnectToHeadset = true;
 
         Context context = ConnectionWithHeadset.this;
-        Class nextClass = StartPlay1Activity.class;
+
+        nextClass = StartPlay1Activity.class;
 
         Intent intent = new Intent(context,nextClass);
 
@@ -431,10 +439,12 @@ String Score,GameMode;
         else
             intent.putExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE,neeuroAddress);
 
-        intent.putExtra(SELECTED_GAME_LEVEL_INTENT, mSelectedGameLevel);
+        intent.putExtra(SELECTED_GAME_LEVEL_INTENT,getIntent().getIntExtra(SELECTED_GAME_LEVEL_INTENT,1));
         intent.putExtra(CONTROL_MODE_GAME_INTENT,getIntent().getStringExtra(CONTROL_MODE_GAME_INTENT));
-        intent.putExtra(Game_Score,Score);
         intent.putExtra(CONTROL_GAME_INTENT,GameMode);
+        intent.putExtra(Game_Score,getIntent().getStringExtra(Game_Score));
+
+
         startActivity(intent);
 
 
@@ -459,15 +469,15 @@ String Score,GameMode;
             case R.id.save_bt:
                 save();
                 break;
-            case R.id.layout_quit_bt:
-                hideSaveHeadset();
-                break;
+//            case R.id.layout_quit_bt:
+//                hideSaveHeadset();
+//                break;
             case R.id.go_to_scan_bt:
                 hideSkipLayout();
                 break;
-            case R.id.skip_quit_bt:
-                hideSkipLayout();
-                break;
+//            case R.id.skip_quit_bt:
+//                hideSkipLayout();
+//                break;
             case R.id.continue_bt:
                 mIsContinueHeadset = true;
                 progressDialog.setMessage("Searching ...");
@@ -716,11 +726,13 @@ String Score,GameMode;
         private ImageView starsImageView;
         private Timer timer;
         private TimerTask timerTask;
-        private double mScore;
+   public double mScore;
         private TextView mScore_f_tv;
         private double numOfStars;
         private int mSavedScore;
-
+        private int selectGameLevel;
+        private String mScoreChallenge;
+        private TextView mChallengeWin;
 
 
         public void EEG_GetAttention(float result) {
@@ -732,14 +744,18 @@ String Score,GameMode;
                 setStarted(false);
 
             if(controlModeNumber == 2 && !isEnded  && isStarted){
-                if(result > SignalsAvreg)
-                    sendToRobot(String.valueOf((int) Math.floor(2)));
 
-            focusTextView.setText(String.valueOf(result));
+                if(selectGameLevel == 1)
+                    sendToRobotOneLevel(result);
+
+
+                else if(selectGameLevel == 2)
+                    sendToRobotTwoLevel(result);
+
+                focusTextView.setText(String.valueOf(result));
             receiveMessageFromRobot();
 
             }
-
         }
 
 
@@ -753,15 +769,38 @@ String Score,GameMode;
 
 
             if(controlModeNumber == 1 && !isEnded && isStarted){
-                if(result > SignalsAvreg)
-                    sendToRobot(String.valueOf((int) Math.floor(2)));
+
+                if(selectGameLevel == 1)
+                    sendToRobotOneLevel(result);
+                else if(selectGameLevel == 2)
+                    sendToRobotTwoLevel(result);
 
             relaxTextView.setText(String.valueOf(result));
             receiveMessageFromRobot();
 
             }
-
         }
+
+        private void sendToRobotOneLevel(float result) {
+
+            if(result > SignalsAvreg) {
+
+                sendToRobot(String.valueOf((int) Math.floor(2)));
+
+            }
+        }
+
+        private void sendToRobotTwoLevel(float result) {
+
+            if(result > SignalsAvreg){
+
+                sendToRobot(String.valueOf((int) Math.floor(0)));
+
+            }else {
+                sendToRobot(String.valueOf((int) Math.floor(6)));
+            }
+        }
+
 
 
         public void sendToRobot(final String msg) {
@@ -769,8 +808,6 @@ String Score,GameMode;
             if(controlRobotBluetooth == null){
                 setBluetooth();
             }
-
-
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -892,7 +929,7 @@ String Score,GameMode;
                 public void run() {
 
 
-                    if(msg != null){
+                    if(message != null && !message.equals("")){
 
                         startPlay1Activity = new StartPlay1Activity();
                         playContext = startPlay1Activity.getContext();
@@ -903,12 +940,35 @@ String Score,GameMode;
                             distance += Integer.parseInt(message);
 
 
-                        }else{
+                        }else if(Integer.parseInt(message) == Integer.parseInt(String.valueOf("0"))){
+                            msg.setText(message+"\nScore :"+distance);
+                            distance += 2;
+
+                        }else if(Integer.parseInt(message) == Integer.parseInt(String.valueOf("6"))){ // test for level two
+                            msg.setText(message+"\nScore :"+distance);
+                            distance += 0;
+                        }
+                        else{
                                 setEnded(true);
-                                calculateScore();
+
+                            if(mSelectedGameLevel == 1)
+                                calculateScoreLevelOne(false);
+                            else if(mSelectedGameLevel == 2)
+                                calculateScoreLevelTwo(false,false);
                             }
 
+
+
+                        if(mScoreChallenge != null){
+                            if(mScore >= Double.parseDouble(mScoreChallenge)){
+                                if(mSelectedGameLevel == 1)
+                                    calculateScoreLevelOne(true);
+                                else if(mSelectedGameLevel == 2)
+                                    calculateScoreLevelTwo(true,false);
+                            }
                         }
+
+                    }
 
 
                     else
@@ -916,6 +976,65 @@ String Score,GameMode;
                 }
             });
 
+        }
+
+        private void calculateScoreLevelTwo(boolean challenge, boolean timeOver) {
+
+            mFullScreenOpacity.setVisibility(View.VISIBLE);
+
+            //Calculate score
+            mScore = (distance / (endTime * millisecondsToMinutes));
+
+            if(timeOver || (challenge && mScore >= Double.parseDouble(mScoreChallenge))) {
+                mCompleted_l.setVisibility(View.VISIBLE);
+
+                if(challenge)
+                    mChallengeWin.setVisibility(View.VISIBLE);
+            }
+            else if(challenge && mScore < Double.parseDouble(mScoreChallenge)){
+
+                mScore = 0;
+            }
+            else{
+
+                /** Change imageViewStars in failed.xml according to the player score */
+                numOfStars = ((mScore/65)*100); // 65 MUST TO BE CHANGED
+                Drawable new_image = ConnectionWithHeadset.this.getResources().getDrawable(R.drawable.starsunfilled);
+
+
+                if (numOfStars >= 25 && numOfStars<50)
+                    new_image = ConnectionWithHeadset.this.getResources().getDrawable(R.drawable.stars75filled);
+                if (numOfStars >= 50 && numOfStars <75)
+                    new_image = ConnectionWithHeadset.this.getResources().getDrawable(R.drawable.stars50filled);
+                if (numOfStars >= 75 && numOfStars <100)
+                    new_image= ConnectionWithHeadset.this.getResources().getDrawable(R.drawable.stars25filled);
+
+                starsImageView.setImageDrawable(new_image);
+                mFailed_l.setVisibility(View.VISIBLE);
+
+            }
+
+            mScore_c_tv.setText(String.valueOf((int)mScore));
+            mScore_f_tv.setText(String.valueOf((int)mScore));
+
+
+
+            //Get player
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String playeId = user.getUid();
+
+            //Update player score
+            DatabaseReference updateData = FirebaseDatabase.getInstance().getReference("PlayersGameInfo").child(playeId);
+            updateData.child("score").setValue(mSavedScore+((int)mScore));
+
+            //Check total score
+            //Update player level
+            updateData.child("levelNum").setValue(selectGameLevel); //MUST TO BE CHANGED
+
+            StartPlay1Activity startPlay1Activity = new StartPlay1Activity();
+            startPlay1Activity.setCurrentScore(mScore);
+
+            controlRobotBluetooth.disconnect();
         }
 
         public void setRelaxTextView(TextView relaxTextView) {
@@ -926,15 +1045,22 @@ String Score,GameMode;
             this.focusTextView = focusTextView;
         }
 
-        public void calculateScore(){
+        public void calculateScoreLevelOne(boolean challenge){
 
             mFullScreenOpacity.setVisibility(View.VISIBLE);
 
             //Calculate score
             mScore = (distance / (endTime * millisecondsToMinutes));
 
-            if(mScore >= 65) { // 65 MUST TO BE CHANGED
+            if(mScore >= 65 || (challenge && mScore >= Double.parseDouble(mScoreChallenge))) { // 65 MUST TO BE CHANGED
                 mCompleted_l.setVisibility(View.VISIBLE);
+
+                if(challenge)
+                    mChallengeWin.setVisibility(View.VISIBLE);
+
+            } else if(challenge && mScore < Double.parseDouble(mScoreChallenge)){
+
+                mScore = 0;
             }
             else{
 
@@ -958,7 +1084,6 @@ String Score,GameMode;
 
 //            if((endTime*millisecondsToMinutes) > 1)
 //                mScore = (mScore / (endTime * millisecondsToMinutes));
-
             mScore_c_tv.setText(String.valueOf((int)mScore));
             mScore_f_tv.setText(String.valueOf((int)mScore));
 
@@ -974,7 +1099,11 @@ String Score,GameMode;
 
             //Check total score
             //Update player level
-            updateData.child("levelNum").setValue(1); //MUST TO BE CHANGED
+            updateData.child("levelNum").setValue(selectGameLevel); //MUST TO BE CHANGED
+
+
+            StartPlay1Activity startPlay1Activity = new StartPlay1Activity();
+            startPlay1Activity.setCurrentScore(mScore);
 
             controlRobotBluetooth.disconnect();
 
@@ -1015,7 +1144,12 @@ String Score,GameMode;
 
             timer = new Timer();
             initTask();
-            timer.schedule(timerTask, LEVEL_ONE_TIME);
+            if(mSelectedGameLevel == 1)
+                timer.schedule(timerTask, LEVEL_ONE_TIME);// level one
+            else if(mSelectedGameLevel == 2)
+                timer.schedule(timerTask, LEVEL_TWO_TIME); // level two
+
+
 
         }
 
@@ -1032,7 +1166,19 @@ String Score,GameMode;
                             if(!getEnded()){
 
                                 setEnded(true);
-                                calculateScore();
+                                if(mScoreChallenge != null){
+
+                                    if(mSelectedGameLevel == 1)
+                                        calculateScoreLevelOne(true);
+                                    else if(mSelectedGameLevel == 2)
+                                        calculateScoreLevelTwo(true, true);
+                                }else {
+
+                                    if(mSelectedGameLevel == 1)
+                                        calculateScoreLevelOne(false);
+                                    else if(mSelectedGameLevel == 2)
+                                        calculateScoreLevelTwo(false, true);
+                                }
                             }
 
 
@@ -1053,6 +1199,26 @@ String Score,GameMode;
 
         public boolean getEnded() {
             return isEnded;
+        }
+
+        public void setmSelectedGameLevel(int mSelectedGameLevel) {
+
+            selectGameLevel = mSelectedGameLevel;
+
+        }
+
+        public double getScore() {
+            return mScore;
+        }
+
+        public void setScoreChallenge(String mScoreChallenge) {
+
+            this.mScoreChallenge = mScoreChallenge;
+        }
+
+        public void setChallengeWin(TextView mChallengeWin) {
+
+            this.mChallengeWin = mChallengeWin;
         }
     }
 
