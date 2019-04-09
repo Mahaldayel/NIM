@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.hanan.nim_gp.AccountActivity.FirstPage;
 import com.example.hanan.nim_gp.AccountActivity.ViewAccountActivity;
+import com.example.hanan.nim_gp.Challenge.PlayerChallenges;
 import com.example.hanan.nim_gp.Game.control_modeActivity;
 import com.example.hanan.nim_gp.Game.play;
 import com.example.hanan.nim_gp.GameOver.CompletedActivity;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
     private Button buttonTraining;
     private Button buttonLeaders;
     private Button signout;
+    private Button MyChallenges;
     private TextView ScoreView;
     private String Score;
     long currentTime, currentTime2;
@@ -90,6 +92,9 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
             buttonPlay = findViewById(R.id.buttonPlay);
             buttonPlay.setOnClickListener(this);
 
+            MyChallenges=findViewById(R.id.cButton);
+            MyChallenges.setOnClickListener(this);
+
             buttonTraining = findViewById(R.id.buttonTraining);
             buttonTraining.setOnClickListener(this);
 
@@ -122,7 +127,9 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
                 FirebaseAuth.getInstance().signOut();
                 goTo(FirstPage.class);
                 break;
-
+            case R.id.cButton:
+                goTo(PlayerChallenges.class);
+                break;
 
 
 

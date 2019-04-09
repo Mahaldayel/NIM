@@ -49,6 +49,8 @@ import static com.example.hanan.nim_gp.Game.control_modeActivity.CONTROL_MODE_GA
 
 public class ConnectionWithRobotCarActivity extends AppCompatActivity implements AdapterView.OnItemClickListener ,View.OnClickListener {
 
+    public static final String Game_Score ="gameScore";
+    public static final String CONTROL_GAME_INTENT ="gameMode";
 
     private static final int REQUEST_ENABLE_BT = 1111;
     public static final String CONNECTED_DEVICE_INTENT = "connected device index";
@@ -77,7 +79,7 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
     private Button mBack_bt;
 
     private Context mContext;
-    private String mControlMode;
+    private String mControlMode,Score,GameMode;
 
     private int mSelectedGameLevel;
 
@@ -119,6 +121,8 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         getDevicesFromFirebase();
         getControlModeFromIntent();
         getSelectedLevelFromIntent();
+        getChallengeScore();
+        GetGameMode();
         check();
 
 
@@ -131,6 +135,25 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
         if(intent.hasExtra(CONTROL_MODE_GAME_INTENT)){
             mControlMode = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
         }
+
+
+    }
+
+    private void GetGameMode(){
+        Intent intent = getIntent();
+        if(intent.hasExtra(CONTROL_GAME_INTENT)){
+            GameMode = intent.getStringExtra(CONTROL_GAME_INTENT);
+        }
+
+    }
+    private void getChallengeScore() {
+
+        Intent intent = getIntent();
+        if(intent.hasExtra(Game_Score)){
+            Score = intent.getStringExtra(Game_Score);
+        }
+
+
     }
 
     private void getSelectedLevelFromIntent() {
@@ -520,7 +543,11 @@ public class ConnectionWithRobotCarActivity extends AppCompatActivity implements
             intent.putExtra(CONNECTED_DEVICE_INTENT,index);
 
         intent.putExtra(SELECTED_GAME_LEVEL_INTENT,getIntent().getIntExtra(SELECTED_GAME_LEVEL_INTENT,1));
+
         intent.putExtra(CONTROL_MODE_GAME_INTENT,mControlMode);
+        intent.putExtra(Game_Score,getIntent().getStringExtra(Game_Score));
+        intent.putExtra(CONTROL_GAME_INTENT,GameMode);
+
 
 
         startActivity(intent);

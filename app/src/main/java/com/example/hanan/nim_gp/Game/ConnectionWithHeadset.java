@@ -55,8 +55,11 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     public final static String HEADSET_ADDRESS_OF_SELECTED_DEVICE = "HEADSET_ADDRESS_OF_SELECTED_DEVICE";
     public static final int LEVEL_ONE_TIME = 240000;
     public static final int LEVEL_TWO_TIME = 60000;
-//    public static final int LEVEL_Number = 2;
 
+    public static final String CONTROL_GAME_INTENT ="gameMode";
+
+    public static final String Game_Score ="gameScore";
+    String Score,GameMode;
 
 
     FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
@@ -163,6 +166,10 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             getDevicesFromFirebase();
         }
 
+        if(intent.hasExtra(Game_Score))
+            Score = intent.getStringExtra(Game_Score);
+        if(intent.hasExtra(CONTROL_GAME_INTENT))
+            GameMode=intent.getStringExtra(CONTROL_GAME_INTENT);
 
         if(intent.hasExtra(SELECTED_GAME_LEVEL_INTENT))
             mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,1);
@@ -419,6 +426,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         mConnectToHeadset = true;
 
         Context context = ConnectionWithHeadset.this;
+
         nextClass = StartPlay1Activity.class;
 
         Intent intent = new Intent(context,nextClass);
@@ -433,6 +441,10 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         intent.putExtra(SELECTED_GAME_LEVEL_INTENT,getIntent().getIntExtra(SELECTED_GAME_LEVEL_INTENT,1));
         intent.putExtra(CONTROL_MODE_GAME_INTENT,getIntent().getStringExtra(CONTROL_MODE_GAME_INTENT));
+        intent.putExtra(CONTROL_GAME_INTENT,GameMode);
+        intent.putExtra(Game_Score,getIntent().getStringExtra(Game_Score));
+
+
         startActivity(intent);
 
 
@@ -714,11 +726,13 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         private ImageView starsImageView;
         private Timer timer;
         private TimerTask timerTask;
-        private double mScore;
+   public double mScore;
         private TextView mScore_f_tv;
         private double numOfStars;
         private int mSavedScore;
         private int selectGameLevel;
+        private String mScoreChallenge;
+        private TextView mChallengeWin;
 
 
         public void EEG_GetAttention(float result) {
@@ -938,12 +952,23 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                                 setEnded(true);
 
                             if(mSelectedGameLevel == 1)
-                                calculateScoreLevelOne();
+                                calculateScoreLevelOne(false);
                             else if(mSelectedGameLevel == 2)
-                                calculateScoreLevelTwo(false);
+                                calculateScoreLevelTwo(false,false);
                             }
 
+
+
+                        if(mScoreChallenge != null){
+                            if(mScore >= Double.parseDouble(mScoreChallenge)){
+                                if(mSelectedGameLevel == 1)
+                                    calculateScoreLevelOne(true);
+                                else if(mSelectedGameLevel == 2)
+                                    calculateScoreLevelTwo(true,false);
+                            }
                         }
+
+                    }
 
 
                     else
@@ -953,15 +978,22 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         }
 
-        private void calculateScoreLevelTwo(boolean timeOver) {
+        private void calculateScoreLevelTwo(boolean challenge, boolean timeOver) {
 
             mFullScreenOpacity.setVisibility(View.VISIBLE);
 
             //Calculate score
             mScore = (distance / (endTime * millisecondsToMinutes));
 
-            if(timeOver) {
+            if(timeOver || (challenge && mScore >= Double.parseDouble(mScoreChallenge))) {
                 mCompleted_l.setVisibility(View.VISIBLE);
+
+                if(challenge)
+                    mChallengeWin.setVisibility(View.VISIBLE);
+            }
+            else if(challenge && mScore < Double.parseDouble(mScoreChallenge)){
+
+                mScore = 0;
             }
             else{
 
@@ -999,6 +1031,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             //Update player level
             updateData.child("levelNum").setValue(selectGameLevel); //MUST TO BE CHANGED
 
+            StartPlay1Activity startPlay1Activity = new StartPlay1Activity();
+            startPlay1Activity.setCurrentScore(mScore);
 
             controlRobotBluetooth.disconnect();
         }
@@ -1011,15 +1045,23 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             this.focusTextView = focusTextView;
         }
 
-        public void calculateScoreLevelOne(){
+        public void calculateScoreLevelOne(boolean challenge){
 
             mFullScreenOpacity.setVisibility(View.VISIBLE);
 
             //Calculate score
             mScore = (distance / (endTime * millisecondsToMinutes));
 
-            if(mScore >= 65) { // 65 MUST TO BE CHANGED
+            if(mScore >= 50 || (challenge && mScore >= Double.parseDouble(mScoreChallenge))) { // 65 MUST TO BE CHANGED
                 mCompleted_l.setVisibility(View.VISIBLE);
+
+                if(challenge)
+                    mChallengeWin.setVisibility(View.VISIBLE);
+
+            } else if(challenge && mScore < Double.parseDouble(mScoreChallenge)){
+
+                mScore = 0;
+                mFailed_l.setVisibility(View.VISIBLE);
             }
             else{
 
@@ -1060,6 +1102,9 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             //Update player level
             updateData.child("levelNum").setValue(selectGameLevel); //MUST TO BE CHANGED
 
+
+            StartPlay1Activity startPlay1Activity = new StartPlay1Activity();
+            startPlay1Activity.setCurrentScore(mScore);
 
             controlRobotBluetooth.disconnect();
 
@@ -1122,10 +1167,19 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                             if(!getEnded()){
 
                                 setEnded(true);
-                                if(mSelectedGameLevel == 1)
-                                    calculateScoreLevelOne();
-                                else if(mSelectedGameLevel == 2)
-                                    calculateScoreLevelTwo(true);
+                                if(mScoreChallenge != null){
+
+                                    if(mSelectedGameLevel == 1)
+                                        calculateScoreLevelOne(true);
+                                    else if(mSelectedGameLevel == 2)
+                                        calculateScoreLevelTwo(true, true);
+                                }else {
+
+                                    if(mSelectedGameLevel == 1)
+                                        calculateScoreLevelOne(false);
+                                    else if(mSelectedGameLevel == 2)
+                                        calculateScoreLevelTwo(false, true);
+                                }
                             }
 
 
@@ -1152,6 +1206,20 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
             selectGameLevel = mSelectedGameLevel;
 
+        }
+
+        public double getScore() {
+            return mScore;
+        }
+
+        public void setScoreChallenge(String mScoreChallenge) {
+
+            this.mScoreChallenge = mScoreChallenge;
+        }
+
+        public void setChallengeWin(TextView mChallengeWin) {
+
+            this.mChallengeWin = mChallengeWin;
         }
     }
 

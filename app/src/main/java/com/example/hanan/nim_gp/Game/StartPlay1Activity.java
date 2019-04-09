@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.hanan.nim_gp.Challenge.SendChallenge;
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,6 +41,7 @@ import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.LEVEL_TWO_TIME
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.NEEURO_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.CONNECTED_DEVICE_INTENT;
+import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.Game_Score;
 import static com.example.hanan.nim_gp.Game.SelectGameLevelActivity.SELECTED_GAME_LEVEL_INTENT;
 
 //import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
@@ -55,6 +57,9 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
     public static final int FOCUS_NUMBER = 2;
 
     private MediaPlayer mPlaymediaPlayer;
+
+    private Button ChallengeButton;
+
 
 
 
@@ -108,6 +113,7 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
     /**/
     private TextView mScore_c_tv;
     private TextView mScore_f_tv;
+    private TextView mChallengeWin;
     private ConstraintLayout mCompleted_l;
     private ConstraintLayout mFailed_l;
     private ImageView mStarsImageView;
@@ -116,6 +122,8 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
     private int mSavedScore;
     private TextView mPlayCounter_tv;
     private CountDownTimer playTimer;
+    private String mScoreChallenge;
+    private double mScore;
 
     private void initElements(){
 
@@ -146,11 +154,15 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         mLevelsBtnF = findViewById(R.id.LevelsBtn_f);
         mLevelsBtnF.setOnClickListener(this);
 
+        mChallengeWin = findViewById(R.id.challengeWin);
+
         mPlayCounter_tv = findViewById(R.id.play_counter);
 
 
         mContext = StartPlay1Activity.this;
 
+        ChallengeButton=findViewById(R.id.challengeButton);
+        ChallengeButton.setOnClickListener(this);
 
         mPlaymediaPlayer =  MediaPlayer.create(this, R.raw.cat_sound);
 
@@ -223,6 +235,8 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         sbDelegate.setStarted(false);
         sbDelegate.setEnded(false);
         sbDelegate.setmSelectedGameLevel(mSelectedGameLevel);
+        sbDelegate.setScoreChallenge(mScoreChallenge);
+        sbDelegate.setChallengeWin(mChallengeWin);
 
 
     }
@@ -245,9 +259,13 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         if(intent.hasExtra(CONNECTED_DEVICE_INTENT))
             mConnectedDeviceIndex = intent.getIntExtra(CONNECTED_DEVICE_INTENT,-1);
 
+        if(intent.hasExtra(Game_Score)){
+            mScoreChallenge = intent.getStringExtra(Game_Score);
+
+        }
 
         if(intent.hasExtra(SELECTED_GAME_LEVEL_INTENT))
-            mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,0);
+            mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,1);
 
         if(intent.hasExtra(ROBOT_ADDRESS_OF_SELECTED_DEVICE))
             mSelectedRobotDeviceAddress = intent.getStringExtra(ROBOT_ADDRESS_OF_SELECTED_DEVICE);
@@ -328,6 +346,10 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
             case R.id.LevelsBtn_c:
                 goTo(SelectGameLevelActivity.class);
                 break;
+            case R.id.challengeButton:
+                goTo(SendChallenge.class);
+                break;
+
         }
 
     }
@@ -337,6 +359,10 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         Context context = this;
         Intent intent = new Intent(context,nextClass);
         intent.putExtra(CONTROL_MODE_GAME_INTENT,getIntent().getStringExtra(CONTROL_MODE_GAME_INTENT));
+        intent.putExtra(SELECTED_GAME_LEVEL_INTENT,getIntent().getIntExtra(SELECTED_GAME_LEVEL_INTENT,1));
+
+        intent.putExtra(Game_Score, String.valueOf(sbDelegate.getScore()));
+        intent.putExtra(CONTROL_GAME_INTENT,getIntent().getStringExtra(CONTROL_GAME_INTENT));
         startActivity(intent);
 
     }
@@ -347,6 +373,11 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         timerHasStarted = true;
         mTextFeild.setText("GO!");
 
+    }
+
+    public void setCurrentScore(double mScore) {
+
+        this.mScore = mScore;
     }
 
     public class MyCountDownTimer extends CountDownTimer {
@@ -412,6 +443,7 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
             AlertDialog dialog = builder.create();
             dialog.show();
         }else {
+            NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
             startActivity(new Intent(StartPlay1Activity.this, MainActivity.class));
 
 
@@ -482,7 +514,6 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
                 }
 
             }
-
             @Override
             public void onFinish() {
                 // TODO Auto-generated method stub
