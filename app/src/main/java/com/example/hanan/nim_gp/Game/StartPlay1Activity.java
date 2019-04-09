@@ -39,6 +39,7 @@ import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.LEVEL_ONE_TIME
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.NEEURO_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.CONNECTED_DEVICE_INTENT;
+import static com.example.hanan.nim_gp.Game.SelectGameLevelActivity.SELECTED_GAME_LEVEL_INTENT;
 
 //import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
 
@@ -46,7 +47,6 @@ import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.CONNE
 public class StartPlay1Activity extends AppCompatActivity implements View.OnClickListener {
 
 
-    public static final String SELECTED_GAME_LEVEL_INTENT = "SELECTED_GAME_LEVEL_INTENT" ;
     public static final String CONTROL_MODE_GAME_INTENT ="controlMode";
     public static final String CONTROL_GAME_INTENT ="gameMode";
 
@@ -221,6 +221,7 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         sbDelegate.setSavedScore(mSavedScore);
         sbDelegate.setStarted(false);
         sbDelegate.setEnded(false);
+        sbDelegate.setmSelectedGameLevel(mSelectedGameLevel);
 
 
     }

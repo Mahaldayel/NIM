@@ -280,16 +280,16 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/level_number"
         android:text="1"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/carLevel1_iv"
         app:layout_constraintEnd_toEndOf="@+id/carLevel1_iv"
-        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="@+id/carLevel1_iv"
-        app:layout_constraintTop_toTopOf="@+id/lockLevel2"
-        app:layout_constraintVertical_bias="0.48000002" />
+        app:layout_constraintTop_toBottomOf="@+id/apple_tree_iv"
+        app:layout_constraintVertical_bias="0.324" />
 
 
     <ImageView
@@ -301,6 +301,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/lock_icon"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/carLevel1_iv"
         app:layout_constraintEnd_toEndOf="@+id/carLevel1_iv"
         app:layout_constraintHorizontal_bias="0.0"

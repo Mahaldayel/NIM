@@ -54,6 +54,10 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     public final static String ROBOT_ADDRESS_OF_SELECTED_DEVICE = "ROBOT_ADDRESS_OF_SELECTED_DEVICE";
     public final static String HEADSET_ADDRESS_OF_SELECTED_DEVICE = "HEADSET_ADDRESS_OF_SELECTED_DEVICE";
     public static final int LEVEL_ONE_TIME = 240000;
+    public static final int LEVEL_TWO_TIME = 6000;
+    public static final int LEVEL_Number = 2;
+
+
 
     FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
     String CurrentplayeId = CurrentPlayer.getUid();
@@ -161,7 +165,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
 
         if(intent.hasExtra(SELECTED_GAME_LEVEL_INTENT))
-            mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,0);
+            mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,1);
 
     }
 
@@ -339,8 +343,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         beForeScan = true;
 
-        mQuitSkipLayout_bt = findViewById(R.id.skip_quit_bt);
-        mQuitSkipLayout_bt.setOnClickListener(this);
+//        mQuitSkipLayout_bt = findViewById(R.id.skip_quit_bt);
+//        mQuitSkipLayout_bt.setOnClickListener(this);
 
         mContinue_bt = findViewById(R.id.continue_bt);
         mContinue_bt.setOnClickListener(this);
@@ -368,8 +372,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         mSaveHeadsetTitle_tv = findViewById(R.id.layout_title);
         mSaveHeadsetTitle_tv.setTypeface(font);
 
-        mQuitLayout_bt = findViewById(R.id.layout_quit_bt);
-        mQuitLayout_bt.setOnClickListener(this);
+//        mQuitLayout_bt = findViewById(R.id.layout_quit_bt);
+//        mQuitLayout_bt.setOnClickListener(this);
 
         mSave_bt = findViewById(R.id.save_bt);
         mSave_bt.setOnClickListener(this);
@@ -410,12 +414,15 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     }
 
     private void play(String neeuroAddress) {
-
+        Class nextClass;
         NativeNSBInterface.getInstance().connectBT(neeuroAddress);
         mConnectToHeadset = true;
 
         Context context = ConnectionWithHeadset.this;
-        Class nextClass = StartPlay1Activity.class;
+        if(LEVEL_Number == 2)
+             nextClass = StartPlay1Activity.class; // level two
+        else if(LEVEL_Number == 1)
+            nextClass = StartPlay1Activity.class;
 
         Intent intent = new Intent(context,nextClass);
 
@@ -427,7 +434,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         else
             intent.putExtra(NEEURO_ADDRESS_OF_SELECTED_DEVICE,neeuroAddress);
 
-        intent.putExtra(SELECTED_GAME_LEVEL_INTENT, mSelectedGameLevel);
+        intent.putExtra(SELECTED_GAME_LEVEL_INTENT,getIntent().getIntExtra(SELECTED_GAME_LEVEL_INTENT,1));
         intent.putExtra(CONTROL_MODE_GAME_INTENT,getIntent().getStringExtra(CONTROL_MODE_GAME_INTENT));
         startActivity(intent);
 
@@ -453,15 +460,15 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             case R.id.save_bt:
                 save();
                 break;
-            case R.id.layout_quit_bt:
-                hideSaveHeadset();
-                break;
+//            case R.id.layout_quit_bt:
+//                hideSaveHeadset();
+//                break;
             case R.id.go_to_scan_bt:
                 hideSkipLayout();
                 break;
-            case R.id.skip_quit_bt:
-                hideSkipLayout();
-                break;
+//            case R.id.skip_quit_bt:
+//                hideSkipLayout();
+//                break;
             case R.id.continue_bt:
                 mIsContinueHeadset = true;
                 progressDialog.setMessage("Searching ...");
@@ -714,7 +721,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         private TextView mScore_f_tv;
         private double numOfStars;
         private int mSavedScore;
-
+        private int selectGameLevel;
 
 
         public void EEG_GetAttention(float result) {
@@ -726,14 +733,18 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                 setStarted(false);
 
             if(controlModeNumber == 2 && !isEnded  && isStarted){
-                if(result > SignalsAvreg)
-                    sendToRobot(String.valueOf((int) Math.floor(2)));
 
-            focusTextView.setText(String.valueOf(result));
+                if(selectGameLevel == 1)
+                    sendToRobotOneLevel(result);
+
+
+                else if(selectGameLevel == 2)
+                    sendToRobotTwoLevel(result);
+
+                focusTextView.setText(String.valueOf(result));
             receiveMessageFromRobot();
 
             }
-
         }
 
 
@@ -747,15 +758,38 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
 
             if(controlModeNumber == 1 && !isEnded && isStarted){
-                if(result > SignalsAvreg)
-                    sendToRobot(String.valueOf((int) Math.floor(2)));
+
+                if(selectGameLevel == 1)
+                    sendToRobotOneLevel(result);
+                else if(selectGameLevel == 2)
+                    sendToRobotTwoLevel(result);
 
             relaxTextView.setText(String.valueOf(result));
             receiveMessageFromRobot();
 
             }
-
         }
+
+        private void sendToRobotOneLevel(float result) {
+
+            if(result > SignalsAvreg) {
+
+                sendToRobot(String.valueOf((int) Math.floor(2)));
+
+            }
+        }
+
+        private void sendToRobotTwoLevel(float result) {
+
+            if(result > SignalsAvreg){
+
+                sendToRobot(String.valueOf((int) Math.floor(0)));
+
+            }else {
+                sendToRobot(String.valueOf((int) Math.floor(6)));
+            }
+        }
+
 
 
         public void sendToRobot(final String msg) {
@@ -763,8 +797,6 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             if(controlRobotBluetooth == null){
                 setBluetooth();
             }
-
-
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -886,7 +918,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                 public void run() {
 
 
-                    if(msg != null){
+                    if(message != null && !message.equals("")){
 
                         startPlay1Activity = new StartPlay1Activity();
                         playContext = startPlay1Activity.getContext();
@@ -897,9 +929,21 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                             distance += Integer.parseInt(message);
 
 
-                        }else{
+                        }else if(Integer.parseInt(message) == Integer.parseInt(String.valueOf("0"))){
+                            msg.setText(message+"\nScore :"+distance);
+                            distance += Integer.parseInt(message);
+
+                        }else if(Integer.parseInt(message) == Integer.parseInt(String.valueOf("6"))){ // test for level two
+                            msg.setText(message+"\nScore :"+distance);
+                            distance += Integer.parseInt(message);
+                        }
+                        else{
                                 setEnded(true);
-                                calculateScore();
+
+                            if(mSelectedGameLevel == 1)
+                                calculateScoreLevelOne();
+                            else if(mSelectedGameLevel == 2)
+                                calculateScoreLevelTwo(false);
                             }
 
                         }
@@ -912,6 +956,56 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         }
 
+        private void calculateScoreLevelTwo(boolean timeOver) {
+
+            mFullScreenOpacity.setVisibility(View.VISIBLE);
+
+            //Calculate score
+            mScore = (distance / (endTime * millisecondsToMinutes));
+
+            if(timeOver) {
+                mCompleted_l.setVisibility(View.VISIBLE);
+            }
+            else{
+
+                /** Change imageViewStars in failed.xml according to the player score */
+                numOfStars = ((mScore/65)*100); // 65 MUST TO BE CHANGED
+                Drawable new_image = ConnectionWithHeadset.this.getResources().getDrawable(R.drawable.starsunfilled);
+
+
+                if (numOfStars >= 25 && numOfStars<50)
+                    new_image = ConnectionWithHeadset.this.getResources().getDrawable(R.drawable.stars75filled);
+                if (numOfStars >= 50 && numOfStars <75)
+                    new_image = ConnectionWithHeadset.this.getResources().getDrawable(R.drawable.stars50filled);
+                if (numOfStars >= 75 && numOfStars <100)
+                    new_image= ConnectionWithHeadset.this.getResources().getDrawable(R.drawable.stars25filled);
+
+                starsImageView.setImageDrawable(new_image);
+                mFailed_l.setVisibility(View.VISIBLE);
+
+            }
+
+            mScore_c_tv.setText(String.valueOf((int)mScore));
+            mScore_f_tv.setText(String.valueOf((int)mScore));
+
+
+
+            //Get player
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String playeId = user.getUid();
+
+            //Update player score
+            DatabaseReference updateData = FirebaseDatabase.getInstance().getReference("PlayersGameInfo").child(playeId);
+            updateData.child("score").setValue(mSavedScore+((int)mScore));
+
+            //Check total score
+            //Update player level
+            updateData.child("levelNum").setValue(selectGameLevel); //MUST TO BE CHANGED
+
+
+            controlRobotBluetooth.disconnect();
+        }
+
         public void setRelaxTextView(TextView relaxTextView) {
             this.relaxTextView = relaxTextView;
         }
@@ -920,7 +1014,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             this.focusTextView = focusTextView;
         }
 
-        public void calculateScore(){
+        public void calculateScoreLevelOne(){
 
             mFullScreenOpacity.setVisibility(View.VISIBLE);
 
@@ -967,7 +1061,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
             //Check total score
             //Update player level
-            updateData.child("levelNum").setValue(1); //MUST TO BE CHANGED
+            updateData.child("levelNum").setValue(selectGameLevel); //MUST TO BE CHANGED
+
 
             controlRobotBluetooth.disconnect();
 
@@ -1008,7 +1103,12 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
             timer = new Timer();
             initTask();
-            timer.schedule(timerTask, LEVEL_ONE_TIME);
+            if(mSelectedGameLevel == 1)
+                timer.schedule(timerTask, LEVEL_ONE_TIME);// level one
+            else if(mSelectedGameLevel == 2)
+                timer.schedule(timerTask, LEVEL_TWO_TIME); // level two
+
+
 
         }
 
@@ -1025,7 +1125,10 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
                             if(!getEnded()){
 
                                 setEnded(true);
-                                calculateScore();
+                                if(mSelectedGameLevel == 1)
+                                    calculateScoreLevelOne();
+                                else if(mSelectedGameLevel == 2)
+                                    calculateScoreLevelTwo(true);
                             }
 
 
@@ -1046,6 +1149,12 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         public boolean getEnded() {
             return isEnded;
+        }
+
+        public void setmSelectedGameLevel(int mSelectedGameLevel) {
+
+            selectGameLevel = mSelectedGameLevel;
+
         }
     }
 

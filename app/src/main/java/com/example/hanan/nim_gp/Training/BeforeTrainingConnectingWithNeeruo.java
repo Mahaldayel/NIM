@@ -151,9 +151,9 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
 
         Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Tondu_Beta.ttf");
 
-
-        mQuitSkipLayout_bt = findViewById(R.id.skip_quit_bt);
-        mQuitSkipLayout_bt.setOnClickListener(this);
+//
+//        mQuitSkipLayout_bt = findViewById(R.id.skip_quit_bt);
+//        mQuitSkipLayout_bt.setOnClickListener(this);
 
         mContinue_bt = findViewById(R.id.continue_bt);
         mContinue_bt.setOnClickListener(this);
@@ -181,8 +181,8 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
         mSaveHeadsetTitle_tv = findViewById(R.id.layout_title);
         mSaveHeadsetTitle_tv.setTypeface(font);
 
-        mQuitLayout_bt = findViewById(R.id.layout_quit_bt);
-        mQuitLayout_bt.setOnClickListener(this);
+//        mQuitLayout_bt = findViewById(R.id.layout_quit_bt);
+//        mQuitLayout_bt.setOnClickListener(this);
 
         mSave_bt = findViewById(R.id.save_bt);
         mSave_bt.setOnClickListener(this);
@@ -356,15 +356,15 @@ public class BeforeTrainingConnectingWithNeeruo extends AppCompatActivity implem
                 progressDialog.show();
                 save();
                 break;
-            case R.id.layout_quit_bt:
-                hideSaveHeadset();
-                break;
+//            case R.id.layout_quit_bt:
+//                hideSaveHeadset();
+//                break;
             case R.id.go_to_scan_bt:
                 hideSkipLayout();
                 break;
-            case R.id.skip_quit_bt:
-                hideSkipLayout();
-                break;
+//            case R.id.skip_quit_bt:
+//                hideSkipLayout();
+//                break;
             case R.id.continue_bt:
                 mIsContinueHeadset = true;
                 progressDialog.setMessage("Searching ...");
