@@ -304,7 +304,7 @@ public class SelectGameLevelActivity extends AppCompatActivity implements View.O
 
         Context context = SelectGameLevelActivity.this;
         Intent intent = new Intent(context,nextClass);
-        intent.putExtra(SELECTED_GAME_LEVEL_INTENT,Integer.toString(mSelectdGameLevel));
+        intent.putExtra(SELECTED_GAME_LEVEL_INTENT,mSelectdGameLevel);
         intent.putExtra(CONTROL_MODE_GAME_INTENT,controlType);
 
         startActivity(intent);
