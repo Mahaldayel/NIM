@@ -55,7 +55,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     public final static String HEADSET_ADDRESS_OF_SELECTED_DEVICE = "HEADSET_ADDRESS_OF_SELECTED_DEVICE";
     public static final int LEVEL_ONE_TIME = 240000;
     public static final int LEVEL_TWO_TIME = 60000;
-    public static final int LEVEL_Number = 2;
+//    public static final int LEVEL_Number = 2;
 
 
 
@@ -419,10 +419,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
         mConnectToHeadset = true;
 
         Context context = ConnectionWithHeadset.this;
-        if(LEVEL_Number == 2)
-             nextClass = StartPlay1Activity.class; // level two
-        else if(LEVEL_Number == 1)
-            nextClass = StartPlay1Activity.class;
+        nextClass = StartPlay1Activity.class;
 
         Intent intent = new Intent(context,nextClass);
 
