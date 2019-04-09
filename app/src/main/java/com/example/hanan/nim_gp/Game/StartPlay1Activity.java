@@ -514,7 +514,6 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
                 }
 
             }
-
             @Override
             public void onFinish() {
                 // TODO Auto-generated method stub
