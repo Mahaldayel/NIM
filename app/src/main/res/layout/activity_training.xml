@@ -123,7 +123,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:visibility="gone"
-        android:background="@drawable/calibrating_title"
+        android:background="@drawable/training_title"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"

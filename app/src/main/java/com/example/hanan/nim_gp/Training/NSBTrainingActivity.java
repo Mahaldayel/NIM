@@ -363,7 +363,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
     private void prepareForRelaxTraining(){
 
         mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.next_bt));
-        mDesciption.setText("Now, you will be calibrating on the second one is relax in order to pull the car.");
+        mDesciption.setText("Now, you will be train on the second one is relax in order to pull the car.");
 
     }
 
@@ -374,7 +374,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mTraining_layout.setVisibility(View.VISIBLE);
         mTryAgain_bt.setVisibility(View.GONE);
         mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.start_bt));
-        mDesciption.setText("Wear your headset, you will be calibrating on two modes the first one will be focus on pushing the car");
+        mDesciption.setText("Wear your headset, you will be train on two modes the first one will be focus on pushing the car");
 
     }
 
@@ -385,7 +385,7 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         mFinish = true;
         mStartTraining_bt.setBackground(getResources().getDrawable(R.drawable.finish_bt));
         mTryAgain_bt.setVisibility(View.GONE);
-        mDesciption.setText("You have completed the calibrating ");
+        mDesciption.setText("You have completed the training ");
         mCurrentTrainingMode_tv.setText("Relaxation Mode");
         moveBackword();
 
@@ -509,10 +509,10 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         NSBTrainingActivity.this);
                 // set title
-                alertDialogBuilder.setTitle("Calibrating Failed");
+                alertDialogBuilder.setTitle("Training Failed");
                 // set dialog message
                 alertDialogBuilder
-                        .setMessage("Calibrating is Failed.\nPlease make sure yor are wearing your headset correctly ")
+                        .setMessage("Training is Failed.\nPlease make sure yor are wearing your headset correctly ")
                         .setCancelable(false)
                         .setPositiveButton("Ok",
                                 new DialogInterface.OnClickListener() {
