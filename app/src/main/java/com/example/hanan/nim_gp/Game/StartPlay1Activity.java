@@ -36,6 +36,7 @@ import java.util.TimerTask;
 import me.aflak.bluetooth.Bluetooth;
 
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.LEVEL_ONE_TIME;
+import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.LEVEL_TWO_TIME;
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.NEEURO_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithHeadset.ROBOT_ADDRESS_OF_SELECTED_DEVICE;
 import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.CONNECTED_DEVICE_INTENT;
@@ -355,16 +356,21 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
 
         @Override
         public void onFinish() {
-            if(mTextFeild.getText().equals("GO!")){
+//            if(mTextFeild.getText().equals("GO!")){
                 message.setVisibility(View.VISIBLE);
                 quit.setVisibility(View.VISIBLE);
                 mTextFeild.setVisibility(View.GONE);
                 sbDelegate.setStarted(true);
-                displayCounter();
+
+                if(mSelectedGameLevel == 1)
+                    displayCounterLevelOne();
+                else if (mSelectedGameLevel == 2)
+                    displayCounterLevelTwo();
+
                 mPlaymediaPlayer.start();
                 mPlaymediaPlayer.setLooping(true);
 
-            }
+//            }
         }
 
         @Override
@@ -451,7 +457,44 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
     }
 
 
-    private void displayCounter(){
+    private void displayCounterLevelTwo(){
+
+
+        final int[] i = {(LEVEL_TWO_TIME/1000)};
+        playTimer = new CountDownTimer(LEVEL_TWO_TIME,1000) {
+
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // this method will be executed every second ( 1000 ms : the second parameter in the CountDownTimer constructor)
+
+                if(!sbDelegate.getEnded()){
+
+                    mPlayCounter_tv.setText(String.valueOf(0)+":"+String.valueOf(i[0]));
+
+                    i[0]--;
+                }
+
+                else {
+                    mPlaymediaPlayer.setLooping(false);
+                    NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
+                    playTimer.cancel();
+                }
+
+            }
+
+            @Override
+            public void onFinish() {
+                // TODO Auto-generated method stub
+
+            }
+        };
+        playTimer.start();
+
+    }
+
+
+    private void displayCounterLevelOne(){
 
 
         final int[] i = {(LEVEL_ONE_TIME/1000)};

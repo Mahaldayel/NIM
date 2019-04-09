@@ -54,7 +54,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     public final static String ROBOT_ADDRESS_OF_SELECTED_DEVICE = "ROBOT_ADDRESS_OF_SELECTED_DEVICE";
     public final static String HEADSET_ADDRESS_OF_SELECTED_DEVICE = "HEADSET_ADDRESS_OF_SELECTED_DEVICE";
     public static final int LEVEL_ONE_TIME = 240000;
-    public static final int LEVEL_TWO_TIME = 6000;
+    public static final int LEVEL_TWO_TIME = 60000;
     public static final int LEVEL_Number = 2;
 
 
@@ -931,11 +931,11 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
                         }else if(Integer.parseInt(message) == Integer.parseInt(String.valueOf("0"))){
                             msg.setText(message+"\nScore :"+distance);
-                            distance += Integer.parseInt(message);
+                            distance += 2;
 
                         }else if(Integer.parseInt(message) == Integer.parseInt(String.valueOf("6"))){ // test for level two
                             msg.setText(message+"\nScore :"+distance);
-                            distance += Integer.parseInt(message);
+                            distance += 0;
                         }
                         else{
                                 setEnded(true);

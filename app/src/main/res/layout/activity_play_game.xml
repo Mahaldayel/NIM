@@ -99,7 +99,7 @@
         android:background="@drawable/counter_layout"
         android:paddingEnd="16dp"
         android:paddingTop="4dp"
-        android:text="4:0"
+        android:text="0:0"
         android:textAlignment="textEnd"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/training_mode_tv"
