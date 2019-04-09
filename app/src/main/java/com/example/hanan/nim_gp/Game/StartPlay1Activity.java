@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.hanan.nim_gp.Challenge.SendChallenge;
 import com.example.hanan.nim_gp.MainActivity;
 import com.example.hanan.nim_gp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,10 +46,12 @@ import static com.example.hanan.nim_gp.Game.ConnectionWithRobotCarActivity.CONNE
 
 public class StartPlay1Activity extends AppCompatActivity implements View.OnClickListener {
 
-
+String Score;
     public static final String SELECTED_GAME_LEVEL_INTENT = "SELECTED_GAME_LEVEL_INTENT" ;
     public static final String CONTROL_MODE_GAME_INTENT ="controlMode";
+    public static final String Game_Score ="gameScore";
     public static final String CONTROL_GAME_INTENT ="gameMode";
+
 
     public static final int RELAX_NUMBER = 1;
     public static final int FOCUS_NUMBER = 2;
@@ -112,6 +115,8 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
     private ImageView mStarsImageView;
     private Button mLevelsBtnC;
     private Button mLevelsBtnF;
+    private Button ChallengeButton;
+
     private int mSavedScore;
     private TextView mPlayCounter_tv;
     private CountDownTimer playTimer;
@@ -123,9 +128,12 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
 
         mStart_bt = findViewById(R.id.start_bt);
         mStart_bt.setOnClickListener(this);
+        ChallengeButton=findViewById(R.id.challengeButton);
+        ChallengeButton.setOnClickListener(this);
 
         mGameStartCounter = findViewById(R.id.count);
         mFullScreenOpacity = findViewById(R.id.full_screen_opacity);
+
 
         mTextFeild = findViewById(R.id.count);
         countDownTimer = new StartPlay1Activity.MyCountDownTimer(startTime, interval);
@@ -239,6 +247,10 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
             mCcontrolMode = intent.getStringExtra(CONTROL_MODE_GAME_INTENT);
 
         }
+        if(intent.hasExtra(Game_Score)){
+            Score = intent.getStringExtra(Game_Score);
+
+        }
 
         if(intent.hasExtra(CONNECTED_DEVICE_INTENT))
             mConnectedDeviceIndex = intent.getIntExtra(CONNECTED_DEVICE_INTENT,-1);
@@ -326,6 +338,10 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
             case R.id.LevelsBtn_c:
                 goTo(SelectGameLevelActivity.class);
                 break;
+            case R.id.challengeButton:
+                    goTo(SendChallenge.class);
+                    break;
+
         }
 
     }
@@ -335,6 +351,8 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         Context context = this;
         Intent intent = new Intent(context,nextClass);
         intent.putExtra(CONTROL_MODE_GAME_INTENT,getIntent().getStringExtra(CONTROL_MODE_GAME_INTENT));
+        intent.putExtra(Game_Score,getIntent().getStringExtra(Game_Score));
+        intent.putExtra(CONTROL_GAME_INTENT,getIntent().getStringExtra(CONTROL_GAME_INTENT));
         startActivity(intent);
 
     }

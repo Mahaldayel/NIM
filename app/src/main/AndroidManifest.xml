@@ -25,13 +25,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Challenge.SendChallenge"></activity>
+        <activity android:name=".Challenge.PlayerChallenges"></activity>
+        <activity android:name=".Challenge.SendChallenge" />
         <activity
             android:name=".Game.StartPlay1Activity"
             android:label="@string/title_activity_start_play1"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".GameOver.FailedActivity" />
-        <activity android:name=".GameOver.CompletedActivity"></activity>
+        <activity android:name=".GameOver.CompletedActivity" />
         <activity android:name=".AccountActivity.CropView" />
         <activity android:name=".AccountActivity.FirstPage">
             <intent-filter>

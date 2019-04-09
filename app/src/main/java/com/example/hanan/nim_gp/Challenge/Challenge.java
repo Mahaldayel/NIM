@@ -7,9 +7,9 @@ public class Challenge {
     private String Level;
     private String GameControl;
     private String GameMode;
-    int Score;
+    String Score;
 
-    public Challenge(String senderUname,String pic,String id,String level,int Score,String control,String mode) {
+    public Challenge(String senderUname,String pic,String id,String level,String Score,String control,String mode) {
         SenderUname = senderUname;
         SenderPic=pic;
         ChallengeID=id;
@@ -72,11 +72,11 @@ public class Challenge {
     }
 
 
-    public int getScore() {
+    public String getScore() {
         return Score;
     }
 
-    public void setScore(int score) {
+    public void setScore(String score) {
         Score = score;
     }
 

@@ -49,12 +49,12 @@ import static com.example.hanan.nim_gp.Game.control_modeActivity.CONTROL_MODE_GA
 
 
 public class ConnectionWithHeadset extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
-
+    public static final String Game_Score ="gameScore";
     public final static String NEEURO_ADDRESS_OF_SELECTED_DEVICE = "NEEURO_ADDRESS_OF_SELECTED_DEVICE";
     public final static String ROBOT_ADDRESS_OF_SELECTED_DEVICE = "ROBOT_ADDRESS_OF_SELECTED_DEVICE";
     public final static String HEADSET_ADDRESS_OF_SELECTED_DEVICE = "HEADSET_ADDRESS_OF_SELECTED_DEVICE";
     public static final int LEVEL_ONE_TIME = 240000;
-
+    public static final String CONTROL_GAME_INTENT ="gameMode";
     FirebaseUser CurrentPlayer = FirebaseAuth.getInstance().getCurrentUser();
     String CurrentplayeId = CurrentPlayer.getUid();
     DatabaseReference refrence= FirebaseDatabase.getInstance().getReference().child("TrainingInformation");
@@ -66,7 +66,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
     private ProgressDialog progressDialog;
     float SignalsAvreg=0;
     float SignalsMax=0;
-
+String Score,GameMode;
     boolean mIsContinueCar;
 
     private String TAG = "BeforeTrainingConnectingWithNeeruo";
@@ -162,6 +162,10 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         if(intent.hasExtra(SELECTED_GAME_LEVEL_INTENT))
             mSelectedGameLevel = intent.getIntExtra(SELECTED_GAME_LEVEL_INTENT,0);
+        if(intent.hasExtra(Game_Score))
+            Score = intent.getStringExtra(Game_Score);
+        if(intent.hasExtra(CONTROL_GAME_INTENT))
+            GameMode=intent.getStringExtra(CONTROL_GAME_INTENT);
 
     }
 
@@ -429,6 +433,8 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
         intent.putExtra(SELECTED_GAME_LEVEL_INTENT, mSelectedGameLevel);
         intent.putExtra(CONTROL_MODE_GAME_INTENT,getIntent().getStringExtra(CONTROL_MODE_GAME_INTENT));
+        intent.putExtra(Game_Score,Score);
+        intent.putExtra(CONTROL_GAME_INTENT,GameMode);
         startActivity(intent);
 
 
@@ -952,6 +958,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
 
 //            if((endTime*millisecondsToMinutes) > 1)
 //                mScore = (mScore / (endTime * millisecondsToMinutes));
+
             mScore_c_tv.setText(String.valueOf((int)mScore));
             mScore_f_tv.setText(String.valueOf((int)mScore));
 
