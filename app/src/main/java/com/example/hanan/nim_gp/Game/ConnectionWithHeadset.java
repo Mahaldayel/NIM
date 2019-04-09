@@ -1052,7 +1052,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             //Calculate score
             mScore = (distance / (endTime * millisecondsToMinutes));
 
-            if(mScore >= 65 || (challenge && mScore >= Double.parseDouble(mScoreChallenge))) { // 65 MUST TO BE CHANGED
+            if(mScore >= 50 || (challenge && mScore >= Double.parseDouble(mScoreChallenge))) { // 65 MUST TO BE CHANGED
                 mCompleted_l.setVisibility(View.VISIBLE);
 
                 if(challenge)
@@ -1061,6 +1061,7 @@ public class ConnectionWithHeadset extends AppCompatActivity implements AdapterV
             } else if(challenge && mScore < Double.parseDouble(mScoreChallenge)){
 
                 mScore = 0;
+                mFailed_l.setVisibility(View.VISIBLE);
             }
             else{
 
