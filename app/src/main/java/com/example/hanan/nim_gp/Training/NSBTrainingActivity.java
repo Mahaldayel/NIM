@@ -221,11 +221,10 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         switch (view.getId()){
 
             case R.id.start_training_bt:
-                if(mFinish)
-                    if(checkOfFocusData()&& checkOfRelaxData())
-                        saveTrainingInformationOnDatabase();
-                    else
-                        trainFailed();
+                if(mFinish){
+                    NativeNSBInterface.getInstance().disconnectBT(mHeadsetAddress);
+                    goTo(MainActivity.class);
+                }
                 else
                     startTraining();
                 break;
@@ -273,12 +272,11 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
 
     private void saveTrainingInformationOnDatabase() {
 
-        String playerId = firebaseAuth.getCurrentUser().getUid();
+        String playerId =  FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("TrainingInformation").child(playerId).setValue(mTainingInformation);
 
-        goTo(MainActivity.class);
     }
 
     private void goTo(Class nextClass) {
@@ -311,6 +309,11 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
         }else if(mCurrentTrainingMode == TRAINING_MODE_RELAX){
 //            mTainingInformation = sbDelegate.endTrainRelax(mTainingInformation);
             mCurrentTrainingMode = TRAINING_MODE_FOCUS;
+            if(mFinish)
+                if(checkOfFocusData()&& checkOfRelaxData())
+                    saveTrainingInformationOnDatabase();
+                else
+                    trainFailed();
         }
 
 
@@ -466,10 +469,10 @@ public class NSBTrainingActivity extends AppCompatActivity implements View.OnCli
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         NSBTrainingActivity.this);
                 // set title
-                alertDialogBuilder.setTitle("Calibrating Succeeded");
+                alertDialogBuilder.setTitle("Training Succeeded");
                 // set dialog message
                 alertDialogBuilder
-                        .setMessage("Calibrating is successful. Accept this Calibrating?")
+                        .setMessage("Training is successful. Accept this training?")
                         .setCancelable(false)
                         .setPositiveButton("Yes",
                                 new DialogInterface.OnClickListener() {

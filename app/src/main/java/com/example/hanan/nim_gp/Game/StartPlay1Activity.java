@@ -124,6 +124,8 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
     private CountDownTimer playTimer;
     private String mScoreChallenge;
     private double mScore;
+    private Button mRestartBtnF;
+    private Button mRestartBtnC;
 
     private void initElements(){
 
@@ -149,10 +151,17 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         mScore_c_tv = findViewById(R.id.textViewScore);
         mScore_f_tv = findViewById(R.id.textViewScore_f);
         mStarsImageView =  findViewById(R.id.imageViewStars_f);
+
         mLevelsBtnC = findViewById(R.id.LevelsBtn_c);
         mLevelsBtnC.setOnClickListener(this);
         mLevelsBtnF = findViewById(R.id.LevelsBtn_f);
         mLevelsBtnF.setOnClickListener(this);
+
+        mRestartBtnF = findViewById(R.id.RestartBtn_f);
+        mRestartBtnF.setOnClickListener(this);
+
+        mRestartBtnC = findViewById(R.id.RestartBtn_c);
+        mRestartBtnC.setOnClickListener(this);
 
         mChallengeWin = findViewById(R.id.challengeWin);
 
@@ -346,6 +355,10 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
             case R.id.LevelsBtn_c:
                 goTo(SelectGameLevelActivity.class);
                 break;
+            case R.id.RestartBtn_f:
+            case R.id.RestartBtn_c:
+                goTo(ConnectionWithRobotCarActivity.class);
+                break;
             case R.id.challengeButton:
                 goTo(SendChallenge.class);
                 break;
@@ -360,7 +373,6 @@ public class StartPlay1Activity extends AppCompatActivity implements View.OnClic
         Intent intent = new Intent(context,nextClass);
         intent.putExtra(CONTROL_MODE_GAME_INTENT,getIntent().getStringExtra(CONTROL_MODE_GAME_INTENT));
         intent.putExtra(SELECTED_GAME_LEVEL_INTENT,getIntent().getIntExtra(SELECTED_GAME_LEVEL_INTENT,1));
-
         intent.putExtra(Game_Score, String.valueOf(sbDelegate.getScore()));
         intent.putExtra(CONTROL_GAME_INTENT,getIntent().getStringExtra(CONTROL_GAME_INTENT));
         startActivity(intent);
